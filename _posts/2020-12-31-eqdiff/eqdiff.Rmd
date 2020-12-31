@@ -5,7 +5,7 @@ description: |
 author:
   - name: Rafael Peixoto
     affiliation: Universidade Estadual de Campinas
-citation_url: https://rpmeira.github.io/EqDiff
+citation_url: https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/
 slug: peixoto2020eqdiff1
 date: "`r Sys.Date()`"
 bibliography: EqDiff.bib
@@ -79,7 +79,17 @@ Usualmente, não é de interesse apenas umas descrição da evolução da variá
 
 Um ponto fixo de uma função $f$ é um número $x^*$ que quando aplicado na função resulta nele mesmo, ou seja, $x^* = f(x^*, t)$. Posto de outra forma, é um número que não muda quando iterado na função. Assim, a órbita de $x^*$ consiste apenas de $x^*$.
 
-Por exemplo, seja a equação em diferença $x_t = x_{t-1}^2$. A função $f(x) = x^2$ apresenta dois pontos fixos: $0$ e $1$. O que é fácil de se verificar: $0^2 = 0$ e $1^2 = 1$. 
+**Exemplo 1:** seja a equação em diferença $x_t = x_{t-1}^2$. A função $f(x) = x^2$ apresenta dois pontos fixos: $0$ e $1$. O que é fácil de se verificar:
+$$
+\begin{align}
+& x = f(x) \\
+& x = x^2 \\
+& x - x^2 = 0 \\
+& x(1 - x) = 0 \\
+& x = 0 ; \ x = 1
+\end{align}
+$$
+
 O gráfico abaixo mostra quatro iterações da equação $x_t = x_{t-1}^2$, para $x_0$ igual a 0; 1; 1.1; -1.2; 0.9.
 
 ```{r, layout="l-body"}
@@ -111,8 +121,62 @@ autoplot(itx2) +
   scale_colour_discrete(expression(X[0])) +
   scale_x_continuous(breaks = seq(from = 0,to = 5, by = 1)) +
   scale_y_continuous(breaks = seq(from = -2,to = 18, by = 2))
-                 
 ```
 
 É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 1$. Além disso, para valores de $x_0$ entre $0$ e $1$, como $0.9$, $x$ tende ao ponto fixo $0$; e para valores fora desse intervalo $x$ tente ao infinito. Considerando apenas números positivos, é possivel afirmar que $x = 0$ é um ponto fixo estável, pois conforme se escolhe um $x_0$ cada vez mais longe de $0$, $x$ sempre irá tender a $0$, até que se chegue em $x_0 = 1$. A partir daí, conforme se escolhe um $x_0$ maior que $1$, $x$ tenderá sempre a se afastar desse ponto fixo, portanto $x = 1$ é um ponto fixo instável. 
+
+
+**Exemplo 2:** seja a equação em diferença $x_t = \frac{1}{2}x_{t-1} - 4$. A função $f(x) = \frac{1}{2}x - 4$ apresenta quais pontos fixos?
+
+$$
+\begin{align}
+& x = f(x) \\
+& x = \frac{1}{2}x - 4 \\
+& \frac{1}{2}x = -4 \\
+& x = -8 \\
+\end{align}
+$$
+
+Vejamos no gráfico:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+itmx <- read.raw.lsd("itmx-4.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(itmx) <- c(-6, -8, -10)
+
+# Acrescentar t_0
+itmx <- itmx %>%
+  as_tibble() %>%
+  add_row(.before = T, "-6" = -6, "-8" = -8, "-10" = -10) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(itmx) +
+  ggtitle(expression(X[t] == frac(1,2)  %*% (X[t-1]) - 4)) +
+  xlab("Step") +
+  ylab("X") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 15, by = 1)) +
+  scale_y_continuous(breaks = seq(from = -10,to = -6, by = 0.5))
+```
+
+
+
+É possível observar que $x$ se mantém constante para $x_0 = -8$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $-8$, $x$ tende ao ponto fixo $-8$.
+
+
+
+
+
+
+
+
+
+
 
