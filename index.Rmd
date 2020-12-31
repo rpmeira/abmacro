@@ -1,0 +1,21 @@
+---
+title: "Posts"
+site: distill::distill_website
+listing: posts
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+```
+
+<h1 style="font-size:60px; text-align: center">Macroeconomia <br> Baseada em Agentes</h1>
+
+<br>
+
+```{r title-page-plot, layout="l-page", eval=T, fig.width=15, fig.asp=.25}
+knitr::include_graphics("dymsis.jpeg")
+```

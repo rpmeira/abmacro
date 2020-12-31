@@ -1,0 +1,118 @@
+---
+title: "Equações em Diferença"
+description: |
+  Este Post apresenta uma introdução ao estudo de Equações em Diferença. 
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+citation_url: https://rpmeira.github.io/EqDiff
+slug: peixoto2020eqdiff1
+date: "`r Sys.Date()`"
+bibliography: EqDiff.bib
+nocite: | 
+  @neusser2016difference, @wainwright2005fundamental
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Introdução
+  - Matemática
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+```
+
+## Definição
+
+A equação em diferença descreve a evolução de alguma variável (ou grupo de variáveis) ao longo do tempo. O valor dessa variável no período $t$ é denotado por $x_t$. O índice de tempo $t$ assume valores discretos e tipicamente abrange todos os números inteiros, ou seja, $t = \dots, -2, -1, 0, 1, 2, \dots$.
+
+Uma equação em diferença, então, nada mais é que uma *regra* uma *função* que indica como computar o valor da variável de interesse no próximo período, e.g. $t+1$, dado seu valor presente, $t$, ou passado, e.g. $t-1$. Em sua forma mais geral, uma equação em diferença pode ser ecrita como:
+
+$$
+F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
+$$
+
+Onde $F$ é uma função dada.
+
+## Homogeneidade
+
+Se o tempo não aparece como um argumento separado e entra somente como um índice da variável, a equação é dita **autônoma** ou **homogênea**. No caso de equações de primeira ordem, por exemplo, a forma geral é 
+$$\theta_1 x_t + \theta_0x_{t-1} = g(t)$$
+A equação homogênea seria
+
+$$\theta_1 x_t + \theta_0x_{t-1} = 0$$
+
+Escrita de outra forma:
+
+$$x_{t} = f(x_{t-1})$$
+
+## Solução
+
+A partir disso, dado algum valor inicial para $x$ no período $0$, a equação em diferença determina, unicamente, todos os valores subsequentes de $x_t$, com $t=1,2,\dots$, inserindo os valores de $x_t$ iterativamente na equação. No caso da equação de primeira ordem homogênea, como apontada acima:
+
+$$
+\begin{align}
+& x_0 = x \\
+& x_1 = f(x_0) = f(x) \\
+& x_2 = f(x_1) = f(f(x)) = f^2(x) \\
+& \dots \\
+& x_t = f(x_{t-1}) = f^t(x)
+\end{align}
+$$
+
+Assim, o valor da variável $x$ no período $t$ é uma função do seu valor inicial. Para explicitar essa dependência, escreve-se $x_t = \phi(t,x)$. Como resultado dessa iteração, a equação em diferença gera uma sequência, em $t = 0, 1, 2, \dots$, chamada de **trajetória**. O conjunto de valores realizados por uma trajetória particular é chamada de **órbita**.
+
+Para selecionar uma solução única para a equação em diferença, requerimentos adicionais são necessários, como as **condições de fronteira**. No exemplo acima, foi fornecido um valor inicial para a variável, o que o enquadra em uma **condição de valor inicial**. Se as condições de fronteira são suficientes para fixar uma única solução, o modelo (baseado em equações em diferença) é dito **determinado**.
+
+## Estabilidade
+
+Usualmente, não é de interesse apenas umas descrição da evolução da variável dependente ao longo do tempo, mas também algumas propriedades qualitativas das soluções. Em particular, é importante caracterizar o comportamento de longo-prazo, ou assimptótico, da variável.
+
+#### Ponto Fixo
+
+Um ponto fixo de uma função $f$ é um número $x^*$ que quando aplicado na função resulta nele mesmo, ou seja, $x^* = f(x^*, t)$. Posto de outra forma, é um número que não muda quando iterado na função. Assim, a órbita de $x^*$ consiste apenas de $x^*$.
+
+Por exemplo, seja a equação em diferença $x_t = x_{t-1}^2$. A função $f(x) = x^2$ apresenta dois pontos fixos: $0$ e $1$. O que é fácil de se verificar: $0^2 = 0$ e $1^2 = 1$. 
+O gráfico abaixo mostra quatro iterações da equação $x_t = x_{t-1}^2$, para $x_0$ igual a 0; 1; 1.1; -1.2; 0.9.
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+itx2 <- read.raw.lsd("itx2.res.gz")
+
+# Estrutura dos dados
+#str(itx2)
+#colnames(itx2)
+
+# Mudar nome das Variáveis (Colunas)
+colnames(itx2) <- c(0, 1, 1.1, -1.2, 0.9)
+
+# Acrescentar t_0
+itx2 <- itx2 %>%
+  as_tibble() %>%
+  add_row(.before = T, "0" = 0, "1" = 1, "1.1" = 1.1, "-1.2" = -1.2, "0.9" = 0.9) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(itx2) +
+  ggtitle(expression(X[t] == (X[t-1])^2)) +
+  xlab("Step") +
+  ylab("X") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 5, by = 1)) +
+  scale_y_continuous(breaks = seq(from = -2,to = 18, by = 2))
+                 
+```
+
+É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 1$. Além disso, para valores de $x_0$ entre $0$ e $1$, como $0.9$, $x$ tende ao ponto fixo $0$; e para valores fora desse intervalo $x$ tente ao infinito. Considerando apenas números positivos, é possivel afirmar que $x = 0$ é um ponto fixo estável, pois conforme se escolhe um $x_0$ cada vez mais longe de $0$, $x$ sempre irá tender a $0$, até que se chegue em $x_0 = 1$. A partir daí, conforme se escolhe um $x_0$ maior que $1$, $x$ tenderá sempre a se afastar desse ponto fixo, portanto $x = 1$ é um ponto fixo instável. 
+

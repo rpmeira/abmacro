@@ -1,0 +1,9 @@
+---
+title: "Rafael Peixoto"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Eu sou um estudante de economia, atualmente no doutorado, e meus interesses estão principalmente em análise de dados e macroeconomia. Minha pesquisa é sobre a modelagem baseada em agentes aplicada à macroeconomia, e minha tese de doutorado é sobre um ABM para analisar os impactos econômicos de uma política de Renda Básica Universal.
