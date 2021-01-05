@@ -12,7 +12,7 @@ library(forecast)
 library(ggthemes)
 ```
 
-<h1 style="font-size:60px; text-align: center">Macroeconomia <br> Baseada em Agentes</h1>
+<h1 style="font-size: 300%; text-align: center; font-family: optima;">Macroeconomia <br><br> Baseada em Agentes</h1>
 
 <br>
 

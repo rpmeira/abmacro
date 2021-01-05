@@ -27,6 +27,7 @@ library(LSDinterface)
 library(tidyverse)
 library(forecast)
 library(ggthemes)
+library(DiagrammeR)
 ```
 
 ## Definição
@@ -69,15 +70,40 @@ $$
 
 Assim, o valor da variável $x$ no período $t$ é uma função do seu valor inicial. Para explicitar essa dependência, escreve-se $x_t = \phi(t,x)$. Como resultado dessa iteração, a equação em diferença gera uma sequência, em $t = 0, 1, 2, \dots$, chamada de **trajetória**. O conjunto de valores realizados por uma trajetória particular é chamada de **órbita**.
 
+```{tikz, out.width = "40%", fig.align='center'}
+\begin{tikzpicture}
+\draw
+    (0,0) rectangle(1,1);
+\draw
+    (0.5,0.5) node {$f$};
+\draw[->]
+    (1,0.5) -- (2,0.5);
+\draw
+    (1.5, 0.8) node {$f(x)$};
+\draw
+    (2,0.5) -- (2,-0.5);
+\draw
+    (2,-0.5) -- (-1,-0.5);
+\draw
+    (-1,-0.5) -- (-1,0.5);
+\draw[->]
+    (-1,0.5) -- (0,0.5);
+\draw
+    (-0.5, 0.8) node {$x$};
+\end{tikzpicture}
+```
+
+
+
 Para selecionar uma solução única para a equação em diferença, requerimentos adicionais são necessários, como as **condições de fronteira**. No exemplo acima, foi fornecido um valor inicial para a variável, o que o enquadra em uma **condição de valor inicial**. Se as condições de fronteira são suficientes para fixar uma única solução, o modelo (baseado em equações em diferença) é dito **determinado**.
 
 ## Estabilidade
 
 Usualmente, não é de interesse apenas umas descrição da evolução da variável dependente ao longo do tempo, mas também algumas propriedades qualitativas das soluções. Em particular, é importante caracterizar o comportamento de longo-prazo, ou assimptótico, da variável.
 
-#### Ponto Fixo
+Um **ponto fixo** de uma função $f$ é um número $x^*$ que quando aplicado na função resulta nele mesmo, ou seja, $x^* = f(x^*, t)$. Posto de outra forma, é um número que não muda quando iterado na função. Assim, a órbita de $x^*$ consiste apenas de $x^*$.
 
-Um ponto fixo de uma função $f$ é um número $x^*$ que quando aplicado na função resulta nele mesmo, ou seja, $x^* = f(x^*, t)$. Posto de outra forma, é um número que não muda quando iterado na função. Assim, a órbita de $x^*$ consiste apenas de $x^*$.
+Um ponto fixo é **estável** se pontos pertos dele convergem para o ponto fixo quando são iterados. Por outro lado, um ponto fixo é **instável** se pontos perto dele divergem do ponto fixo quando são iterados.
 
 **Exemplo 1:** seja a equação em diferença $x_t = x_{t-1}^2$. A função $f(x) = x^2$ apresenta dois pontos fixos: $0$ e $1$. O que é fácil de se verificar:
 $$
@@ -112,8 +138,8 @@ itx2 <- itx2 %>%
 # Visualizar Gráfico
 autoplot(itx2) +
   ggtitle(expression(X[t] == (X[t-1])^2)) +
-  xlab("Step") +
-  ylab("X") +
+  xlab("Time t") +
+  ylab(expression(X[t])) +
   theme_hc() +
   theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
         plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
@@ -125,6 +151,36 @@ autoplot(itx2) +
 
 É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 1$. Além disso, para valores de $x_0$ entre $0$ e $1$, como $0.9$, $x$ tende ao ponto fixo $0$; e para valores fora desse intervalo $x$ tente ao infinito. Considerando apenas números positivos, é possivel afirmar que $x = 0$ é um ponto fixo estável, pois conforme se escolhe um $x_0$ cada vez mais longe de $0$, $x$ sempre irá tender a $0$, até que se chegue em $x_0 = 1$. A partir daí, conforme se escolhe um $x_0$ maior que $1$, $x$ tenderá sempre a se afastar desse ponto fixo, portanto $x = 1$ é um ponto fixo instável. 
 
+```{tikz, out.width = "40%", fig.align='center'}
+\begin{tikzpicture}[scale = 1.3]
+\draw[fill = black]
+    (0,0) circle (2pt);
+\draw
+    (0, 0.25) node {$0$};
+\draw[<-, thick]
+    (0.08,0) -- (0.5,0);
+\draw[<-, thick]
+    (0.5,0) -- (1,0);
+\draw[<-, thick]
+    (1,0) -- (1.5,0);
+\draw[fill = black]
+    (1.6,0) circle (2pt);
+\draw
+    (1.6, 0.25) node {$1$};
+\draw[->, thick]
+    (1.7,0) -- (2,0);
+\draw[->, thick]
+    (2,0) -- (2.5,0);
+\draw[->, thick]
+    (2.5,0) -- (3,0);
+\draw[->, thick]
+    (3,0) -- (3.5,0);
+\draw[thick]
+    (3.5,0) -- (4,0);
+\end{tikzpicture}
+```
+
+<br>
 
 **Exemplo 2:** seja a equação em diferença $x_t = \frac{1}{2}x_{t-1} - 4$. A função $f(x) = \frac{1}{2}x - 4$ apresenta quais pontos fixos?
 
@@ -155,8 +211,8 @@ itmx <- itmx %>%
 # Visualizar Gráfico
 autoplot(itmx) +
   ggtitle(expression(X[t] == frac(1,2)  %*% (X[t-1]) - 4)) +
-  xlab("Step") +
-  ylab("X") +
+  xlab("Time t") +
+  ylab(expression(X[t])) +
   theme_hc() +
   theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
         plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
@@ -167,16 +223,34 @@ autoplot(itmx) +
 ```
 
 
+É possível observar que $x$ se mantém constante para $x_0 = -8$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $-8$, $x$ tende ao ponto fixo $-8$. Portanto, este é um ponto fixo estável.
 
-É possível observar que $x$ se mantém constante para $x_0 = -8$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $-8$, $x$ tende ao ponto fixo $-8$.
+```{tikz, out.width = "40%", fig.align='center'}
+\begin{tikzpicture}[scale = 1.3]
+\draw[thick]
+    (-0.3,0) -- (0,0);
+\draw[->, thick]
+    (0,0) -- (0.5,0);
+\draw[->, thick]
+    (0.5,0) -- (1,0);
+\draw[->, thick]
+    (1,0) -- (1.5,0);
+\draw[fill = black]
+    (1.6,0) circle (2pt);
+\draw
+    (1.5, 0.25) node {$-8$};
+\draw[<-, thick]
+    (1.7,0) -- (2.3,0);
+\draw[<-, thick]
+    (2.3,0) -- (2.8,0);
+\draw[<-, thick]
+    (2.8,0) -- (3.2,0);
+\draw[thick]
+    (3.2,0) -- (3.5,0);
+\end{tikzpicture}
+```
 
-
-
-
-
-
-
-
+<br>
 
 
 
