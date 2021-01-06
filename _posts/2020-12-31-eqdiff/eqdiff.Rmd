@@ -72,24 +72,12 @@ Assim, o valor da variável $x$ no período $t$ é uma função do seu valor ini
 
 ```{tikz, out.width = "40%", fig.align='center'}
 \begin{tikzpicture}
-\draw
-    (0,0) rectangle(1,1);
-\draw
-    (0.5,0.5) node {$f$};
-\draw[->]
-    (1,0.5) -- (2,0.5);
-\draw
-    (1.5, 0.8) node {$f(x)$};
-\draw
-    (2,0.5) -- (2,-0.5);
-\draw
-    (2,-0.5) -- (-1,-0.5);
-\draw
-    (-1,-0.5) -- (-1,0.5);
-\draw[->]
-    (-1,0.5) -- (0,0.5);
-\draw
-    (-0.5, 0.8) node {$x$};
+\node[draw, minimum size = 1cm] 
+    (f){$f$};
+\draw[-latex]
+    (f.east) -- (1.5,0) node[midway, above]{$f(x)$};
+\draw[-latex]
+    (1.5,0) |- (-1.5,-1) |- (f.west) node[near end, above]{$x$};
 \end{tikzpicture}
 ```
 
@@ -103,7 +91,7 @@ Usualmente, não é de interesse apenas umas descrição da evolução da variá
 
 Um **ponto fixo** de uma função $f$ é um número $x^*$ que quando aplicado na função resulta nele mesmo, ou seja, $x^* = f(x^*, t)$. Posto de outra forma, é um número que não muda quando iterado na função. Assim, a órbita de $x^*$ consiste apenas de $x^*$.
 
-Um ponto fixo é **estável** se pontos pertos dele convergem para o ponto fixo quando são iterados. Por outro lado, um ponto fixo é **instável** se pontos perto dele divergem do ponto fixo quando são iterados.
+Um ponto fixo é **estável**, ou **atrator**, se pontos pertos dele convergem para o ponto fixo quando são iterados. Por outro lado, um ponto fixo é **instável**, ou **repulsor**, se pontos perto dele divergem do ponto fixo quando são iterados.
 
 **Exemplo 1:** seja a equação em diferença $x_t = x_{t-1}^2$. A função $f(x) = x^2$ apresenta dois pontos fixos: $0$ e $1$. O que é fácil de se verificar:
 $$
@@ -138,7 +126,7 @@ itx2 <- itx2 %>%
 # Visualizar Gráfico
 autoplot(itx2) +
   ggtitle(expression(X[t] == (X[t-1])^2)) +
-  xlab("Time t") +
+  xlab("t") +
   ylab(expression(X[t])) +
   theme_hc() +
   theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
@@ -152,31 +140,20 @@ autoplot(itx2) +
 É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 1$. Além disso, para valores de $x_0$ entre $0$ e $1$, como $0.9$, $x$ tende ao ponto fixo $0$; e para valores fora desse intervalo $x$ tente ao infinito. Considerando apenas números positivos, é possivel afirmar que $x = 0$ é um ponto fixo estável, pois conforme se escolhe um $x_0$ cada vez mais longe de $0$, $x$ sempre irá tender a $0$, até que se chegue em $x_0 = 1$. A partir daí, conforme se escolhe um $x_0$ maior que $1$, $x$ tenderá sempre a se afastar desse ponto fixo, portanto $x = 1$ é um ponto fixo instável. 
 
 ```{tikz, out.width = "40%", fig.align='center'}
-\begin{tikzpicture}[scale = 1.3]
+\usetikzlibrary{decorations.markings}
+\begin{tikzpicture}
+[decoration={markings, 
+    mark= between positions 0.1 and 0.5 step 0.1 
+        with {\arrowreversed{latex}},
+    mark= between positions 0.6 and 1 step 0.1 
+        with {\arrow{latex}}}
+] 
+\draw [postaction={decorate}] 
+    (0,0) -- (4,0); 
 \draw[fill = black]
-    (0,0) circle (2pt);
-\draw
-    (0, 0.25) node {$0$};
-\draw[<-, thick]
-    (0.08,0) -- (0.5,0);
-\draw[<-, thick]
-    (0.5,0) -- (1,0);
-\draw[<-, thick]
-    (1,0) -- (1.5,0);
+    (2,0) circle (1.5pt) node[above, scale=0.7] {$1$};
 \draw[fill = black]
-    (1.6,0) circle (2pt);
-\draw
-    (1.6, 0.25) node {$1$};
-\draw[->, thick]
-    (1.7,0) -- (2,0);
-\draw[->, thick]
-    (2,0) -- (2.5,0);
-\draw[->, thick]
-    (2.5,0) -- (3,0);
-\draw[->, thick]
-    (3,0) -- (3.5,0);
-\draw[thick]
-    (3.5,0) -- (4,0);
+    (0,0) circle (1.5pt) node[above, scale=0.7] {$0$};
 \end{tikzpicture}
 ```
 
@@ -211,7 +188,7 @@ itmx <- itmx %>%
 # Visualizar Gráfico
 autoplot(itmx) +
   ggtitle(expression(X[t] == frac(1,2)  %*% (X[t-1]) - 4)) +
-  xlab("Time t") +
+  xlab("t") +
   ylab(expression(X[t])) +
   theme_hc() +
   theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
@@ -226,31 +203,212 @@ autoplot(itmx) +
 É possível observar que $x$ se mantém constante para $x_0 = -8$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $-8$, $x$ tende ao ponto fixo $-8$. Portanto, este é um ponto fixo estável.
 
 ```{tikz, out.width = "40%", fig.align='center'}
-\begin{tikzpicture}[scale = 1.3]
-\draw[thick]
-    (-0.3,0) -- (0,0);
-\draw[->, thick]
-    (0,0) -- (0.5,0);
-\draw[->, thick]
-    (0.5,0) -- (1,0);
-\draw[->, thick]
-    (1,0) -- (1.5,0);
+\usetikzlibrary{decorations.markings}
+\begin{tikzpicture}
+[decoration={markings, 
+    mark= between positions 0.1 and 0.5 step 0.1 
+        with {\arrow{latex}},
+    mark= between positions 0.6 and 1 step 0.1 
+        with {\arrowreversed{latex}}}
+] 
+\draw [postaction={decorate}] 
+    (0,0) -- (4,0); 
 \draw[fill = black]
-    (1.6,0) circle (2pt);
-\draw
-    (1.5, 0.25) node {$-8$};
-\draw[<-, thick]
-    (1.7,0) -- (2.3,0);
-\draw[<-, thick]
-    (2.3,0) -- (2.8,0);
-\draw[<-, thick]
-    (2.8,0) -- (3.2,0);
-\draw[thick]
-    (3.2,0) -- (3.5,0);
+    (2,0) circle (1.5pt) node[above, scale=0.7] {$-8$};
 \end{tikzpicture}
 ```
 
+
 <br>
+
+**Exemplo 3:** seja a *Equação Logística* $x_t = m \times x_{t-1} \times (1 - x_{t-1})$. A função $f(x) = m \times x \times (1 - x)$ apresenta quais pontos fixos?
+
+$$
+\begin{align}
+& x = f(x) \\
+& x = mx(1 - x) \\
+& mx(1 - x) - x = 0 \\
+& x(m - mx - 1) = 0 \\
+& x = 0 ; \ x = 1 - \frac{1}{m} \\
+\end{align}
+$$
+
+Vejamos o gráfico para **m = 2**:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+m2logi <- read.raw.lsd("m2v2.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(m2logi) <- paste0(rep("0.", 10), 0:9)
+
+# Acrescentar t_0
+m2logi <- m2logi %>%
+  as_tibble() %>%
+  add_row(.before = T, "0.0" = 0.0, "0.1" = 0.1, "0.2" = 0.2, "0.3" = 0.3, "0.4" = 0.4, 
+          "0.5" = 0.5, "0.6" = 0.6, "0.7" = 0.7, "0.8" = 0.8, "0.9" = 0.9) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(m2logi) +
+  ggtitle(expression(X[t] == m  %*% X[t-1] %*% (1 - X[t-1])), subtitle = expression(m == 2)) +
+  xlab("t") +
+  ylab(expression(X[t])) +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 6, by = 1)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 0.5$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $0.5$, $x$ tende ao ponto fixo $0.5$. Portanto, este é um ponto fixo estável.Já $x_0 = 0$ é um ponto fixo instável, pois conforme $x$ se afasta dele, até $x = 0.5$, mais ele tende a se afastar, em direção àqele ponto fixo. Fora do intervalo $[0,1]$ a equação explode.
+
+```{tikz, out.width = "40%", fig.align='center'}
+\usetikzlibrary{decorations.markings}
+\begin{tikzpicture}
+[decoration={markings, 
+    mark= between positions 0.1 and 0.5 step 0.1 
+        with {\arrow{latex}},
+    mark= between positions 0.6 and 1 step 0.1 
+        with {\arrowreversed{latex}}}
+] 
+\draw [postaction={decorate}] 
+    (0,0) -- (4,0); 
+\draw[fill = black]
+    (2,0) circle (1.5pt) node[above, scale=0.7] {$0.5$};
+\draw[fill = black]
+    (0,0) circle (1.5pt) node[above, scale=0.7] {$0$};
+\end{tikzpicture}
+```
+
+
+<br>
+
+Vejamos o gráfico para **m = 3**:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+m3logi <- read.raw.lsd("m3.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(m3logi) <- paste0(rep("0.", 10), c(0, 1, 2, 3, 4, 5, 666, 7, 8, 9))
+
+
+# Acrescentar t_0
+m3logi <- m3logi %>%
+  as_tibble() %>%
+  add_row(.before = T, "0.0" = 0.0, "0.1" = 0.1, "0.2" = 0.2, "0.3" = 0.3, "0.4" = 0.4, 
+          "0.5" = 0.5, "0.666" = 0.666, "0.7" = 0.7, "0.8" = 0.8, "0.9" = 0.9) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(m3logi) +
+  ggtitle(expression(X[t] == m  %*% X[t-1] %*% (1 - X[t-1])), subtitle = expression(m == 3)) +
+  xlab("t") +
+  ylab(expression(X[t])) +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 10, by = 1)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 0.666$. Além disso, para valores de $x_0$ tanto maiores quanto menores a $0.666$, $x$ tende a oscilar entre esse ponto. Como visto acima, esses são os pontos fixos da equação:
+
+$$
+\begin{align}
+& x = 0 ; \ x = 1 - \frac{1}{m} \\
+\end{align}
+$$
+
+Para $m = 3$, o segundo ponto fixo é $1 - \frac{1}{3}$, aproximadamente $0.666$. Para valores de $x_0$ diferentes dos dois pontos fixos, a iteração da equação gera um ciclo atrator, a **óbita** é periódica. Diferentes valores de $m$, entre $3$ e $4$ (excluso), geram ciclos atratores com diferentes períodos (número de interações para se repetir um ciclo).
+
+Vejamos o gráfico para **m = 4**:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+m4logi <- read.raw.lsd("m4.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(m4logi) <- paste0(rep("0.", 10), c(0, 1, 2, 3, 4, 5, 6, 75, 8, 9))
+
+
+# Acrescentar t_0
+m4logi <- m4logi %>%
+  as_tibble() %>%
+  add_row(.before = T, "0.0" = 0.0, "0.1" = 0.1, "0.2" = 0.2, "0.3" = 0.3, "0.4" = 0.4, 
+          "0.5" = 0.5, "0.6" = 0.6, "0.75" = 0.75, "0.8" = 0.8, "0.9" = 0.9) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(m4logi) +
+  ggtitle(expression(X[t] == m  %*% X[t-1] %*% (1 - X[t-1])), subtitle = expression(m == 4)) +
+  xlab("t") +
+  ylab(expression(X[t])) +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 30, by = 2)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+É possível observar que $x$ se mantém constante para $x_0 = 0$ e $x_0 = 0.75$ (segundo ponto fixo). Já para os valores de $x_0$ tanto maiores quanto menores a $0.75$, $x$ tende a oscilar de forma aperiódica, ou seja, a **óbita** é aperiódica. 
+
+Apesar de a Equação Logística ser determinística, como as órbitas são aperiódicas para $m = 4$, variações pequenas no $x_0$ levam a trajetórias completamente distintas, o que torna impraticável a previsão de $x$ após um certo número de iterações. Tal comportamento é denominado de **dependência sensível das condições iniciais** (*sensitive dependence on initial conditions (SDIC)*). Posto de outra forma, um sistema dinâmico possui dependência sensível das condições iniciais se diferenças arbitrariamente pequenas nas condições iniciais eventualmente levam a diferenças arbitrariamente grandes nas órbitas.
+
+Esse comportamento é bem visível quando se parte de $x_0$ muito próximos:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+m4sdic <- read.raw.lsd("m4sdic.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(m4sdic) <- paste0(rep("0.30000", 10), c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+
+
+# Acrescentar t_0
+m4sdic <- m4sdic %>%
+  as_tibble() %>%
+  add_row(.before = T, "0.300000" = 0.300000, "0.300001" = 0.300001, "0.300002" = 0.300002, 
+          "0.300003" = 0.300003, "0.300004" = 0.300004, "0.300005" = 0.300005, "0.300006" = 0.300006, 
+          "0.300007" = 0.300007, "0.300008" = 0.300008, "0.300009" = 0.300009) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(m4sdic) +
+  ggtitle(expression(X[t] == m  %*% X[t-1] %*% (1 - X[t-1])), subtitle = expression(m == 4)) +
+  xlab("t") +
+  ylab(expression(X[t])) +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 30, by = 2)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+Até o período $14$, as órbitas se comportam de forma muito semelhante, mas as diferenças vão se acumulando a cada iteração, fazendo com que a partir deste período as órbitas se divirjam enormemente. Caso isso fosse um exercício de previsão, um 'erro' de $0.00001$ no valor inicial faria com que essa previsão fosse errônea a partir do período $14$. Esse comportamento é denominado também de **efeito borboleta**.
+
+## Conclusão
+
+Essa breve introdução buscou apresentar o conceito de equações em diferença e algumas de suas características principais. O foco se deu sobre o comportamento ao longo do tempo desse tipo de equação. Como visto, a órbita produzida por uma sequência de iterações de uma equação em diferença pode apresentar diversos comportamentos:
+
+- Ponto fixo
+- Atraído por um ponto fixo
+- Explosivo
+- Ciclo periódico
+- Ciclo aperiódico
+
+Esses comportamentos dependem tanto da estrutura da equação em si como do valor inicial $x_0$.
+
+
 
 
 

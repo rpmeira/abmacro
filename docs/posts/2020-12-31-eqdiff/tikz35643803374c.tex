@@ -1,0 +1,19 @@
+\documentclass{article}
+\include{preview}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\begin{document}
+\begin{preview}
+%% TIKZ_CODE %%
+\begin{tikzpicture}
+\node[draw, minimum size = 1cm] 
+    (f){$f$};
+\draw[-latex]
+    (f.east) -- (1.5,0) node[midway, above]{$f(x)$};
+\draw[-latex]
+    (1.5,0) |- (-1.5,-1) |- (f.west) node[near end, above]{$x$};
+\end{tikzpicture}
+\end{preview}
+\end{document}
