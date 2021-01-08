@@ -1,0 +1,182 @@
+---
+title: "Equações de Primeira Ordem"
+description: |
+  Este Post discute Equações em Diferença de Primeira Ordem.
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2020primordem
+date: "`r Sys.Date()`"
+bibliography: EqDiff.bib
+nocite: | 
+  @neusser2016difference, @wainwright2005fundamental
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Introdução
+  - Matemática
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+```
+
+## Introdução
+
+Em contextos em que o tempo é tomado como uma variável discreta --- ou seja, a variável $t$ só pode assumir valores inteiros ---, o padrão de mudança de uma variável $x$ deve ser descrito pelas chamadas *equações em diferença*, ao invés de por equações diferenciais ou derivativas.
+
+Como $t$ só pode assumit valores inteiros, quando se compara valores de $x$ em dois períodos consecutivos, tem-se que $\Delta t = 1$, portanto, o padrão de mudança $\frac{\Delta x}{\Delta t}$ pode ser simplificado para $\Delta x$. essa é a **primeira diferença** de $x$. Adicionando-se o subscrito referente ao periodo em que ocorre a mudança $\Delta x$, tem-se:
+
+$$
+\Delta x_t \equiv x_t - x_{t-1}
+$$
+
+Assim, padrões de mudança como $\Delta x_t = 2$ podem ser expresas como
+
+$$
+\begin{aligned}
+& x_t - x_{t-1} = 2 \\
+& x_t = x_{t-1} + 2
+\end{aligned}
+$$
+
+Equações em Diferença podem ser:
+
+- linear ou não-linear
+- homogênea ou não-homogênea
+- de primeira ordem ou ordem maior
+
+Esse texto visa analisar apenas equações de primeira ordem, ou seja, equações que envolvem apenas uma diferença de um período.
+
+Um exemplo de equação de primeira ordem linear e não-homogênea é a seguinte equação afim:
+
+$$
+x_t = \theta x_{t-1} + z_t, \qquad \theta \ne 0
+$$
+
+A equação homogênea correspondente seria 
+
+$$
+x_t = \theta x_{t-1}
+$$
+
+## Solução
+
+A trajetória no tempo, de uma equação em diferença, deve ser uma função de $t$ --- uma fórmula definindo os valores de $x$ em cada período de tempo --- consistente com a dada equação e com as condições iniciais.
+
+#### Método Iterativo
+
+Antes de apresentar um método geral de solução de equações em diferença, é interessante discutir o método iterativo, que, embora rústico, ajuda a entender a natureza das soluções desse tipo de equação.
+
+Equações de primeira ordem descrevem o padrão de mudança de $x$ entre dois períodos consecutivos. Uma vez que esse padrão é especificado --- e.g. $\Delta x_t = 2$ ---, e uma vez que é dado um valor inicial $x_0$, não é problema encontrar $x_1$ com a equação. De forma semelhante, uma vez encontrado $x_1$, é possível obter $x_2$, e assim por diante, iterando o madrão de mudança especificado pela equação em diferença.
+
+**Exemplo 1:** Seja a equação em diferença $\Delta x_t = 2$, assumindo um valor inicial $x_0 = 15$. É possível inferir a trajetória da variável $x$ iterando a equação, a partir do valor inivial dado.
+
+$$
+\begin{aligned}
+& \Delta x_t = 2 \\
+& x_t - x_{t-1} = 2 \\
+& x_t = x_{t-1} + 2 \\
+& x_1 = x_0 + 2 \\
+& x_2 = x_1 + 2 = (x_0 + 2) + 2 = x_0 + 2(2) \\
+& x_3 = x_2 + 2 = [x_0 + 2(2)] + 2 = x_0 + 3(2) \\
+& \dots
+\end{aligned}
+$$
+
+Em geral, para qualquer período $t$:
+
+$$
+x_t = x_0 + t(2)
+$$
+
+Como foi estabelecido que $x_0 = 15$:
+
+$$
+x_t = 15 + 2t
+$$
+
+**Exemplo 2:** Seja a equação em diferença $x_t = 0.9x_{t-1}$, com um valor inicial não especificado. Por iteração tem-se:
+
+$$
+\begin{aligned}
+& x_1 = 0.9x_0 \\
+& x_2 = 0.9x_1 = 0.9(0.9x_0) = (0.9)^2x_0 \\
+& x_3 = 0.9x_2 = 0.9(0.9)^2x_0 = (0.9)^3x_0 \\
+& \dots
+\end{aligned}
+$$
+
+Em geral, para qualquer período $t$:
+
+$$
+x_t = (0.9)^tx_0
+$$
+
+É possível generalizar esse resultado para encontrar uma solução para equações em diferença de primeira ordem homogêneas. No no lugar de $0.9$ põe-se um parâmetro $b$ e, no lugar de $x_0$, uma constante $A$:
+
+$$
+x_t = Ab^t
+$$
+
+#### Método Geral
+
+Seja uma equação em diferença de primeira ordem não-homogênea
+
+$$
+x_t + ax_{t-1} = c
+$$
+
+onde $a$ e $c$ são duas constantes. 
+
+A solução geral irá consistir na soma de dois componentes: 
+
+- a *solução particular* $x_p$, que é qualquer solução da equação não-homogênea
+- a *função complementar* $x_c$, que é a solução geral da equação reduzida (homogênea) $x_t + ax_{t-1} = 0$
+
+O componente $x_p$ representa nível de equilíbrio intertemporal de $x$, e o componente $x_c$ representa os desvios da trajetória desse equilíbrio. A soma dos dois constitui a solução geral devido à presença de uma constante arbitrária. Para definir a solução, é necessário um condição inicial.
+
+**Função complementar:** Como visto no *exemplo 2*, uma solução geral para equações em diferença de primeira ordem homogêneas é $x_t = Ab^t$. Neste caso, é possivel afirmar que $x_{t-1} = Ab^{t-1}$. Com isso, a equação homogênea $x_t + ax_{t-1} = 0$ pode ser reescrita como:
+
+$$
+\begin{aligned}
+& Ab^t + aAb^{t-1} = 0 \\
+& Ab^t + aA\frac{b^t}{b} = 0 \\
+& Ab^t(1 + \frac{a}{b}) = 0, \qquad com \quad Ab^t \ne 0 \\
+& 1 + \frac{a}{b} = 0 \\
+& b = -a
+\end{aligned}
+$$
+
+Com isso, a função complementar pode ser escrita como:
+
+$$
+x_c = Ab^t = A(-a)^t
+$$
+
+**Solução particular:** Como mencionado acima, para $x_p$ é possível escolher *qualquer* solução da equação. Assim, pode-se escolher uma solução trivial da forma mais simples $x_t = k$, onde $k$ é uma constante. Com isso, tem-se também que $x_{t-1} = k$, portanto: x_t + ax_{t-1} = c
+
+$$
+\begin{aligned}
+& x_t + ax_{t-1} = c \\
+& k + ak = c \\
+& k = \frac{c}{1+a} \\
+& x_p = k = \frac{c}{1+a}, \qquad a \ne -1
+\end{aligned}
+$$
+
+Caso $a = -1$, a solução particular $\frac{c}{1+a}$ não é definida, e outra solução para a equação não-homogênea deve ser buscada. 
+
+
+
+
+
+
