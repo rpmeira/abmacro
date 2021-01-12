@@ -7,7 +7,7 @@
     <description>Esse Blog apresenta posts relacioandos à modelagem baseada em agentes aplicada em macroeconomia.
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>qui, 07 jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>seg, 11 jan 2021 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Equações de Primeira Ordem</title>
       <dc:creator>Rafael Peixoto</dc:creator>
@@ -16,7 +16,8 @@
       <category>Introdução</category>
       <category>Matemática</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem</guid>
-      <pubDate>qui, 07 jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>seg, 11 jan 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/primordem_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>Equações em Diferença</title>
