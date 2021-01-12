@@ -1,0 +1,265 @@
+---
+title: "Equações de Segunda Ordem"
+description: |
+  Este Post discute Equações em Diferença de Segunda Ordem.
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2020segordem
+date: "`r Sys.Date()`"
+bibliography: EqDiff.bib
+nocite: | 
+  @neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdifseg
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Introdução
+  - Matemática
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+```
+
+
+## Introdução
+
+Uma equação em diferença de segunda ordem é uma equação que envolve a expressão $\Delta ^2 x_t$, chamada de segunda diferença de $x_t$, mas que não contém diferenças de ordem maior que $2$. O símbolo $\Delta ^2$ é uma instrução de que está se tomando a segunda diferença:
+
+$$
+\begin{aligned}
+& \Delta ^2 x_t 
+\begin{aligned}
+& = \Delta (\Delta x_t) \\
+& = \Delta (x_t - x_{t-1}) \\
+& = (x_t - x_{t-1}) - (x_{t-1} - x_{t-2}) \\
+& = x_t -2x_{t-1} + x_{t-2}
+\end{aligned}
+\end{aligned}
+$$
+
+Assim, a segunda diferença de $x_t$ é transformável em uma soma de termos envolvendo uma diferença de dois períodos de tempo.
+
+De forma geral, uma equação de segunda ordem pode ser expressa por:
+
+$$
+\begin{aligned}
+& ax_t + bx_{t-1} + cx_{t-2} = f(t)
+\end{aligned}
+$$
+
+## Equação homogênea
+
+Assim como para equações de primeira ordem, é possível separar equações de segunda ordem em **função complementar** e **solução particular**. Vamos começar pela função complementar, que é a solução geral da equação homogênea. 
+
+Seja a equação homogênea:
+
+$$
+\begin{aligned}
+& ax_t + bx_{t-1} + cx_{t-2} = 0
+\end{aligned}
+$$
+ou, de forma equivalente:
+
+$$
+\begin{aligned}
+& ax_{t+2} + bx_{t+1} + cx_t = 0
+\end{aligned}
+$$
+
+Para encontrar a função complementar de uma equação de segunda ordem, utiliza-se o seguinte articífio:
+
+
+$$
+\begin{aligned}
+& x_t = \lambda ^t \\
+& x_{t+1} = \lambda ^{t+1} = \lambda ^t \lambda \\
+& x_{t+2} = \lambda ^{t+2} = \lambda ^t \lambda ^2 \\[10pt]
+& a \lambda ^2 \lambda ^t + b \lambda \lambda ^t + c \lambda ^t = 0 \\
+& \lambda ^t (a \lambda ^2 + b \lambda + c ) = 0 \\
+& a \lambda ^2 + b \lambda + c  = 0
+\end{aligned}
+$$
+
+$a \lambda ^2 + b \lambda + c  = 0$ também é chamada de **equação característica**. Como é uma equação de segundo grau, seu $\Delta$ pode apresentar $3$ resultados possíveis: pode ser negativo, pode ser zero, pode ser positivo. Caso seja positivo, basta utilizar as duas soluções encontradas. Caso seja zero (o que apresenta apenas uma solução $x_t$), a segunda solução toma a forma de $tx_t$. Caso seja negativo, é necessário calcular a parte imaginária.  
+
+**Exemplo 1:** Seja a equação $2x_{t+2} - 5x_{t+1} + 2x_t = 0$. A equação característica é:
+
+$$
+\begin{aligned}
+& 2 \lambda ^2 - 5 \lambda + 2 = 0 \\[10pt]
+& \Delta = (-5)^2 - 4(2)(2) = 25 - 16 = 9 \\
+& \lambda = \frac{5 \pm 3}{4} \\
+& \begin{cases}
+\lambda_1 = 2 \\
+\lambda_2 = \frac{1}{2}
+\end{cases}
+\end{aligned}
+$$
+
+Portanto, a solução da equação homogênea é:
+
+$$
+\begin{aligned}
+& x_t = \lambda ^t \\[10pt]
+& \begin{cases}
+x_t = (2)^t \\
+x_t = (\frac{1}{2})^t
+\end{cases} \\[10pt]
+& x_t = A(2)^t + B(\frac{1}{2})^t
+\end{aligned}
+$$
+
+Dado que as condições iniciais sejam, por exemplo:
+
+$$
+\begin{aligned}
+& \begin{cases}
+x_0 = 2 \\
+x_1 = \frac{11}{2}
+\end{cases} \\[10pt]
+& x_0 = A(2)^0 + B(\frac{1}{2})^0 = A + B = 2 \\
+& x_1 = A(2)^1 + B(\frac{1}{2})^1 = 2A + \frac{1}{2}B = \frac{11}{2} \\[10pt]
+& \begin{cases}
+A + B = 2 \\
+4A + B = 11 
+\end{cases} \\[10pt]
+& A = 3; \quad B= -1 \\[10pt]
+\end{aligned}
+$$
+
+A solução final fica:
+
+$$
+\begin{aligned}
+& x_t = 3(2)^t -(\frac{1}{2})^t
+\end{aligned}
+$$
+
+Como a solução possui um $\lambda > 1$, a equação apresentará um comportamento explosivo, de forma semelhante a equações de primeira ordem com $\theta >1$. Vejamos um grafico da sua dinâmica:
+
+```{r, layout="l-body"}
+# Acessar resultados do LSD
+segordem <- read.raw.lsd("segordem.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(segordem) <- 5.5
+
+# Acrescentar t_0
+segordem <- segordem %>%
+  as_tibble() %>%
+  add_row(.before = T, "5.5" = 5.5) %>%
+  ts(start = 0)
+
+# Visualizar Gráfico
+autoplot(segordem, colour = "darkblue") +
+  ggtitle(expression(2 %*% X[t+2] - 5 %*% X[t+1] + 2 %*% X[t] == 0)) +
+  xlab("t") +
+  ylab(expression(X[t])) +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"),
+        legend.position = "right") +
+  scale_colour_discrete(expression(X[0])) +
+  scale_x_continuous(breaks = seq(from = 0,to = 5, by = 1)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 200, by = 20))
+```
+
+
+## Equação não-homogênea
+
+Assim como para equações de primeira ordem, a equação não-homogênea de segunda ordem tem como solução a soma da função complementar e da solução particular, e pode ser expressa genericamente por:
+
+$$
+\begin{aligned}
+& ax_t + bx_{t-1} + cx_{t-2} = f(t)
+\end{aligned}
+$$
+
+**Exemplo 2:** Seja a equação $x_{t+2} - 2x_{t+1} +x_t = 2$. A Equação homogênea seria $x_{t+2} - 2x_{t+1} +x_t = 0$, com equação característica $\lambda^2 - 2\lambda + 1 = 0$. Vamos achar a função complementar:
+
+$$
+\begin{aligned}
+& \Delta = (-2)^2 -4(1)(1) = 0 \\
+& \lambda = \frac{2 \pm \sqrt{0}}{(2)(1)} = 1 \\[10pt]
+& x_t = A(1)^t + Bt(1)^t \\
+& x_t = A + Bt
+\end{aligned}
+$$
+
+Achada a solução da equação homogênea, o próximo passo é encontrar a solução particular da não-homogênea. Como os três primeiros casos de solução de não-homogênea ($x_t = A$, $x_t = At$ e $x_t = A + Bt$) não são adequados (eles já são solução da equação homogênea), parte-se para o caso $x_t = At^2$:
+
+$$
+\begin{aligned}
+& x_t = At^2 \\
+& x_{t+1} = A(t+1)^2 = At^2 + 2At + A \\
+& x_{t+2} = A(t+2)^2 = At^2 + 4At + 4A \\[10pt]
+& x_{t+2} - 2x_{t+1} +x_t = 2 \\
+& At^2 + 4At + 4A - 2At^2 - 4At - 2A + At^2 = 2 \\
+& 2A = 2 \\
+& A = 1 \\[10pt]
+& x_t = At^2 \\
+& x_t = t^2
+\end{aligned}
+$$
+
+Com isso, a solução geral da equação, que é a soma da função complementar e da solução particular, fica:
+
+$$
+\begin{aligned}
+& x_t = A + Bt + t^2
+\end{aligned}
+$$
+
+Dado que as condições iniciais sejam, por exemplo:
+
+$$
+\begin{aligned}
+& \begin{cases}
+x_0 = 1 \\
+x_1 = 3
+\end{cases} \\[10pt]
+& x_0 = A + B(0) + 0^2 = A = 1 \\
+& x_1 = A + B(1) + 1^2 = 2 + B = 3 \\[10pt]
+& A = 1; \quad B = 1 \\
+\end{aligned}
+$$
+
+A solução final fica:
+
+$$
+\begin{aligned}
+& x_t = 1 + t + t^2
+\end{aligned}
+$$
+
+## Conclusão
+
+Assim como para equações em diferença de primeira ordem, as equações de segunda ordem também possuem uma solução que é a soma da função complementar com a solução particular:
+
+$$
+\begin{aligned}
+& x_t = x_c + x_p \\
+\end{aligned}
+$$
+
+Porém, a função complementar irá chegar na equação característica, que segue a forma:
+
+$$
+\begin{aligned}
+& a \lambda ^2 + b \lambda + c  = 0
+\end{aligned}
+$$
+
+
+
+
+
