@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
   <meta name="generator" content="distill" />
-  <link rel="alternate" type="application/rss+xml" href="https://rpmeira.github.io/abmacro/index.xml" />
 
   <style type="text/css">
   /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
@@ -85,621 +84,40 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>Macroeconomia Baseada em Agentes: Posts</title>
+  <title>Equações em Diferença Estocásticas</title>
+  
+  <meta property="description" itemprop="description" content="Este Post discute Equações em Diferença Estocásticas."/>
   
   
-  
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-01-13"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-01-13"/>
+  <meta name="article:author" content="Rafael Peixoto"/>
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Macroeconomia Baseada em Agentes: Posts"/>
+  <meta property="og:title" content="Equações em Diferença Estocásticas"/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Este Post discute Equações em Diferença Estocásticas."/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="Macroeconomia Baseada em Agentes"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Posts"/>
+  <meta property="twitter:title" content="Equações em Diferença Estocásticas"/>
+  <meta property="twitter:description" content="Este Post discute Equações em Diferença Estocásticas."/>
   
   <!--/radix_placeholder_meta_tags-->
+  
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","site","listing"]}},"value":[{"type":"character","attributes":{},"value":["Posts"]},{"type":"character","attributes":{},"value":["distill::distill_website"]},{"type":"character","attributes":{},"value":["posts"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Equações em Diferença Estocásticas"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença Estocásticas.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020eqestoc"]},{"type":"character","attributes":{},"value":["2021-01-13"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@reginatto2019eqestoc\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","drift.res.gz","EqDiff.bib","eqestoc_files/anchor-4.2.2/anchor.min.js","eqestoc_files/bowser-1.9.3/bowser.min.js","eqestoc_files/distill-2.2.21/template.v2.js","eqestoc_files/figure-html5/unnamed-chunk-1-1.png","eqestoc_files/figure-html5/unnamed-chunk-2-1.png","eqestoc_files/figure-html5/unnamed-chunk-3-1.png","eqestoc_files/figure-html5/unnamed-chunk-4-1.png","eqestoc_files/figure-html5/unnamed-chunk-5-1.png","eqestoc_files/figure-html5/unnamed-chunk-6-1.png","eqestoc_files/figure-html5/unnamed-chunk-7-1.png","eqestoc_files/figure-html5/unnamed-chunk-8-1.png","eqestoc_files/jquery-1.11.3/jquery.min.js","eqestoc_files/webcomponents-2.0.0/webcomponents.js","homog.res.gz","naohom1.res.gz","naohom2.res","naohom3.res","passeio.res.gz","rndhom.res.gz","ruido.res.gz"]}
+  </script>
   <!--radix_placeholder_navigation_in_header-->
-  <meta name="distill:offset" content=""/>
-  
-  <script type="application/javascript">
-  
-    window.headroom_prevent_pin = false;
-  
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-  
-      // initialize headroom for banner
-      var header = $('header').get(0);
-      var headerHeight = header.offsetHeight;
-      var headroom = new Headroom(header, {
-        tolerance: 5,
-        onPin : function() {
-          if (window.headroom_prevent_pin) {
-            window.headroom_prevent_pin = false;
-            headroom.unpin();
-          }
-        }
-      });
-      headroom.init();
-      if(window.location.hash)
-        headroom.unpin();
-      $(header).addClass('headroom--transition');
-  
-      // offset scroll location for banner on hash change
-      // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
-      window.addEventListener("hashchange", function(event) {
-        window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
-      });
-  
-      // responsive menu
-      $('.distill-site-header').each(function(i, val) {
-        var topnav = $(this);
-        var toggle = topnav.find('.nav-toggle');
-        toggle.on('click', function() {
-          topnav.toggleClass('responsive');
-        });
-      });
-  
-      // nav dropdowns
-      $('.nav-dropbtn').click(function(e) {
-        $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
-        $(this).parent().siblings('.nav-dropdown')
-           .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $("body").click(function(e){
-        $('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $(".nav-dropdown").click(function(e){
-        e.stopPropagation();
-      });
-    });
-  </script>
-  
-  <style type="text/css">
-  
-  /* Theme (user-documented overrideables for nav appearance) */
-  
-  .distill-site-nav {
-    color: rgba(255, 255, 255, 0.8);
-    background-color: #0F2E3D;
-    font-size: 15px;
-    font-weight: 300;
-  }
-  
-  .distill-site-nav a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  .distill-site-nav a:hover {
-    color: white;
-  }
-  
-  @media print {
-    .distill-site-nav {
-      display: none;
-    }
-  }
-  
-  .distill-site-header {
-  
-  }
-  
-  .distill-site-footer {
-  
-  }
-  
-  
-  /* Site Header */
-  
-  .distill-site-header {
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 3;
-  }
-  
-  .distill-site-header .nav-left {
-    display: inline-block;
-    margin-left: 8px;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header .nav-left {
-      margin-left: 0;
-    }
-  }
-  
-  
-  .distill-site-header .nav-right {
-    float: right;
-    margin-right: 8px;
-  }
-  
-  .distill-site-header a,
-  .distill-site-header .title {
-    display: inline-block;
-    text-align: center;
-    padding: 14px 10px 14px 10px;
-  }
-  
-  .distill-site-header .title {
-    font-size: 18px;
-    min-width: 150px;
-  }
-  
-  .distill-site-header .logo {
-    padding: 0;
-  }
-  
-  .distill-site-header .logo img {
-    display: none;
-    max-height: 20px;
-    width: auto;
-    margin-bottom: -4px;
-  }
-  
-  .distill-site-header .nav-image img {
-    max-height: 18px;
-    width: auto;
-    display: inline-block;
-    margin-bottom: -3px;
-  }
-  
-  
-  
-  @media screen and (min-width: 1000px) {
-    .distill-site-header .logo img {
-      display: inline-block;
-    }
-    .distill-site-header .nav-left {
-      margin-left: 20px;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 20px;
-    }
-    .distill-site-header .title {
-      padding-left: 12px;
-    }
-  }
-  
-  
-  .distill-site-header .nav-toggle {
-    display: none;
-  }
-  
-  .nav-dropdown {
-    display: inline-block;
-    position: relative;
-  }
-  
-  .nav-dropdown .nav-dropbtn {
-    border: none;
-    outline: none;
-    color: rgba(255, 255, 255, 0.8);
-    padding: 16px 10px;
-    background-color: transparent;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-    margin-top: 1px;
-    z-index: 2;
-  }
-  
-  .nav-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-    z-index: 1;
-    margin-top: 2px;
-    white-space: nowrap;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  
-  .nav-dropdown-content hr {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  
-  .nav-dropdown-active {
-    display: block;
-  }
-  
-  .nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
-    color: black;
-    padding: 6px 24px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
-  
-  .nav-dropdown-content .nav-dropdown-header {
-    display: block;
-    padding: 5px 24px;
-    padding-bottom: 0;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #999999;
-    white-space: nowrap;
-  }
-  
-  .nav-dropdown:hover .nav-dropbtn {
-    color: white;
-  }
-  
-  .nav-dropdown-content a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  
-  .nav-right .nav-dropdown-content {
-    margin-left: -45%;
-    right: 0;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
-    .distill-site-header a.nav-toggle {
-      float: right;
-      display: block;
-    }
-    .distill-site-header .title {
-      margin-left: 0;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 0;
-    }
-    .distill-site-header {
-      overflow: hidden;
-    }
-    .nav-right .nav-dropdown-content {
-      margin-left: 0;
-    }
-  }
-  
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header.responsive {position: relative; min-height: 500px; }
-    .distill-site-header.responsive a.nav-toggle {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .distill-site-header.responsive a,
-    .distill-site-header.responsive .nav-dropdown {
-      display: block;
-      text-align: left;
-    }
-    .distill-site-header.responsive .nav-left,
-    .distill-site-header.responsive .nav-right {
-      width: 100%;
-    }
-    .distill-site-header.responsive .nav-dropdown {float: none;}
-    .distill-site-header.responsive .nav-dropdown-content {position: relative;}
-    .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
-      display: block;
-      width: 100%;
-      text-align: left;
-    }
-  }
-  
-  /* Site Footer */
-  
-  .distill-site-footer {
-    width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    z-index: 3;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    text-align: center;
-  }
-  
-  /* Headroom */
-  
-  d-title {
-    padding-top: 6rem;
-  }
-  
-  @media print {
-    d-title {
-      padding-top: 4rem;
-    }
-  }
-  
-  .headroom {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .headroom--transition {
-    transition: all .4s ease-in-out;
-  }
-  
-  .headroom--unpinned {
-    top: -100px;
-  }
-  
-  .headroom--pinned {
-    top: 0;
-  }
-  
-  </style>
-  
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
-  <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
-  <script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
-  <script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
-  
-  <script type="application/javascript">
-  
-  function getMeta(metaName) {
-    var metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-      if (metas[i].getAttribute('name') === metaName) {
-        return metas[i].getAttribute('content');
-      }
-    }
-    return '';
-  }
-  
-  function offsetURL(url) {
-    var offset = getMeta('distill:offset');
-    return offset ? offset + '/' + url : url;
-  }
-  
-  function createFuseIndex() {
-  
-    // create fuse index
-    var options = {
-      keys: [
-        { name: 'title', weight: 20 },
-        { name: 'categories', weight: 15 },
-        { name: 'description', weight: 10 },
-        { name: 'contents', weight: 5 },
-      ],
-      ignoreLocation: true,
-      threshold: 0
-    };
-    var fuse = new window.Fuse([], options);
-  
-    // fetch the main search.json
-    return fetch(offsetURL('search.json'))
-      .then(function(response) {
-        if (response.status == 200) {
-          return response.json().then(function(json) {
-            // index main articles
-            json.articles.forEach(function(article) {
-              fuse.add(article);
-            });
-            // download collections and index their articles
-            return Promise.all(json.collections.map(function(collection) {
-              return fetch(offsetURL(collection)).then(function(response) {
-                if (response.status === 200) {
-                  return response.json().then(function(articles) {
-                    articles.forEach(function(article) {
-                      fuse.add(article);
-                    });
-                  })
-                } else {
-                  return Promise.reject(
-                    new Error('Unexpected status from search index request: ' +
-                              response.status)
-                  );
-                }
-              });
-            })).then(function() {
-              return fuse;
-            });
-          });
-  
-        } else {
-          return Promise.reject(
-            new Error('Unexpected status from search index request: ' +
-                        response.status)
-          );
-        }
-      });
-  }
-  
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-  
-    // get search element (bail if we don't have one)
-    var searchEl = window.document.getElementById('distill-search');
-    if (!searchEl)
-      return;
-  
-    createFuseIndex()
-      .then(function(fuse) {
-  
-        // make search box visible
-        searchEl.classList.remove('hidden');
-  
-        // initialize autocomplete
-        var options = {
-          autoselect: true,
-          hint: false,
-          minLength: 2,
-        };
-        window.autocomplete(searchEl, options, [{
-          source: function(query, callback) {
-            const searchOptions = {
-              isCaseSensitive: false,
-              shouldSort: true,
-              minMatchCharLength: 2,
-              limit: 10,
-            };
-            var results = fuse.search(query, searchOptions);
-            callback(results
-              .map(function(result) { return result.item; })
-              .filter(function(item) { return !!item.description; })
-            );
-          },
-          templates: {
-            suggestion: function(suggestion) {
-              var html = `
-                <div class="search-item">
-                  <h3>${suggestion.title}</h3>
-                  <div class="search-item-description">
-                    ${suggestion.description}
-                  </div>
-                  <div class="search-item-preview">
-                    <img src="${suggestion.preview ? offsetURL(suggestion.preview) : ''}"</img>
-                  </div>
-                </div>
-              `;
-              return html;
-            }
-          }
-        }]).on('autocomplete:selected', function(event, suggestion) {
-          window.location.href = offsetURL(suggestion.path);
-        });
-        // remove inline display style on autocompleter (we want to
-        // manage responsive display via css)
-        $('.algolia-autocomplete').css("display", "");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-  
-  });
-  
-  </script>
-  
-  <style type="text/css">
-  
-  /* Algolioa Autocomplete */
-  
-  .algolia-autocomplete {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: sub;
-    background-color: white;
-    color: black;
-    padding: 6px;
-    padding-top: 8px;
-    padding-bottom: 0;
-    border-radius: 6px;
-    border: 1px #0F2E3D solid;
-    width: 180px;
-  }
-  
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-nav .algolia-autocomplete {
-      display: none;
-      visibility: hidden;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete {
-      display: inline-block;
-      visibility: visible;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
-      margin-left: 0;
-      width: 400px;
-      max-height: 400px;
-    }
-  }
-  
-  .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
-    width: 90%;
-    outline: none;
-    border: none;
-  }
-  
-  .algolia-autocomplete .aa-hint {
-    color: #999;
-  }
-  .algolia-autocomplete .aa-dropdown-menu {
-    width: 550px;
-    max-height: 70vh;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
-    margin-top: 3px;
-    margin-left: -150px;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid #999;
-    border-top: none;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
-    cursor: pointer;
-    padding: 5px 4px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
-    border-bottom: none;
-    margin-bottom: 2px;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
-    overflow: hidden;
-    font-size: 0.8em;
-    line-height: 1.4em;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
-    margin-block-start: 0;
-    margin-block-end: 5px;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
-    display: inline-block;
-    overflow: hidden;
-    height: 2.8em;
-    width: 80%;
-    margin-right: 4%;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
-    display: inline-block;
-    width: 15%;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
-    height: 3em;
-    width: auto;
-    display: none;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
-    display: initial;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-    background-color: #eee;
-  }
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
-    font-weight: bold;
-    font-style: normal;
-  }
-  
-  </style>
-  
-  
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
   
@@ -1985,305 +1403,128 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
   
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-  <script src="site_libs/anchor-4.2.2/anchor.min.js"></script>
-  <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
-  <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="site_libs/distill-2.2.21/template.v2.js"></script>
+  <script src="eqestoc_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="eqestoc_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="eqestoc_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="eqestoc_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="eqestoc_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
   <!--/radix_placeholder_site_in_header-->
 
 
 </head>
 
-<body class="layout-listing">
+<body>
 
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Posts","authors":[]}
+{"title":"Equações em Diferença Estocásticas","description":"Este Post discute Equações em Diferença Estocásticas.","authors":[{"author":"Rafael Peixoto","authorURL":{},"affiliation":"Universidade Estadual de Campinas","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-01-13T00:00:00.000-03:00","citationText":"Peixoto, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
 <!--radix_placeholder_navigation_before_body-->
-<header class="header header--fixed" role="banner">
-<nav class="distill-site-nav distill-site-header">
-<div class="nav-left">
-<a href="index.html" class="title">Macroeconomia Baseada em Agentes</a>
-<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
-</div>
-<div class="nav-right">
-<a href="index.html">Posts</a>
-<a href="about.html">Sobre</a>
-<a href="gallery.html">Galeria</a>
-<a href="index.xml">
-<i class="fa fa-rss" aria-hidden="true"></i>
-</a>
-<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
-</div>
-</nav>
-</header>
 <!--/radix_placeholder_navigation_before_body-->
 <!--radix_placeholder_site_before_body-->
 <!--/radix_placeholder_site_before_body-->
-<!--radix_placeholder_article_listing-->
-
-
-<script type="application/javascript">
-
-function init_posts_list() {
-
-  function load_image(img) {
-    var src = $(img).attr('data-src');
-    if (src) {
-      $(img).attr('src', src);
-      $(img).load(function() {
-        img.removeAttribute('data-src');
-      });
-    }
-  }
-
-  function set_posts_visible(posts, visible) {
-    if (visible) {
-
-      // show bottom border by default
-      $(posts).removeClass('post-preview-last');
-
-      // apply limits if need be
-      var max_posts = 25;
-      var apply_limits = $('.posts-container').hasClass('posts-apply-limit');
-      if (apply_limits && posts.length > max_posts) {
-        posts = $(posts).slice(0, max_posts);
-      } else {
-        $('.posts-more a').addClass('hidden');
-      }
-
-      // apply last style
-      $(posts.slice(-1)[0]).addClass('post-preview-last');
-
-      $(posts).removeClass('hidden');
-      $(posts).find('img[data-src]').each(function(i, img) {
-        load_image(img);
-      });
-    } else {
-      $(posts).addClass('hidden');
-    }
-  }
-
-  function apply_hash_filter() {
-
-    // clear active state
-    $('.categories .active').removeClass('active');
-
-    // mark all posts invisible to start
-    set_posts_visible($('.posts-list').children('a'), false);
-
-    // if we have a hash filter
-    if (window.location.hash && window.location.hash.startsWith("#category:")) {
-
-      // mark posts that match the category visible
-      var page_category = window.location.hash.replace(/^#category:/, "");
-      var posts = $('.post-metadata').map(function(idx, script) {
-        var metadata = $.parseJSON($(script).html());
-        var post = null;
-        $.each(metadata.categories, function(idx, category) {
-          category = category.replace(/ /g,"_");
-          if ((page_category || '').toLowerCase() === "articles" || category === page_category) {
-            post = $(script).parent().get();
-            return false;
-          }
-        });
-        return post;
-      });
-      set_posts_visible(posts, true);
-
-      // mark the hash active
-      $('.categories li>a[href="' + window.location.hash + '"]').addClass('active');
-
-      // update the list_caption
-      var list_caption = $('.posts-list-caption');
-      var caption = (page_category || '').toLowerCase() === "articles"
-        ? list_caption.attr('data-caption')
-        : ('Category: ' + page_category.replace(/_/g," "));
-      list_caption.text(caption);
-
-    } else {
-
-      // no hash filter, make all posts visible (subject to max display)
-      set_posts_visible($('.posts-list').children(), true);
-
-      // reset list caption
-      var list_caption = $('.posts-list-caption');
-      list_caption.text(list_caption.attr('data-caption'));
-
-
-    }
-  }
-
-  // more articles
-  function apply_post_limits(apply) {
-    if (apply) {
-      $('.posts-container').addClass('posts-apply-limit');
-      $('.posts-more a').removeClass('hidden');
-    } else {
-      $('.posts-container').removeClass('posts-apply-limit');
-      $('.posts-more a').addClass('hidden');
-    }
-  }
-
-  // click handling for tags
-  $('.dt-tag').click(function(ev) {
-    window.location.hash = '#category:' + $(this).text().replace(/ /g, "_");
-    return false;
-  })
-
-  // hash filter handling
-  apply_hash_filter();
-  $(window).on('hashchange',function() {
-    apply_post_limits(true);
-    apply_hash_filter();
-  });
-
-  // more articles link
-  $('.posts-more a').click(function(e) {
-    e.preventDefault();
-    apply_post_limits(false);
-    apply_hash_filter();
-    return false;
-  });
-
-}
-
-</script>
-
-
-
-<div class="posts-container posts-with-sidebar posts-apply-limit l-screen-inset">
-<div class="posts-list">
-<h1 class="posts-list-caption" data-caption="Posts">Posts</h1>
-<a href="posts/2021-01-12-eqestoc/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":["Introdução","Matemática"]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 13, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Rafael Peixoto</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png"/>
-</div>
-<div class="description">
-<h2>Equações em Diferença Estocásticas</h2>
-<div class="dt-tags">
-<div class="dt-tag">Introdução</div>
-<div class="dt-tag">Matemática</div>
-</div>
-<p>Este Post discute Equações em Diferença Estocásticas.</p>
-</div>
-</a>
-<a href="posts/2021-01-12-segordem/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":["Introdução","Matemática"]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 12, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Rafael Peixoto</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-1-1.png"/>
-</div>
-<div class="description">
-<h2>Equações de Segunda Ordem</h2>
-<div class="dt-tags">
-<div class="dt-tag">Introdução</div>
-<div class="dt-tag">Matemática</div>
-</div>
-<p>Este Post discute Equações em Diferença de Segunda Ordem.</p>
-</div>
-</a>
-<a href="posts/2021-01-06-primordem/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":["Introdução","Matemática"]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 11, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Rafael Peixoto</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2021-01-06-primordem/primordem_files/figure-html5/unnamed-chunk-1-1.png"/>
-</div>
-<div class="description">
-<h2>Equações de Primeira Ordem</h2>
-<div class="dt-tags">
-<div class="dt-tag">Introdução</div>
-<div class="dt-tag">Matemática</div>
-</div>
-<p>Este Post discute Equações em Diferença de Primeira Ordem.</p>
-</div>
-</a>
-<a href="posts/2020-12-31-eqdiff/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":["Introdução","Matemática"]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 6, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Rafael Peixoto</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-1-1.png"/>
-</div>
-<div class="description">
-<h2>Equações em Diferença</h2>
-<div class="dt-tags">
-<div class="dt-tag">Introdução</div>
-<div class="dt-tag">Matemática</div>
-</div>
-<p>Este Post apresenta uma introdução ao estudo de Equações em Diferença.</p>
-</div>
-</a>
-</div>
-<div class="posts-sidebar">
-<div class="sidebar-section categories">
-<h3>Categories</h3>
-<ul>
-<li>
-<a href="#category:Articles">Articles</a>
-<span class="category-count">(4)</span>
-</li>
-<li>
-<a href="#category:Introdução">Introdução</a>
-<span class="category-count">(4)</span>
-</li>
-<li>
-<a href="#category:Matemática">Matemática</a>
-<span class="category-count">(4)</span>
-</li>
-</ul>
-</div>
-</div>
-<div class="posts-more">
-<a href="#">More articles &raquo;</a>
-</div>
-</div>
-<!--/radix_placeholder_article_listing-->
 
 <div class="d-title">
-<h1>Posts</h1>
+<h1>Equações em Diferença Estocásticas</h1>
 <!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt=tag">Introdução</div>
+<div class="dt=tag">Matemática</div>
+</div>
 <!--/radix_placeholder_categories-->
-
+<p><p>Este Post discute Equações em Diferença Estocásticas.</p></p>
 </div>
 
+<div class="d-byline">
+  Rafael Peixoto true (Universidade Estadual de Campinas)
+  
+<br/>2021-01-13
+</div>
 
 <div class="d-article">
-<h1 style="font-size: 300%; text-align: center; font-family: optima;">
-Macroeconomia <br><br> Baseada em Agentes
-</h1>
-<p><br></p>
-<div class="layout-chunk" data-layout="l-page">
-<p><img src="index_files/figure-html5/title-page-plot-1.png" width="1440" /></p>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#equação-homogênea">Equação homogênea</a></li>
+<li><a href="#equação-não-homogênea">Equação não-homogênea</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
+</ul>
+</nav>
 </div>
+<h2 id="introdução">Introdução</h2>
+<p>Equações em diferença estocásticas, como o nome deixa claro, são equações em difereça que possuem algum componente estocástico. É comum encontrá-las em modelos de séries temporais, como, por exemplo, <em>ruído branco</em> <span class="math inline">\(x_t = \epsilon_t\)</span> ou <em>passeio aleatório</em> <span class="math inline">\(x_t = x_{t-1} + \epsilon_t\)</span>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<p>O ruído branco é um processo com média zero e variância constante. No caso do gráfico, está sendo utilizado uma ruído branco com distribuição normal e variância igual a um. O passeio aleatório é uma equação em diferença de primeira ordem não-homogênea, <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span>, onde o termo <span class="math inline">\(f(t)\)</span> é um processo de ruído branco e o termo <span class="math inline">\(\theta\)</span> é igual a um. Caso <span class="math inline">\(\theta &gt; 1\)</span> ou <span class="math inline">\(\theta &lt; -1\)</span>, a equação explode. Caso <span class="math inline">\(-1 &lt; \theta &lt; 1\)</span>, a equação oscila em torno de um valor. Caso o termo <span class="math inline">\(f(t)\)</span> seja composto por um ruído branco mais uma constante, ou seja <span class="math inline">\(f(t) = \epsilon_t + c\)</span>, a equação apresenta uma um <em>drift</em>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<p>Seja uma equação em diferença de primeira ordem não-homogênea</p>
+<p><span class="math display">\[
+x_t - \theta x_{t-1} = f(t)
+\]</span> A solução geral irá consistir na soma de dois componentes:</p>
+<ul>
+<li>a <em>solução particular</em> <span class="math inline">\(x_p\)</span>, que é qualquer solução da equação não-homogênea</li>
+<li>a <em>função complementar</em> <span class="math inline">\(x_c\)</span>, que é a solução geral da equação reduzida (homogênea) <span class="math inline">\(x_t - \theta x_{t-1} = 0\)</span></li>
+</ul>
+<h2 id="equação-homogênea">Equação homogênea</h2>
+<p>A equação em diferença homogênea de primeira ordem <span class="math inline">\(x_t - \theta x_{t-1} = 0\)</span> possui a seguinte solução:</p>
+<p><span class="math display">\[
+\begin{aligned}
+x_t = C(\theta)^t
+\end{aligned}
+\]</span></p>
+<p>Em que:</p>
+<ul>
+<li><span class="math inline">\(\theta &gt; 1\)</span>: solução explosiva, não oscilatória.</li>
+<li><span class="math inline">\(0 &lt; \theta &lt; 1\)</span>: solução convergente, não oscilatória.</li>
+<li><span class="math inline">\(-1 &lt; \theta &lt; 0\)</span>: solução convergente, oscilatória.</li>
+<li><span class="math inline">\(\theta &lt; -1\)</span>: solução explosiva, oscilatória.</li>
+</ul>
+<p>Caso <span class="math inline">\(\theta\)</span> seja uma variável estocástica, é possível que ela apresente diferentes valores ao longo do tempo, fazendo com que o comportamento da equação varie ao longo do tempo, conforme o valor de <span class="math inline">\(\theta\)</span>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h2 id="equação-não-homogênea">Equação não-homogênea</h2>
+<p>Para resolver uma equação não-homogênea, <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span>, é preciso achar a solução particular e depois somá-la com a função complementar da equação homogênea. Para tanto, é possível escolher <em>qualquer</em> solução da equação.</p>
+<p>Como visto, o passeio aleatório, <span class="math inline">\(x_t = x_{t-1} + \epsilon_t\)</span>, é uma equação em diferença de primeira ordem não-homogênea em que <span class="math inline">\(\theta = 1\)</span>. Caso haja drift, <span class="math inline">\(f(t) = \epsilon_t + c\)</span>.</p>
+<p>Assim como foi feito para a equação homogêna, vejamos o comportamento da equação não-homogênea para diferentes <span class="math inline">\(\theta\)</span>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>Assim como nas equações homogêneas, nas não-homogêneas:</p>
+<ul>
+<li><span class="math inline">\(\theta &lt; 0\)</span> faz a equação oscilar</li>
+<li><span class="math inline">\(|\theta| &gt; 1\)</span> faz a equação explodir.</li>
+</ul>
+<p>O <em>drift</em> afeta mais os valores da série gerada pela equação quando <span class="math inline">\(\theta &gt; 0\)</span> pois esses deslocamentos se reinforçam, ao contrário do que ocorre quando <span class="math inline">\(\theta &lt; 0\)</span>. Mas, de toda forma, o <em>drift</em> não muda o comportamento da equação (oscilatória ou não, convergente ou divergente).</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>A equação em diferença <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span> tem seu comportamento determinado principalmente por <span class="math inline">\(\theta\)</span>, independentemente de <span class="math inline">\(f(t)\)</span> apresentar componentes estocásticos ou não.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references" role="doc-bibliography">
+<div id="ref-reginatto2019eqestoc">
+<p>REGINATTO, V. O. <strong>Equações a diferenças</strong>. Disponível em: &lt;<a href="https://www.modelodomundo.com/2019/03/equa%C3%A7%C3%B5es-a-diferen%C3%A7as/">https://www.modelodomundo.com/2019/03/equa%C3%A7%C3%B5es-a-diferen%C3%A7as/</a>&gt;. </p>
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2291,19 +1532,25 @@ Macroeconomia <br><br> Baseada em Agentes
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+<h3 id="references">References</h3>
+<div id="references-listing"></div>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
-<div class="distill-site-nav distill-site-footer">
-<footer>
-<p style="text-align: center; margin-top: 0em; margin-bottom: 0em;"><a href="https://www.linkedin.com/in/rafael-peixoto-75361b162/">Rafael Peixoto</a> | <a href="https://brmacro.netlify.app/">Graficos Macro</a></p>
-<p style="text-align: center; margin-top: 0em; margin-bottom: 0em;"><span style="color: #808080;"><em>peixoto.rafael@outlook.com</em></span></p>
-</footer>
-</div>
 <!--/radix_placeholder_navigation_after_body-->
 
 </body>

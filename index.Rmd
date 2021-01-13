@@ -17,5 +17,27 @@ library(ggthemes)
 <br>
 
 ```{r title-page-plot, layout="l-page", eval=T, fig.width=15, fig.asp=.25}
-knitr::include_graphics("dymsis.jpeg")
+# Acessar resultados do LSD
+capa <- read.raw.lsd("capa.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(capa) <- 1:3
+
+# Acrescentar t_0
+capa <- capa %>%
+  as_tibble() %>%
+  ts()
+
+# Visualizar Gráfico
+autoplot(capa) +
+  ggtitle("") +
+  xlab("") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "none") +
+  scale_colour_brewer(direction = 1, type = "qual", palette = 2) +
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL)
 ```

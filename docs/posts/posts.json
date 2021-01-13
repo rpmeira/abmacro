@@ -1,5 +1,27 @@
 [
   {
+    "path": "posts/2021-01-12-eqestoc/",
+    "title": "Equações em Diferença Estocásticas",
+    "description": "Este Post discute Equações em Diferença Estocásticas.",
+    "author": [
+      {
+        "name": "Rafael Peixoto",
+        "url": {}
+      }
+    ],
+    "date": "2021-01-13",
+    "categories": [
+      "Introdução",
+      "Matemática"
+    ],
+    "contents": "\r\n\r\nContents\r\nIntrodução\r\nEquação homogênea\r\nEquação não-homogênea\r\nConclusão\r\n\r\nIntrodução\r\nEquações em diferença estocásticas, como o nome deixa claro, são equações em difereça que possuem algum componente estocástico. É comum encontrá-las em modelos de séries temporais, como, por exemplo, ruído branco \\(x_t = \\epsilon_t\\) ou passeio aleatório \\(x_t = x_{t-1} + \\epsilon_t\\).\r\n\r\n\r\n\r\n\r\n\r\n\r\nO ruído branco é um processo com média zero e variância constante. No caso do gráfico, está sendo utilizado uma ruído branco com distribuição normal e variância igual a um. O passeio aleatório é uma equação em diferença de primeira ordem não-homogênea, \\(x_t - \\theta x_{t-1} = f(t)\\), onde o termo \\(f(t)\\) é um processo de ruído branco e o termo \\(\\theta\\) é igual a um. Caso \\(\\theta > 1\\) ou \\(\\theta < -1\\), a equação explode. Caso \\(-1 < \\theta < 1\\), a equação oscila em torno de um valor. Caso o termo \\(f(t)\\) seja composto por um ruído branco mais uma constante, ou seja \\(f(t) = \\epsilon_t + c\\), a equação apresenta uma um drift.\r\n\r\n\r\n\r\nSeja uma equação em diferença de primeira ordem não-homogênea\r\n\\[\r\nx_t - \\theta x_{t-1} = f(t)\r\n\\] A solução geral irá consistir na soma de dois componentes:\r\na solução particular \\(x_p\\), que é qualquer solução da equação não-homogênea\r\na função complementar \\(x_c\\), que é a solução geral da equação reduzida (homogênea) \\(x_t - \\theta x_{t-1} = 0\\)\r\nEquação homogênea\r\nA equação em diferença homogênea de primeira ordem \\(x_t - \\theta x_{t-1} = 0\\) possui a seguinte solução:\r\n\\[\r\n\\begin{aligned}\r\nx_t = C(\\theta)^t\r\n\\end{aligned}\r\n\\]\r\nEm que:\r\n\\(\\theta > 1\\): solução explosiva, não oscilatória.\r\n\\(0 < \\theta < 1\\): solução convergente, não oscilatória.\r\n\\(-1 < \\theta < 0\\): solução convergente, oscilatória.\r\n\\(\\theta < -1\\): solução explosiva, oscilatória.\r\nCaso \\(\\theta\\) seja uma variável estocástica, é possível que ela apresente diferentes valores ao longo do tempo, fazendo com que o comportamento da equação varie ao longo do tempo, conforme o valor de \\(\\theta\\).\r\n\r\n\r\n\r\n\r\n\r\n\r\nEquação não-homogênea\r\nPara resolver uma equação não-homogênea, \\(x_t - \\theta x_{t-1} = f(t)\\), é preciso achar a solução particular e depois somá-la com a função complementar da equação homogênea. Para tanto, é possível escolher qualquer solução da equação.\r\nComo visto, o passeio aleatório, \\(x_t = x_{t-1} + \\epsilon_t\\), é uma equação em diferença de primeira ordem não-homogênea em que \\(\\theta = 1\\). Caso haja drift, \\(f(t) = \\epsilon_t + c\\).\r\nAssim como foi feito para a equação homogêna, vejamos o comportamento da equação não-homogênea para diferentes \\(\\theta\\):\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nAssim como nas equações homogêneas, nas não-homogêneas:\r\n\\(\\theta < 0\\) faz a equação oscilar\r\n\\(|\\theta| > 1\\) faz a equação explodir.\r\nO drift afeta mais os valores da série gerada pela equação quando \\(\\theta > 0\\) pois esses deslocamentos se reinforçam, ao contrário do que ocorre quando \\(\\theta < 0\\). Mas, de toda forma, o drift não muda o comportamento da equação (oscilatória ou não, convergente ou divergente).\r\nConclusão\r\nA equação em diferença \\(x_t - \\theta x_{t-1} = f(t)\\) tem seu comportamento determinado principalmente por \\(\\theta\\), independentemente de \\(f(t)\\) apresentar componentes estocásticos ou não.\r\n\r\n\r\n\r\nREGINATTO, V. O. Equações a diferenças. Disponível em: <https://www.modelodomundo.com/2019/03/equa%C3%A7%C3%B5es-a-diferen%C3%A7as/>. \r\n\r\n\r\n\r\n\r\n",
+    "preview": "posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-01-13T18:16:25-03:00",
+    "input_file": {},
+    "preview_width": 1248,
+    "preview_height": 768
+  },
+  {
     "path": "posts/2021-01-12-segordem/",
     "title": "Equações de Segunda Ordem",
     "description": "Este Post discute Equações em Diferença de Segunda Ordem.",

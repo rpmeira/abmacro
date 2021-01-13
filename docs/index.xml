@@ -7,7 +7,18 @@
     <description>Esse Blog apresenta posts relacioandos à modelagem baseada em agentes aplicada em macroeconomia.
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>ter, 12 jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>qua, 13 jan 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Equações em Diferença Estocásticas</title>
+      <dc:creator>Rafael Peixoto</dc:creator>
+      <link>https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc</link>
+      <description>Este Post discute Equações em Diferença Estocásticas.</description>
+      <category>Introdução</category>
+      <category>Matemática</category>
+      <guid>https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc</guid>
+      <pubDate>qua, 13 jan 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Equações de Segunda Ordem</title>
       <dc:creator>Rafael Peixoto</dc:creator>
