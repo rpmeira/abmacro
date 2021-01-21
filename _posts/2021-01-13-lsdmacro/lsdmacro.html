@@ -1456,6 +1456,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#objetos-e-ponteiros">Objetos e Ponteiros</a></li>
 <li><a href="#sufixos-e-famílias-macro">Sufixos e famílias Macro</a></li>
 <li><a href="#funções-matemáticas-e-estatísticas">Funções matemáticas e estatísticas</a></li>
+<li><a href="#código-c-básico">Código C++ básico</a></li>
 </ul>
 </nav>
 </div>
@@ -1703,6 +1704,104 @@ Algumas das funções abaixo só estão disponíveis para compilador C++11 ou ma
 <li><span class="math inline">\(poisson(mean,x)\)</span>: distribuição acumulada Poisson com média <span class="math inline">\(mean\)</span> de <span class="math inline">\(-\infty\)</span> a <span class="math inline">\(x\)</span></li>
 <li><span class="math inline">\(unifcdf(min,max,x)\)</span>: distribuição acumulada uniforme no intervalo <span class="math inline">\([min,max]\)</span> de <span class="math inline">\(-\infty\)</span> a <span class="math inline">\(x\)</span></li>
 </ul>
+<h2 id="código-c-básico">Código C++ básico</h2>
+<p>Dentro da Equação de uma variável — ou seja, entre EQUATION(…) e RESULT(…) — é possível usar qualquer elemento ou construção legal do C++. Como já visto, toda linha de código dentro da Equação termina com um ponto e vírgula “;” — a menos que seja um comando operando sobre um bloco de código, como “if(…)” —, o que faz parte da sintaxe do C++. Outro exemplo de sintaxe do C++ já visto é a dos comentários:</p>
+<blockquote>
+<p style="color:green;">
+/*<br />
+Esse é um comentário<br />
+com mais de uma linha<br />
+*/
+</p>
+</blockquote>
+<blockquote>
+<p style="color:green;">
+// Esse é um comentário com apenas uma linha
+</p>
+</blockquote>
+<h4 id="atribuições-operações-aritméticas-e-incrementos">Atribuições, operações aritméticas e incrementos</h4>
+<p>Sendo <span class="math inline">\(a\)</span> uma variável (de C++), é possível lhe atribuir um valor com o comando “=”:</p>
+<blockquote>
+<p><span class="math inline">\(a = 4.3;\)</span></p>
+</blockquote>
+<p>Toda atribuição em C++ precisa terminar com um ponto e vírgula.<br />
+É possível também atribuir valores de outras variáveis, assim como usar operações matemáticas:</p>
+<blockquote>
+<p><span class="math inline">\(a = b + 3 - d / (e + g) * (h + i);\)</span></p>
+</blockquote>
+<p>Um pouco menos óbvio, é possível usar a mesma variável nos dois lados da atribuição:</p>
+<blockquote>
+<p><span class="math inline">\(a = a + 32;\)</span></p>
+</blockquote>
+<p>O comando acima atribui a <span class="math inline">\(a\)</span> o seu valor prévio mais um acréscimo de 32. Portanto, caso <span class="math inline">\(a\)</span> tivesse o valor de 5, após o comando acima <span class="math inline">\(a\)</span> teria o valor de 37.<br />
+Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-lo: <span class="math inline">\(a\ +\!= 32;\)</span>. O mesmo pode ser feito com outras operações aritméticas:</p>
+<ul>
+<li><span class="math inline">\(a = a / 32;\)</span>     é equivalente a     <span class="math inline">\(a\  /\!= 32;\)</span></li>
+<li><span class="math inline">\(a = a * 32;\)</span>     é equivalente a     <span class="math inline">\(a\ *\!= 32;\)</span></li>
+<li><span class="math inline">\(a = a - 32;\)</span>     é equivalente a     <span class="math inline">\(a\ -\!= 32;\)</span></li>
+</ul>
+<p>Um comando peculiar de C++ permite tanto incrementar por 1 uma variável como atribuí-la: “<span class="math inline">\(++\)</span>”. Assim:</p>
+<ul>
+<li><span class="math inline">\(a = a + 1;\)</span>     é equivalente a     <span class="math inline">\(a\  +\!= 1;\)</span>     que é equivalente a     <span class="math inline">\(a++\)</span></li>
+</ul>
+<p>O comando <span class="math inline">\(b = a++;\)</span>, por exemplo, primeiro atribui o valor de <span class="math inline">\(a\)</span> a <span class="math inline">\(b\)</span> e depois incrementa <span class="math inline">\(a\)</span>.<br />
+É possível também primeiro incrementar a variável e depois atribuir: <span class="math inline">\(++a\)</span>.</p>
+<h4 id="condições-if-then-else">Condições: if …, then …, else …</h4>
+<p>A função <code>if()</code> é uma forma de executar blocos de código apenas sobre determinadas condições:</p>
+<blockquote>
+if ( condição )<br />
+{
+<p style="color:green;">
+// colocar aqui alguma linha de comando a ser executada caso a “condição” seja verdadeira
+</p>
+}<br />
+else<br />
+{
+<p style="color:green;">
+// colocar aqui alguma linha de comando a ser executada caso a “condição” seja falsa
+</p>
+<p>}</p>
+</blockquote>
+<p>Os colchetes “{” e “}” não são necessários caso haja apenas uma linha de comando (terminada com “;”).<br />
+A condição do <code>if()</code> normalmente é baseada nos seguintes operadores de comparação (<span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> são dois valores numéricos ou variáveis contendo valores numéricos):</p>
+<ul>
+<li><strong>Igual <span class="math inline">\((a == b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> forem iguais</li>
+<li><strong>Diferente <span class="math inline">\((a\ !\!= b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> forem diferentes</li>
+<li><strong>Maior que <span class="math inline">\((a &gt; b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> for maior que <span class="math inline">\(b\)</span></li>
+<li><strong>Maior ou igual <span class="math inline">\((a &gt;= b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> for maior ou igual a <span class="math inline">\(b\)</span></li>
+<li><strong>Menor que <span class="math inline">\((a &lt; b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> for menor que <span class="math inline">\(b\)</span></li>
+<li><strong>Menor ou igual <span class="math inline">\((a &lt;= b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> for menor ou igual a <span class="math inline">\(b\)</span></li>
+</ul>
+<p>A condição pode ainda ser composta por operadores lógicos conectando as comparações:</p>
+<ul>
+<li><strong>Negação (!(condição))</strong>: é verdadeiro se a condição for falsa</li>
+<li><strong>Lógico “e” (&amp;&amp;)</strong>: dadas duas condições, a condição compostas é verdadeira se as duas condições, necessariamente, forem verdadeiras</li>
+<li><strong>Lógico “ou” (||)</strong>: dadas duas condições, a condição compostas é verdadeira se uma ou as duas condições forem verdadeiras</li>
+</ul>
+<h4 id="ciclos-for...">Ciclos <code>for(...)</code></h4>
+<p>Esse comando permite a repetição de um bloco de código até que uma condição específica seja satisfeita. A sua sintaxe é a seguinte:</p>
+<blockquote>
+for ( INI ; CONDIÇÂO ; FIMCICLO )<br />
+{
+<p style="color:green;">
+// Bloco de código do ciclo<br />
+// Pode haver qualquer comando aqui
+</p>
+<p>}</p>
+</blockquote>
+<p>Por exemplo:</p>
+<blockquote>
+for ( i = -2; i &lt; 3; i++ )<br />
+{
+<p style="color:green;">
+// na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2
+</p>
+v[i] = i;<br />
+}
+<p style="color:green;">
+// aqui, i é igual a 3, porque foi a condição para sair do ciclo
+</p>
+</blockquote>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

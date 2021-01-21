@@ -348,5 +348,113 @@ Algumas das funções abaixo só estão disponíveis para compilador C++11 ou ma
 
 
 
+## Código C++ básico
+
+Dentro da Equação de uma variável --- ou seja, entre EQUATION(...) e RESULT(...) --- é possível usar qualquer elemento ou construção legal do C++. Como já visto, toda linha de código dentro da Equação termina com um ponto e vírgula ";" --- a menos que seja um comando operando sobre um bloco de código, como "if(...)" ---, o que faz parte da sintaxe do C++. Outro exemplo de sintaxe do C++ já visto é a dos comentários:
+
+>
+<p style="color:green;">
+/*  
+Esse é um comentário  
+com mais de uma linha  
+*/  
+</p>
+
+
+>
+<p style="color:green;">
+// Esse é um comentário com apenas uma linha  
+</p>
+
+
+#### Atribuições, operações aritméticas e incrementos
+
+Sendo $a$ uma variável (de C++), é possível lhe atribuir um valor com o comando "=":
+
+>
+$a = 4.3;$
+
+Toda atribuição em C++ precisa terminar com um ponto e vírgula.  
+É possível também atribuir valores de outras variáveis, assim como usar operações matemáticas:
+
+>
+$a = b + 3 - d / (e + g) * (h + i);$
+
+Um pouco menos óbvio, é possível usar a mesma variável nos dois lados da atribuição:
+
+>
+$a = a + 32;$
+
+O comando acima atribui a $a$ o seu valor prévio mais um acréscimo de 32. Portanto, caso $a$ tivesse o valor de 5, após o comando acima $a$ teria o valor de 37.  
+Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-lo: $a\ +\!= 32;$. O mesmo pode ser feito com outras operações aritméticas:
+
+- $a = a / 32;$ \ \ \ \ é equivalente a \ \ \ \ $a\  /\!= 32;$
+- $a = a * 32;$ \ \ \ \ é equivalente a \ \ \ \ $a\ *\!= 32;$
+- $a = a - 32;$ \ \ \ \ é equivalente a \ \ \ \ $a\ -\!= 32;$
+
+Um comando peculiar de C++ permite tanto incrementar por 1 uma variável como atribuí-la: "$++$". Assim:
+
+- $a = a + 1;$ \ \ \ \ é equivalente a \ \ \ \ $a\  +\!= 1;$ \ \ \ \ que é equivalente a \ \ \ \ $a++$
+
+O comando $b = a++;$, por exemplo, primeiro atribui o valor de $a$ a $b$ e depois incrementa $a$.  
+É possível também primeiro incrementar a variável e depois atribuir: $++a$.
+
+
+#### Condições: if ..., then ..., else ...
+
+A função `if()` é uma forma de executar blocos de código apenas sobre determinadas condições:
+
+>
+if ( condição )  
+{  <p style="color:green;">  
+  // colocar aqui alguma linha de comando a ser executada caso a "condição" seja verdadeira  
+  </p>  
+}  
+else  
+{  <p style="color:green;">  
+  // colocar aqui alguma linha de comando a ser executada caso a "condição" seja falsa  
+  </p>
+}  
+
+
+Os colchetes "{" e "}" não são necessários caso haja apenas uma linha de comando (terminada com ";").  
+A condição do `if()` normalmente é baseada nos seguintes operadores de comparação ($a$ e $b$ são dois valores numéricos ou variáveis contendo valores numéricos):
+
+- **Igual $(a == b)$**: a condição é verdadeira se $a$ e $b$ forem iguais
+- **Diferente $(a\ !\!= b)$**: a condição é verdadeira se $a$ e $b$ forem diferentes
+- **Maior que $(a > b)$**: a condição é verdadeira se $a$ for maior que $b$ 
+- **Maior ou igual $(a >= b)$**: a condição é verdadeira se $a$ for maior ou igual a $b$
+- **Menor que $(a < b)$**: a condição é verdadeira se $a$ for menor que $b$ 
+- **Menor ou igual $(a <= b)$**: a condição é verdadeira se $a$ for menor ou igual a $b$
+
+A condição pode ainda ser composta por operadores lógicos conectando as comparações:
+
+- **Negação (!(condição))**: é verdadeiro se a condição for falsa
+- **Lógico "e" (&&)**: dadas duas condições, a condição compostas é verdadeira se as duas condições, necessariamente, forem verdadeiras
+- **Lógico "ou" (||)**: dadas duas condições, a condição compostas é verdadeira se uma ou as duas condições forem verdadeiras
+
+
+#### Ciclos `for(...)`
+
+Esse comando permite a repetição de um bloco de código até que uma condição específica seja satisfeita. A sua sintaxe é a seguinte:
+
+>
+for ( INI ; CONDIÇÂO ; FIMCICLO )  
+{   <p style="color:green;"> 
+  // Bloco de código do ciclo  
+  // Pode haver qualquer comando aqui  </p>
+}  
+
+Por exemplo:
+
+>
+for ( i = -2; i < 3; i++ )  
+{<p style="color:green;"> 
+  // na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2 </p>
+  v[i] = i;  
+} <p style="color:green;">   
+// aqui, i é igual a 3, porque foi a condição para sair do ciclo </p>  
+
+
 
 
