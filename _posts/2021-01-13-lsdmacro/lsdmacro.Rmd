@@ -1,0 +1,352 @@
+---
+title: "LSD Linguagem Macro"
+description: |
+  Este Post apresenta um breve resumo da linguagem macro do LSD, descrita no manual que acompanha o software.
+preview: lsd.png
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2020lsdmacro
+date: "`r Sys.Date()`"
+categories:
+  - Introdução
+  - LSD
+  - ABM
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+```
+
+
+## Estrutura do arquivo de Equação
+
+Os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis que fazem parte do modelo. Os cógidos para cada Equação são separados um do outro, em blocos. 
+
+A estrutura mínima de um modelo do LSD é a seguinte:
+
+>
+#include "../src/fun_head_fast.h"
+>
+MODELBEGIN
+>
+MODELEND
+>
+void close_sim( )  
+{  
+}
+
+
+As equações do modelo devem ser inseridas entre $MODELBEGIN$ e $MODELEND$.
+
+Cada variável do modelo possui sua própria Equação, e essa pode ser executada diversas vezes, a depender da quantidade de objetos (agentes) que a chamam. As variáveis e os parâmetros são localizadas dentro dos objetos, portanto cada objeto, ou cópia do objeto, possui uma cópia diferente das variáveis e dos parâmetros. Por exemplo, suponha um objeto, chamado $Firma$, que contém a variável chamada $Q$ que depende de outra variável chamda $K$. Se são criadas diversas cópias do objeto $Firma$, cada cópia da Equação para $Q$, que necessita da variável $K$ para seu cálculo, utilizará sua própria cópia de $K$, ou seja a cópia de $K$ contida no mesmo objeto que a cópia da Equação para $Q$ que está sendo computada.
+
+A ordem com que as Equações aparecem no arquivo de Equação é irrelevante, uma vez que o LSD avalia de forma automática a sequencia de variáveis que será executada, com base nos períodos $t$ dessa variáveis --- Cada variável, e sua Equação associada, deve ser pensada como uma equação em diferença:
+
+$$
+\begin{aligned}
+X_t = f(Y_{t-lag}, Z_{t-lag}, \dots)
+\end{aligned}
+$$
+
+As Equações podem ser compostas também por parâmetros que, na maioria das vezes, são constantes durante as simulações --- a menos que sejam modificados por outras variáveis, o que é possível por meio dos macros $WRITE(\dots)$ ou $INCR(\dots)$. 
+
+
+## EQUATION("variável")
+
+A macro $EQUATION$ inicia um bloco de código associado a uma variável. Por exemplo:
+
+>
+EQUATION( "X" )  
+<p style="color:green;">/*  
+Comentário especificando o que a equação faz  
+*/  </p>
+>
+RESULT( 3 ) // Neste exemplo a equação sempre retorna o valor 3 para a variável X
+
+A primeira linha indica que o código se refere à variável X. A última linha indica o resultado que será atribuído para essa variável em cada período de tempo. No exemplo acima, é atriuído um valor constante para a variável, mas usulmente esse não é o caso. Esse resultado dependerá dos cálculos feitos pela Equação. O LSD oferece diversas macros para esses cálculos. Ao longo desse texto, serão vistas as macros mais frequentemente utilizadas.
+
+A macro mais utilizada é a $V(\dots)$, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:
+
+>
+EQUATION( "PROF" )  
+/***************************  
+<p style="color:green;">
+A equação computa a taxa de lucro:
+PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn  
+lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior
+menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  
+***************************/  </p>
+RESULT( V("Price") * VL("A", 1) - V("C") - V("RIM") - V("RIN") * V("Inn") )
+
+
+## Armazenamento temporário: v[n]
+
+O modo padrão de expressar a Equação é coletando um conjunto de dados gerados pelo modelo (variáveis e parâmetros) e elaborar em cima disso para chegar no resultado desejado para o valor da variável. v[n] fornece uma forma de armazenar valores temporários que serão utilizados pela Equação. Estão disponíveis até mil posições para v[n], para cada Equação: de v[0] a v[999]. Os valores de v[n] são redefinidos para cada Equação, portanto não podem ser utilizados para transferir informação de uma Equação para outra. ou entre periodos de tempo diferentes na mesma Equação. Exemplo:
+
+>
+EQUATION( "PROF" )  
+<p style="color:green;">
+/***************************  
+A equação computa a taxa de lucro:  
+PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn    
+lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior
+menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  
+***************************/  </p>
+v[0] = V( "Price" );  
+v[1] = VL( "A",1 );  
+v[2] = V( "C" );  
+v[3] = V( "RIM" );  
+v[4] = V( "RIN" );  
+v[5] = V( "Inn" );  
+>
+RESULT( v[0] * v[1] - v[2] - v[3] - v[4] * v[5] )
+
+
+Existem varias vantagens em utilizar v[n]: i) o código fica mais fácil de ler; ii) os valores intermediários podem ser observados usando o *LSD Debugger*; iii) se um valor é usado muitas vezes na mesma Equação, é mais rápido e menos propenso a erro guardar esse valor em um v[n].
+
+
+## Objetos e Ponteiros
+
+A maioria das macros do LSD são operados *dentro* de um objeto, que é definido pelo ponteiro $p$. As macros são operadas nos objetos para que uma mesma Equação possa ser reusada por diversas cópias do objeto. Por exemplo, seja um modelo com um objeto chamado **Firma**, que contém as variáveis **Lucro**, **Preço** e **Quantidade**, sendo que a Equação para o Lucro é:
+
+$$
+Lucro = Preço \times Quantidade
+$$
+
+O modelo pode possuir diversas cópias do objeto Firma, com cada uma tendo a sua própria cópia das variáveis Lucro, Preço e Quantidade. Ou seja, cada cópia do objeto Firma pode possuir trajetórias distintas para os valores dessas variáveis. O LSD toma conta dessa correspondência entre objetos e variáveis através dos seguintes meios:
+
+- $p$ se refere ao objeto que contém a variável cuja Equação está sendo computada.
+- $c$ se refere ao objeto que requisitou a computação da variável.
+- $cur$, $cur1$, $cur2$, etc., são ponteiros temporários que podem guardar os endereços correntes dos objetos obtidos de outras macros.
+
+#### cur
+
+De forma um pouco mais detalhada, $cur$ funciona de maneira semelhante a v[n], porém para ponteiros, ao invés de para valores numéricos. Assim como v[n] vai de v[0] a v[999], $cur$ vai de $cur1$ a $cur9$. O usuário chama macros do LSD que retornam objetos e associam esses a $cur1$, $cur2$, $\dots$ e, com isso, usam esses ponteiros em outras macros que requeiram obejetos em seus cálculos. 
+
+#### HOOK(...)
+
+Qualquer objeto em um modelo do LSD pode conter um ou mais elementos chamados *hook*, que são ponteiros para outros objetos, assim como $cur$, porém não são temporários, existindo por toda a vida do objeto. Portanto, hooks permitem conectar uma cópia de um objeto a qualquer outra cópia de qualquer outro objeto no modelo. A sua principal vantagem é acelerar operações de busca por objetos. 
+
+## Sufixos e famílias Macro
+
+A maioria das macros do LSD, como V(...), pode ser acrescida de alguns sufixos, como $L$, $S$, $LS$, etc. O sufixo $L$ faz referência a *Lag* e indica que a operação se refere a valores passados. O sufixo $S$ indica uma cópia *Specific* de um objeto. $LS$ indica que a macro será aplicada tanto com Lag quanto para uma cópia em específico de um objeto.
+
+#### Família V(...)
+
+Essa é a família de macros do LSD mais usada. Composta por V("X"), VL("X", lag), VS(obj, "X"), VLS(obj, "X", lag). Essas macros retornam o valor da variável ou parâmetro com nome *X*. As formas  VL("X", lag) e VLS(obj, "X", lag) permitem especificar um *lag* como, por exemplo, VL("X", 2) pra um lag de 2 períodos. As formas VS(obj, "X") e VLS(obj, "X", lag) especificam em qual objeto específico o parâmetro ou a variável sevem ser procuradas. Em V("X") e VL("X", lag), onde não é especificado o objeto, a busca começa de $p$ --- objeto corrente. 
+
+#### Família SUM(...)
+
+Composta por SUM("X"), SUML("X", lag), SUMS(obj, "X"), SUMLS(obj, "X", lag). Essas macros procuram uma instância da variável ou parâmetro *X* e então começam a somar com todos os valores de instâncias de *X* encontradas no conjunto de objetos que são cópias do primeiro encontrado. 
+
+Por exemplo, seja um modelo composto por um objeto chamado "Mercado", que contém uma variável chamada "Q_TOT", e do qual descende um conjunto de objetos chamados "Firmas", que possuem a variável chamada "Q". A Equação da soma dos "Q" de todas as firmas seria:
+
+>
+EQUATION( "Q_TOT" )  <p style="color:green;">
+/*  
+Calcula a soma de todos os Q's no mercado  
+*/  </p>
+>
+RESULT( SUM( "Q" ) )
+
+É importante ressaltar, porém, que se o modelo possuir diversas cópias do objeto "Mercado", a equação acima só irá computar os "Q" pertencentes às firmas que descendem da cópia do "Mercado" em questão, e não todos os "Q" do modelo. Portanto, se existirem 3 cópias de "Mercado" com 10 cópias de "Firma" em cada um, e "Q" for estabelecido como uma constante igual a 1, "Q_TOT" será 10, para cada objeto "Mercado", e não 30.
+
+
+#### Família MAX(...)
+
+Semelhante a SUM("X"), mas ao invés da soma, essa família de macro calcula o valor máximo da variável ou parâmetro chamado "X" entre os descendentes do objeto corrente. 
+
+O mesmo ocorre para **MIN(...)**, **AVE(...)**, **MED(...)** e **SD(...)**, que computam o mínimo, a média, a mediana e o desvio padrão, respectivamente.
+
+
+#### Família WHTAVE(...)
+
+Semelhante a SUM("X"), mas WHTAVE("X","Y"), ao invés da soma, calcula a média ponderada da variável ou parâmetro chamado "X" entre os descendentes do objeto corrente, usando a variável ou parâmetro chamado "Y" como peso. "X" e "Y" devem estar contidos no mesmo objeto.
+
+
+#### Família SEARCH(...)
+
+Composta por SEARCH("A") e SEARCHS(obj, "A"), essas macros exploram um ramo único do model em busca da primeria instância do objeto chamado "A". Elas procuram dentro dos descendentes do objeto que as está chamado --- SEARCH("A") --- ou dos descentender de um certo objeto "obj" --- SEARCHS(obj, "A"). Assim, a busca não é exaustiva sobre o modelo inteiro, a menos que comece do objeto "*root*" (objeto "pai" de todo e qualquer modelo). É possível partir do "pai" ou "avô" do objeto corrente, utilizando `p->up` (pai) ou `p->up->up` (avô).
+
+Essas macros retornam um ponteiro --- que pode ser usado (chamado) depois --- para a primeira instância do objeto "A" ou `NULL` caso não seja encontrado nenhum objeto. Por exemplo, deseja-se procurar pelo objeto "Mercado" e sabe-se que ele é avô do objeto que está realizando a busca. O endereço de "Mercado" será salvo no ponteiro temporário `cur` e depois utilizado para acessar a variável "VendasTotais":
+
+>
+…  
+cur = SEARCH( p->up->up, "Mercado" );  
+v[1] = VS( cur, "VendasTotais" );  
+…  
+
+
+#### Família SEARCH_CND(...)
+
+Semelhante à família SEARCH(...), porém as macros SEARCH_CND("X", valor) e suas parentes L, S e LS são usadas para encontrar uma instância de um objeto no modelo que contenha a variável, ou parâmetro, chamada "X" com o valor específico apontado. A variante SEARCH_CNDL("X", valor, lag) aponta também o lag, com relação ao periodo de tempo corrente, que se deseja procurar o valor para a variável. A variante SEARCH_CNDS(obj, "X", valor) aponta também o objeto de onde se parte a busca (ao invés do objeto corrente que está chamando a macro). 
+
+Por exemplo, deseja-se extrair uma instância aleaória do objeto "Firma", de um grupo de 100 instâncias que possuem o parâmetro "IdFirma" ajustado de 1 a 100, e alocar o enderço desse objeto no ponteiro temporário `cur`:
+
+>
+…  
+v[0] = uniform_int( 1, 100 );  
+cur = SEARCH_CND( "IdFirma", v[0] );  
+…   
+
+
+#### Família SEARCH_INST(...)
+
+Composta por SEARCH_INST("A") e SEARCH_INSTS(obj, "A"), essa família de macros procura o número da instância de um objeto cópia do objeto "A". A variante SEARCH_INSTS(obj, "A") aponta também o objeto de onde se parte a busca (ao invés do objeto corrente que está chamando a macro). Quando uma instância do objeto é encontrada, a macro retorna um número que representa a posição dessa instância em específico (com relação a essa cadeia de cópias do objeto), começando em 1 e indo até o número total de cópias do objeto em questão.
+
+Por exemplo, deseja-se confirmar se o parâmetro "IdFirma" está ajustado ao número (posição) de cada instância do objeto "Firma":
+
+>
+CYCLE( cur, "Firma" )  
+{  
+  v[1] = VS( cur, "IdFirma" );  
+  v[2] = SEARCH_INST( cur );  
+  if ( v[1] != v[2] )  
+    LOG( "\n IdFirma=%g diferente da instância número=%g", v[1], v[2] );  
+}  
+
+
+#### Família RDNDRAW(...)
+
+Composta por RDNDRAW("A", X"), RDNDRAWL("A", "X", lag), RDNDRAWS(obj, "A", "X"), RDNDRAWLS(obj, "A", "X", lag), essa família de macros procura por um grupo de objetos chamado de "A" e retorna um ponteiro com o endereço de uma das instâncias do objeto "A", escolhido de forma aleatória com probabilidade proporcional aos valores da variável "X" (possuida pelo mesmo objeto). A variante S pode começar a busca a partir de outro objeto que não o objeto corrente, e a variante L pode especificar um período anterior que o período corrente.
+
+Por exemplo, deseja-se escolher aleatoriamente uma instância do objeto "Firma" e retornar o valor do seu parâmetro "IdFirma". O objeto "Firma" é descendente direto do objeto que está rodando a equação. O código atribui o parâmetro "prob", em cada Firma, ao quadrado do seu market share ("ms").
+
+>
+EQUATION( "EscolherFirma" )  <p style="color:green;">
+/***************************  
+Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    
+***************************/ </p>  
+CYCLE( cur, "Firma" )  
+{  
+  v[0] = V( "ms" );  
+  WRITES( cur, "Prob", v[0] * v[0] );  
+}  
+cur = RNDDRAW( "Firma", "Prob" );  
+RESULT( VS( cur, "IdFirma" ) )  
+
+
+
+#### Família RDNDRAW_FAIR(...)
+
+Composta por RDNDRAW_FAIR("A") e RDNDRAW_FAIRS(obj, "A"), essa família de macros é semelhante à Família RDNDRAW(...), porém usa a mesma probabilidade para todos os objetos. Por exemplo:
+
+>
+EQUATION( "EscolherFirma" )  <p style="color:green;">
+/***************************  
+Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    
+***************************/ </p>  
+cur = RNDDRAW_FAIR( "Firma");  
+RESULT( VS( cur, "IdFirma" ) )  
+
+
+#### Família WRITE(...)
+
+Composta por WRITE("X", valor), WRITES(obj, "X", valor), WRITEL("X", valor, tempo), WRITELS(obj, "X", valor, tempo), WRITELL("X", valor, tempo, lag), WRITELLS(obj, "X", valor, tempo, lag), essa família de macros escreve o valor "valor" na variável ou parâmetro "X". No caso de uma variável, é possível fazer aparecer como se o tempo da ultima computação da variável sendo escrita fosse "tempo". Ou seja, após a macro ser executada, a variável "X" irá aparecer para o LSD como se sua última computação tivesse sido esecutada no periodo "tempo", e seu valor fosse "valor". Se "X" for um prâmetro, o campo "tempo" é ignorado. A variável deve contida pelo objeto corrente ou pelo objeto especificado na variante S. Adicionlamente, a variante LL permite modificar os valores em "lag" da variável (ignorado se for parâmetro), portanto é possível "reescrever o passado", mudando o valor retornado pelo LSD caso o valor em lag da variável seja requisitado por, por exemplo, uma macro VL(...). Reescrever o passado é algo perigoso e só é recomendado em alguns casos.
+
+O melhor uso dessa família é para mudar os valores de parâmetros durante uma simulação. Um uso frequente em variáveis é para a inicialização de objetos recentemente adicionados.
+
+
+#### Família CYCLE(...){}
+
+Composta por CYCLE(cur, "A"), CYCLES(obj, cur, "A"), CYCLE_SAFE(cur, "A"), CYCLE_SAFES(obj, cur, "A"), essa família de macros examina todas as instâncias do objeto "A" --- que descende do objeto corrente ou que é apontado na variante S --- atribuindo ciclicamente o ponteiro `cur` para o endenreço de cada instância do objeto. É possivel aninhar dois ou mais CYCLE(...), dado que se utilize diferentes ponteiros (`cur`, `cur1`, `cur2`, etc.) para cada nível.
+
+Por exemplo, deseja-se calcular o lucro total de todas as Firmas, de todos os Mercados (o objeto Mercado contém o objeto Firma). O ponteiro `cur` cicla através de todos os objetos chamados "Mercado" (supondo que exista mais de 1). Por sua vez, para cada instância de "Mercado", o ponteiro `cur1` cicla através de cada objeto chamado "Firma" que está contido nessa instância em especifico do objeto "Mercado". Para cada "Firma"
+
+>
+…   
+v[0] = 0; // ajustar v[0] para ser inicialmente 0  
+CYCLE( cur, "Mercado" )  
+{ // Para cada Mercado  
+  CYCLES( cur, cur1, "Firma" )  
+  { // para cada Firma contida em cur (instância de Mercado)  
+    v[1] = VS( cur1, "Lucro" );  // retorne o lucro dessa Firma em específico  
+    v[0] = v[0] + v[1];  
+  }  
+}  
+// A partir daqui v[0] contém os lucros acumulados  
+…   
+
+Nunca use DELETE(...) dentro de um CYCLE(...) para remover uma das instâncias do objeto sendo ciclado. Deletar qualquer objeto apontado por `cur` impede a macro CYCLE(...) de identificar a próxima instância do objeto. Como alternativo, utiliza-se a macro CYCLE_SAFE(...) 
+
+
+
+## Funções matemáticas e estatísticas
+
+Além das macros específicas do LSD, é possivel utilizar diversas funções matemáticas e estatísticas.
+
+<aside>
+Algumas das funções abaixo só estão disponíveis para compilador C++11 ou maior, o que não é o caso da instalação do LSD Windows 32-bit.
+</aside>
+
+
+**Constantes**:
+
+- $pi$: o número $\pi$
+
+
+**Funções e operadores**
+
+- $abs(a)$: valor absoluto de $a$
+- $exp(a)$: exponencial de $a$
+- $fact(a)$: fatorial de $a$
+- $log(a)$, $log10(a)$: log natural e com base 10 de $a$
+- $min(a,b)$: o mínimo entre $a$ e $b$
+- $max(a,b)$: o máximo entre $a$ e $b$
+- $pow(a,b)$: a potência $b$ de $a$
+- $round(a)$: o inteiro mais próximo de valor real de $a$
+- $round\_digits(a,b)$: o valor real de $a$ arredondado de $b$ dígitos significativos
+- $sin(a)$, $cos(a)$, $tan(a)$, $asin(a)$, $acos(a)$, $atan(a)$: funções trigonométricas ($a$ em radianos)
+- $sqrt(a)$, $cbrt(a)$: raís quadrada e cúbica de $a$
+- $tgamma(a)$, $lgamma(a)$: função gamma e log-gamma de $a$
+
+**Testes**
+
+- $is\_finite(a)$, $is\_inf(a)$, $is\_nan(a)$: testes lógicos para checar se $a$ é finito, infinito ou NaN (*Not a Number*), retornando 0 se for falso
+
+**Sorteio de número aleatório**
+
+- $alapl(med, \alpha1, \alpha2)$: sorteio aleatório de uma distribuição de Laplace assimétrica com mediana $med$ e parâmetros $\alpha1$ e $\alpha2$
+- $bernoulli(p)$: sorteio aletório de uma distribuição Bernoulli com probabilidade $p$
+- $beta(\alpha, \beta)$: sorteio aletório de uma distribuição beta com parâmetros $\alpha$ e $\beta$
+- $binomial(p,t)$: sorteio aletório de uma distribuição binomial com probabilidade $p$ e $t$ ensaios
+- $cauchy(a,b)$: sorteio aletório de uma distribuição Cauchy com modo $a$ e escala $b$
+- $chi\_squared(n)$: sorteio aletório de uma distribuição chi quadrada com $n$ graus de liberdade
+- $exponencial(\lambda)$: sorteio aletório de uma distribuição exponencial com frequência média $\lambda$
+- $fisher(m,n)$: sorteio aletório de uma distribuição F de Fisher com $m$ e $n$ graus de liberdade
+- $gamma(\alpha, \beta)$: sorteio aletório de uma distribuição gamma com parâmetros $\alpha$ e $\beta$
+- $geometric(p)$: sorteio aletório de uma distribuição geométrica com probabilidade $p$
+- $lnorm(mean, dev)$: sorteio aletório de uma distribuição lognormal com média $mean$ e desvio padrão $dev$
+- $norm(mean, dev)$: sorteio aletório de uma distribuição  normal com média $mean$ e desvio padrão $dev$
+- $pareto(\mu, \alpha)$: sorteio aletório de uma distribuição Pareto com escala $\mu$ e parâmetro shape $\alpha$
+- $poisson(mean)$: sorteio aletório de uma distribuição Poisson com média $mean$
+- $student(n)$: sorteio aletório de uma distribuição t de Student com $n$ graus de liberdade
+- $uniform(min, max)$: sorteio aletório de uma distribuição uniforme no intervalo $[min,max]$
+- $uniform\_int(min,max)$: sorteio aletório de números inteiros de uma distribuição uniforme no intervalo $[min,max]$
+- $weibull(a,b)$: sorteio aletório de uma distribuição Weibull com parâmetros $a$ e $b$
+
+**Funções de distribuição acumulada**
+
+- $alaplcdf(med, \alpha1, \alpha2,x)$: distribuição acumulada asimétrica de Laplace com parâmetros $\alpha1$ e $\alpha2$, de $-\infty$ a $x$
+- $betacdf(\alpha,\beta,x)$: distribuição acumulada beta com parâmetros $\alpha$ e $\beta$ de $-\infty$ a $x$
+- $gammacdf(mean,x)$: distribuição acumulada gamma com média $mean$ de $-\infty$ a $x$
+- $lnormcdf(mean,dev,x)$: distribuição acumulada lognormal com média $mean$ e desvio padrão $dev$ de $-\infty$ a $x$
+- $normcdf(mean,dev,x$: distribuição acumulada normal com média $mean$ e desvio padrão $dev$ de $-\infty$ a $x$
+- $paretocdf(\mu,\alpha,x$: distribuição acumulada Pareto com escala $\mu$ e parâmetro shape $\alpha$ de $-\infty$ a $x$
+- $poisson(mean,x)$: distribuição acumulada Poisson com média $mean$ de $-\infty$ a $x$
+- $unifcdf(min,max,x)$: distribuição acumulada uniforme no intervalo $[min,max]$ de $-\infty$ a $x$
+
+
+
+
+

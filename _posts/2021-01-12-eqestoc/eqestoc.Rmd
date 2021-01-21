@@ -310,7 +310,7 @@ Assim como nas equações homogêneas, nas não-homogêneas:
 - $\theta < 0$ faz a equação oscilar 
 - $|\theta| > 1$ faz a equação explodir. 
 
-O *drift* afeta mais os valores da série gerada pela equação quando $\theta > 0$ pois esses deslocamentos se reinforçam, ao contrário do que ocorre quando $\theta < 0$. Mas, de toda forma, o *drift* não muda o comportamento da equação (oscilatória ou não, convergente ou divergente).
+O *drift* afeta mais os valores da série (os pontos de convergência) gerada pela equação quando $\theta > 0$ pois esses deslocamentos se reinforçam, ao contrário do que ocorre quando $\theta < 0$. Mas, de toda forma, o *drift* não muda o comportamento da equação (oscilatória ou não, convergente ou divergente). Além disso, esse comportamento não depende do valor inicial $x_0$, a menos que esse coincida com o ponto fixo da equação.
 
 
 ## Conclusão
