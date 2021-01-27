@@ -7,7 +7,7 @@ author:
     affiliation: Universidade Estadual de Campinas
 citation_url: https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/
 slug: peixoto2020eqdiff1
-date: "`r Sys.Date()`"
+date: "Jan. 6, 2021"
 bibliography: EqDiff.bib
 nocite: | 
   @neusser2016difference, @wainwright2005fundamental
@@ -395,6 +395,18 @@ autoplot(m4sdic) +
 ```
 
 Até o período $14$, as órbitas se comportam de forma muito semelhante, mas as diferenças vão se acumulando a cada iteração, fazendo com que a partir deste período as órbitas se divirjam enormemente. Caso isso fosse um exercício de previsão, um 'erro' de $0.00001$ no valor inicial faria com que essa previsão fosse errônea a partir do período $14$. Esse comportamento é denominado também de **efeito borboleta**.
+
+
+#### Logistic App
+
+Utilize o aplicativo abaixo para experimentar diferentes configurações da equação logística.
+
+```{r, layout="l-page"}
+knitr::include_app("https://rafaelpeixoto.shinyapps.io/logistic/",  height = "500px")
+```
+
+
+
 
 ## Conclusão
 

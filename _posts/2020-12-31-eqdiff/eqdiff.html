@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","citation_url","slug","date","bibliography","nocite","csl","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Equações em Diferença"]},{"type":"character","attributes":{},"value":["Este Post apresenta uma introdução ao estudo de Equações em Diferença. \n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/"]},{"type":"character","attributes":{},"value":["peixoto2020eqdiff1"]},{"type":"character","attributes":{},"value":["2021-01-06"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","citation_url","slug","date","bibliography","nocite","csl","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Equações em Diferença"]},{"type":"character","attributes":{},"value":["Este Post apresenta uma introdução ao estudo de Equações em Diferença. \n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/"]},{"type":"character","attributes":{},"value":["peixoto2020eqdiff1"]},{"type":"character","attributes":{},"value":["Jan. 6, 2021"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1449,7 +1449,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-byline">
   Rafael Peixoto  (Universidade Estadual de Campinas)
   
-<br/>2021-01-06
+<br/>Jan. 6, 2021
 </div>
 
 <div class="d-article">
@@ -1574,6 +1574,12 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 <p><img src="eqdiff_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
 </div>
 <p>Até o período <span class="math inline">\(14\)</span>, as órbitas se comportam de forma muito semelhante, mas as diferenças vão se acumulando a cada iteração, fazendo com que a partir deste período as órbitas se divirjam enormemente. Caso isso fosse um exercício de previsão, um ‘erro’ de <span class="math inline">\(0.00001\)</span> no valor inicial faria com que essa previsão fosse errônea a partir do período <span class="math inline">\(14\)</span>. Esse comportamento é denominado também de <strong>efeito borboleta</strong>.</p>
+<h4 id="logistic-app">Logistic App</h4>
+<p>Utilize o aplicativo abaixo para experimentar diferentes configurações da equação logística.</p>
+<div class="layout-chunk" data-layout="l-page">
+<iframe src="https://rafaelpeixoto.shinyapps.io/logistic/?showcase=0" width="624" height="500px">
+</iframe>
+</div>
 <h2 id="conclusão">Conclusão</h2>
 <p>Essa breve introdução buscou apresentar o conceito de equações em diferença e algumas de suas características principais. O foco se deu sobre o comportamento ao longo do tempo desse tipo de equação. Como visto, a órbita produzida por uma sequência de iterações de uma equação em diferença pode apresentar diversos comportamentos:</p>
 <ul>
