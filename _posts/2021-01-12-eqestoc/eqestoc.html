@@ -110,7 +110,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Equações em Diferença Estocásticas"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença Estocásticas.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020eqestoc"]},{"type":"character","attributes":{},"value":["2021-01-13"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@reginatto2019eqestoc\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Equações em Diferença Estocásticas"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença Estocásticas.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020eqestoc"]},{"type":"character","attributes":{},"value":["Jan. 13, 2021"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@reginatto2019eqestoc\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1442,7 +1442,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-byline">
   Rafael Peixoto true (Universidade Estadual de Campinas)
   
-<br/>2021-01-13
+<br/>Jan. 13, 2021
 </div>
 
 <div class="d-article">
@@ -1519,6 +1519,12 @@ x_t = C(\theta)^t
 <p>O <em>drift</em> afeta mais os valores da série (os pontos de convergência) gerada pela equação quando <span class="math inline">\(\theta &gt; 0\)</span> pois esses deslocamentos se reinforçam, ao contrário do que ocorre quando <span class="math inline">\(\theta &lt; 0\)</span>. Mas, de toda forma, o <em>drift</em> não muda o comportamento da equação (oscilatória ou não, convergente ou divergente). Além disso, esse comportamento não depende do valor inicial <span class="math inline">\(x_0\)</span>, a menos que esse coincida com o ponto fixo da equação.</p>
 <h2 id="conclusão">Conclusão</h2>
 <p>A equação em diferença <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span> tem seu comportamento determinado principalmente por <span class="math inline">\(\theta\)</span>, independentemente de <span class="math inline">\(f(t)\)</span> apresentar componentes estocásticos ou não.</p>
+<h4 id="equação-estocástica-app">Equação Estocástica App</h4>
+<p>Utilize o aplicativo abaixo para experimentar diferentes configurações da equação de primeira ordem.</p>
+<div class="layout-chunk" data-layout="l-page">
+<iframe src="https://rafaelpeixoto.shinyapps.io/EqdiffEstoch/?showcase=0" width="624" height="500px">
+</iframe>
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <div id="refs" class="references" role="doc-bibliography">
 <div id="ref-reginatto2019eqestoc">

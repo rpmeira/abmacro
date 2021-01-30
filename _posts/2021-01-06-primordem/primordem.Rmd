@@ -7,7 +7,7 @@ author:
     affiliation: Universidade Estadual de Campinas
     url: {}
 slug: peixoto2020primordem
-date: "`r Sys.Date()`"
+date: "Jan. 11, 2021"
 bibliography: EqDiff.bib
 nocite: | 
   @neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdif, @sartoris2020eqdif2
@@ -179,12 +179,12 @@ $$
 Seja uma equação em diferença de primeira ordem não-homogênea
 
 $$
-x_t + \theta x_{t-1} = f(t)
+x_t - \theta x_{t-1} = f(t)
 $$
 A solução geral irá consistir na soma de dois componentes: 
 
 - a *solução particular* $x_p$, que é qualquer solução da equação não-homogênea
-- a *função complementar* $x_c$, que é a solução geral da equação reduzida (homogênea) $x_t + \theta x_{t-1} = 0$
+- a *função complementar* $x_c$, que é a solução geral da equação reduzida (homogênea) $x_t - \theta x_{t-1} = 0$
 
 O componente $x_p$ representa nível de equilíbrio intertemporal de $x$, e o componente $x_c$ representa os desvios da trajetória desse equilíbrio. A soma dos dois constitui a solução geral devido à presença de uma constante arbitrária. Para definir a solução, é necessário um condição inicial.
 
@@ -641,6 +641,14 @@ At + B
 \end{cases}\\
 \end{aligned}
 $$
+
+#### Primeira Ordem App
+
+Utilize o aplicativo abaixo para experimentar diferentes configurações da equação de primeira ordem.
+
+```{r, layout="l-page"}
+knitr::include_app("https://rafaelpeixoto.shinyapps.io/PrimeiraOrdem/",  height = "500px")
+```
 
 
 

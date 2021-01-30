@@ -127,7 +127,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Equações de Primeira Ordem"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença de Primeira Ordem."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020primordem"]},{"type":"character","attributes":{},"value":["2021-01-11"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdif, @sartoris2020eqdif2\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/"]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Equações de Primeira Ordem"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença de Primeira Ordem."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020primordem"]},{"type":"character","attributes":{},"value":["Jan. 11, 2021"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdif, @sartoris2020eqdif2\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/"]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2068,7 +2068,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="d-byline">
   Rafael Peixoto true (Universidade Estadual de Campinas)
   
-<br/>2021-01-11
+<br/>Jan. 11, 2021
 </div>
 
 <div class="d-article">
@@ -2197,11 +2197,11 @@ x_t = (-\frac{1}{2})^tx_0
 <h3 id="método-geral">Método Geral</h3>
 <p>Seja uma equação em diferença de primeira ordem não-homogênea</p>
 <p><span class="math display">\[
-x_t + \theta x_{t-1} = f(t)
+x_t - \theta x_{t-1} = f(t)
 \]</span> A solução geral irá consistir na soma de dois componentes:</p>
 <ul>
 <li>a <em>solução particular</em> <span class="math inline">\(x_p\)</span>, que é qualquer solução da equação não-homogênea</li>
-<li>a <em>função complementar</em> <span class="math inline">\(x_c\)</span>, que é a solução geral da equação reduzida (homogênea) <span class="math inline">\(x_t + \theta x_{t-1} = 0\)</span></li>
+<li>a <em>função complementar</em> <span class="math inline">\(x_c\)</span>, que é a solução geral da equação reduzida (homogênea) <span class="math inline">\(x_t - \theta x_{t-1} = 0\)</span></li>
 </ul>
 <p>O componente <span class="math inline">\(x_p\)</span> representa nível de equilíbrio intertemporal de <span class="math inline">\(x\)</span>, e o componente <span class="math inline">\(x_c\)</span> representa os desvios da trajetória desse equilíbrio. A soma dos dois constitui a solução geral devido à presença de uma constante arbitrária. Para definir a solução, é necessário um condição inicial.</p>
 <h4 id="função-complementar">Função Complementar</h4>
@@ -2507,6 +2507,12 @@ At + B
 \end{cases}\\
 \end{aligned}
 \]</span></p>
+<h4 id="primeira-ordem-app">Primeira Ordem App</h4>
+<p>Utilize o aplicativo abaixo para experimentar diferentes configurações da equação de primeira ordem.</p>
+<div class="layout-chunk" data-layout="l-page">
+<iframe src="https://rafaelpeixoto.shinyapps.io/PrimeiraOrdem/?showcase=0" width="624" height="500px">
+</iframe>
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <div id="refs" class="references" role="doc-bibliography">
 <div id="ref-neusser2016difference">

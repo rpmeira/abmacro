@@ -7,7 +7,7 @@ author:
     affiliation: Universidade Estadual de Campinas
     url: {}
 slug: peixoto2020eqestoc
-date: "`r Sys.Date()`"
+date: "Jan. 13, 2021"
 bibliography: EqDiff.bib
 nocite: | 
   @reginatto2019eqestoc
@@ -318,4 +318,11 @@ O *drift* afeta mais os valores da série (os pontos de convergência) gerada pe
 A equação em diferença $x_t - \theta x_{t-1} = f(t)$ tem seu comportamento determinado principalmente por $\theta$, independentemente de $f(t)$ apresentar componentes estocásticos ou não.
 
 
+#### Equação Estocástica App
+
+Utilize o aplicativo abaixo para experimentar diferentes configurações da equação de primeira ordem.
+
+```{r, layout="l-page"}
+knitr::include_app("https://rafaelpeixoto.shinyapps.io/EqdiffEstoch/",  height = "500px")
+```
 
