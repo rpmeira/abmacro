@@ -7,7 +7,7 @@ author:
     affiliation: Universidade Estadual de Campinas
     url: {}
 slug: peixoto2020segordem
-date: "`r Sys.Date()`"
+date: "Jan. 12, 2021"
 bibliography: EqDiff.bib
 nocite: | 
   @neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdifseg

@@ -8,7 +8,7 @@ author:
     affiliation: Universidade Estadual de Campinas
     url: {}
 slug: peixoto2020lsdmacro
-date: "`r Sys.Date()`"
+date: "Jan. 21, 2021"
 categories:
   - Introdução
   - LSD
@@ -17,6 +17,7 @@ output:
   distill::distill_article:
     self_contained: false
     toc: true
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
@@ -34,16 +35,18 @@ Os modelos escritos no LSD são compostos por um conjunto de Equações que são
 
 A estrutura mínima de um modelo do LSD é a seguinte:
 
->
+```{#numCode .Cpp}
 #include "../src/fun_head_fast.h"
->
+
 MODELBEGIN
->
+
 MODELEND
->
+
 void close_sim( )  
 {  
 }
+```
+
 
 
 As equações do modelo devem ser inseridas entre $MODELBEGIN$ e $MODELEND$.
@@ -65,51 +68,55 @@ As Equações podem ser compostas também por parâmetros que, na maioria das ve
 
 A macro $EQUATION$ inicia um bloco de código associado a uma variável. Por exemplo:
 
->
+```{#numCode .Cpp}
 EQUATION( "X" )  
-<p style="color:green;">/*  
+/*
 Comentário especificando o que a equação faz  
-*/  </p>
->
+*/ 
+
 RESULT( 3 ) // Neste exemplo a equação sempre retorna o valor 3 para a variável X
+```
+
+
 
 A primeira linha indica que o código se refere à variável X. A última linha indica o resultado que será atribuído para essa variável em cada período de tempo. No exemplo acima, é atriuído um valor constante para a variável, mas usulmente esse não é o caso. Esse resultado dependerá dos cálculos feitos pela Equação. O LSD oferece diversas macros para esses cálculos. Ao longo desse texto, serão vistas as macros mais frequentemente utilizadas.
 
 A macro mais utilizada é a $V(\dots)$, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:
 
->
+```{#numCode .Cpp}
 EQUATION( "PROF" )  
 /***************************  
-<p style="color:green;">
 A equação computa a taxa de lucro:
 PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn  
 lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior
 menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  
-***************************/  </p>
+***************************/
 RESULT( V("Price") * VL("A", 1) - V("C") - V("RIM") - V("RIN") * V("Inn") )
+```
 
 
 ## Armazenamento temporário: v[n]
 
 O modo padrão de expressar a Equação é coletando um conjunto de dados gerados pelo modelo (variáveis e parâmetros) e elaborar em cima disso para chegar no resultado desejado para o valor da variável. v[n] fornece uma forma de armazenar valores temporários que serão utilizados pela Equação. Estão disponíveis até mil posições para v[n], para cada Equação: de v[0] a v[999]. Os valores de v[n] são redefinidos para cada Equação, portanto não podem ser utilizados para transferir informação de uma Equação para outra. ou entre periodos de tempo diferentes na mesma Equação. Exemplo:
 
->
+
+```{#numCode .Cpp}
 EQUATION( "PROF" )  
-<p style="color:green;">
 /***************************  
 A equação computa a taxa de lucro:  
 PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn    
 lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior
 menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  
-***************************/  </p>
+***************************/
 v[0] = V( "Price" );  
-v[1] = VL( "A",1 );  
+v[1] = VL( "A", 1 );  
 v[2] = V( "C" );  
 v[3] = V( "RIM" );  
 v[4] = V( "RIN" );  
 v[5] = V( "Inn" );  
->
+
 RESULT( v[0] * v[1] - v[2] - v[3] - v[4] * v[5] )
+```
 
 
 Existem varias vantagens em utilizar v[n]: i) o código fica mais fácil de ler; ii) os valores intermediários podem ser observados usando o *LSD Debugger*; iii) se um valor é usado muitas vezes na mesma Equação, é mais rápido e menos propenso a erro guardar esse valor em um v[n].
@@ -151,13 +158,14 @@ Composta por SUM("X"), SUML("X", lag), SUMS(obj, "X"), SUMLS(obj, "X", lag). Ess
 
 Por exemplo, seja um modelo composto por um objeto chamado "Mercado", que contém uma variável chamada "Q_TOT", e do qual descende um conjunto de objetos chamados "Firmas", que possuem a variável chamada "Q". A Equação da soma dos "Q" de todas as firmas seria:
 
->
-EQUATION( "Q_TOT" )  <p style="color:green;">
+```{#numCode .Cpp}
+EQUATION( "Q_TOT" )
 /*  
 Calcula a soma de todos os Q's no mercado  
-*/  </p>
->
+*/
+
 RESULT( SUM( "Q" ) )
+```
 
 É importante ressaltar, porém, que se o modelo possuir diversas cópias do objeto "Mercado", a equação acima só irá computar os "Q" pertencentes às firmas que descendem da cópia do "Mercado" em questão, e não todos os "Q" do modelo. Portanto, se existirem 3 cópias de "Mercado" com 10 cópias de "Firma" em cada um, e "Q" for estabelecido como uma constante igual a 1, "Q_TOT" será 10, para cada objeto "Mercado", e não 30.
 
@@ -180,12 +188,12 @@ Composta por SEARCH("A") e SEARCHS(obj, "A"), essas macros exploram um ramo úni
 
 Essas macros retornam um ponteiro --- que pode ser usado (chamado) depois --- para a primeira instância do objeto "A" ou `NULL` caso não seja encontrado nenhum objeto. Por exemplo, deseja-se procurar pelo objeto "Mercado" e sabe-se que ele é avô do objeto que está realizando a busca. O endereço de "Mercado" será salvo no ponteiro temporário `cur` e depois utilizado para acessar a variável "VendasTotais":
 
->
+```{#numCode .Cpp}
 …  
 cur = SEARCH( p->up->up, "Mercado" );  
 v[1] = VS( cur, "VendasTotais" );  
 …  
-
+```
 
 #### Família SEARCH_CND(...)
 
@@ -193,11 +201,12 @@ Semelhante à família SEARCH(...), porém as macros SEARCH_CND("X", valor) e su
 
 Por exemplo, deseja-se extrair uma instância aleaória do objeto "Firma", de um grupo de 100 instâncias que possuem o parâmetro "IdFirma" ajustado de 1 a 100, e alocar o enderço desse objeto no ponteiro temporário `cur`:
 
->
+```{#numCode .Cpp}
 …  
 v[0] = uniform_int( 1, 100 );  
 cur = SEARCH_CND( "IdFirma", v[0] );  
-…   
+… 
+```
 
 
 #### Família SEARCH_INST(...)
@@ -206,27 +215,28 @@ Composta por SEARCH_INST("A") e SEARCH_INSTS(obj, "A"), essa família de macros 
 
 Por exemplo, deseja-se confirmar se o parâmetro "IdFirma" está ajustado ao número (posição) de cada instância do objeto "Firma":
 
->
+```{#numCode .Cpp}
 CYCLE( cur, "Firma" )  
 {  
   v[1] = VS( cur, "IdFirma" );  
   v[2] = SEARCH_INST( cur );  
   if ( v[1] != v[2] )  
     LOG( "\n IdFirma=%g diferente da instância número=%g", v[1], v[2] );  
-}  
+} 
+```
 
-
+ 
 #### Família RDNDRAW(...)
 
 Composta por RDNDRAW("A", X"), RDNDRAWL("A", "X", lag), RDNDRAWS(obj, "A", "X"), RDNDRAWLS(obj, "A", "X", lag), essa família de macros procura por um grupo de objetos chamado de "A" e retorna um ponteiro com o endereço de uma das instâncias do objeto "A", escolhido de forma aleatória com probabilidade proporcional aos valores da variável "X" (possuida pelo mesmo objeto). A variante S pode começar a busca a partir de outro objeto que não o objeto corrente, e a variante L pode especificar um período anterior que o período corrente.
 
 Por exemplo, deseja-se escolher aleatoriamente uma instância do objeto "Firma" e retornar o valor do seu parâmetro "IdFirma". O objeto "Firma" é descendente direto do objeto que está rodando a equação. O código atribui o parâmetro "prob", em cada Firma, ao quadrado do seu market share ("ms").
 
->
-EQUATION( "EscolherFirma" )  <p style="color:green;">
+```{#numCode .Cpp}
+EQUATION( "EscolherFirma" )  
 /***************************  
 Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    
-***************************/ </p>  
+***************************/ 
 CYCLE( cur, "Firma" )  
 {  
   v[0] = V( "ms" );  
@@ -234,20 +244,21 @@ CYCLE( cur, "Firma" )
 }  
 cur = RNDDRAW( "Firma", "Prob" );  
 RESULT( VS( cur, "IdFirma" ) )  
-
+```
 
 
 #### Família RDNDRAW_FAIR(...)
 
 Composta por RDNDRAW_FAIR("A") e RDNDRAW_FAIRS(obj, "A"), essa família de macros é semelhante à Família RDNDRAW(...), porém usa a mesma probabilidade para todos os objetos. Por exemplo:
 
->
+```{#numCode .Cpp}
 EQUATION( "EscolherFirma" )  <p style="color:green;">
 /***************************  
 Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    
 ***************************/ </p>  
 cur = RNDDRAW_FAIR( "Firma");  
 RESULT( VS( cur, "IdFirma" ) )  
+```
 
 
 #### Família WRITE(...)
@@ -263,7 +274,7 @@ Composta por CYCLE(cur, "A"), CYCLES(obj, cur, "A"), CYCLE_SAFE(cur, "A"), CYCLE
 
 Por exemplo, deseja-se calcular o lucro total de todas as Firmas, de todos os Mercados (o objeto Mercado contém o objeto Firma). O ponteiro `cur` cicla através de todos os objetos chamados "Mercado" (supondo que exista mais de 1). Por sua vez, para cada instância de "Mercado", o ponteiro `cur1` cicla através de cada objeto chamado "Firma" que está contido nessa instância em especifico do objeto "Mercado". Para cada "Firma"
 
->
+```{#numCode .Cpp}
 …   
 v[0] = 0; // ajustar v[0] para ser inicialmente 0  
 CYCLE( cur, "Mercado" )  
@@ -276,6 +287,8 @@ CYCLE( cur, "Mercado" )
 }  
 // A partir daqui v[0] contém os lucros acumulados  
 …   
+```
+
 
 Nunca use DELETE(...) dentro de um CYCLE(...) para remover uma das instâncias do objeto sendo ciclado. Deletar qualquer objeto apontado por `cur` impede a macro CYCLE(...) de identificar a próxima instância do objeto. Como alternativo, utiliza-se a macro CYCLE_SAFE(...) 
 
@@ -352,38 +365,42 @@ Algumas das funções abaixo só estão disponíveis para compilador C++11 ou ma
 
 Dentro da Equação de uma variável --- ou seja, entre EQUATION(...) e RESULT(...) --- é possível usar qualquer elemento ou construção legal do C++. Como já visto, toda linha de código dentro da Equação termina com um ponto e vírgula ";" --- a menos que seja um comando operando sobre um bloco de código, como "if(...)" ---, o que faz parte da sintaxe do C++. Outro exemplo de sintaxe do C++ já visto é a dos comentários:
 
->
-<p style="color:green;">
+```{#numCode .Cpp}
 /*  
 Esse é um comentário  
 com mais de uma linha  
 */  
-</p>
+```
 
-
->
-<p style="color:green;">
+```{#numCode .Cpp}
 // Esse é um comentário com apenas uma linha  
-</p>
+```
 
 
 #### Atribuições, operações aritméticas e incrementos
 
 Sendo $a$ uma variável (de C++), é possível lhe atribuir um valor com o comando "=":
 
->
-$a = 4.3;$
+```{#numCode .Cpp}
+a = 4.3;
+```
+
+
 
 Toda atribuição em C++ precisa terminar com um ponto e vírgula.  
 É possível também atribuir valores de outras variáveis, assim como usar operações matemáticas:
 
->
-$a = b + 3 - d / (e + g) * (h + i);$
+```{#numCode .Cpp}
+a = b + 3 - d / (e + g) * (h + i);
+```
+
 
 Um pouco menos óbvio, é possível usar a mesma variável nos dois lados da atribuição:
 
->
-$a = a + 32;$
+```{#numCode .Cpp}
+a = a + 32;
+```
+
 
 O comando acima atribui a $a$ o seu valor prévio mais um acréscimo de 32. Portanto, caso $a$ tivesse o valor de 5, após o comando acima $a$ teria o valor de 37.  
 Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-lo: $a\ +\!= 32;$. O mesmo pode ser feito com outras operações aritméticas:
@@ -404,17 +421,16 @@ O comando $b = a++;$, por exemplo, primeiro atribui o valor de $a$ a $b$ e depoi
 
 A função `if()` é uma forma de executar blocos de código apenas sobre determinadas condições:
 
->
+```{#numCode .Cpp}
 if ( condição )  
-{  <p style="color:green;">  
+{   
   // colocar aqui alguma linha de comando a ser executada caso a "condição" seja verdadeira  
-  </p>  
 }  
 else  
-{  <p style="color:green;">  
+{   
   // colocar aqui alguma linha de comando a ser executada caso a "condição" seja falsa  
-  </p>
-}  
+} 
+```
 
 
 Os colchetes "{" e "}" não são necessários caso haja apenas uma linha de comando (terminada com ";").  
@@ -438,22 +454,26 @@ A condição pode ainda ser composta por operadores lógicos conectando as compa
 
 Esse comando permite a repetição de um bloco de código até que uma condição específica seja satisfeita. A sua sintaxe é a seguinte:
 
->
+```{#numCode .Cpp}
 for ( INI ; CONDIÇÂO ; FIMCICLO )  
-{   <p style="color:green;"> 
+{  
   // Bloco de código do ciclo  
-  // Pode haver qualquer comando aqui  </p>
+  // Pode haver qualquer comando aqui 
 }  
+```
 
 Por exemplo:
 
->
+```{#numCode .Cpp}
 for ( i = -2; i < 3; i++ )  
-{<p style="color:green;"> 
-  // na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2 </p>
+{
+  // na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2 
   v[i] = i;  
-} <p style="color:green;">   
-// aqui, i é igual a 3, porque foi a condição para sair do ciclo </p>  
+}   
+// aqui, i é igual a 3, porque foi a condição para sair do ciclo 
+
+```
+
 
 
 
