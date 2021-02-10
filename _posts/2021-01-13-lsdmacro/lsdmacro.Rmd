@@ -12,7 +12,6 @@ date: "Jan. 21, 2021"
 categories:
   - Introdução
   - LSD
-  - ABM
 output:
   distill::distill_article:
     self_contained: false

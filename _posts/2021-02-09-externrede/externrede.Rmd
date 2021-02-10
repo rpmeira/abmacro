@@ -1,0 +1,417 @@
+---
+title: "Modelo - Externalidades de Rede"
+description: |
+  Este post apresenta uma versão em LSD do modelo de externalidades de rede proposto por Brian Arthur.
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2020externrede
+date: 02-09-2021
+bibliography: externrede.bib
+nocite: | 
+  @arthur1989competing
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Modelos
+  - LSD
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+library(readr)
+```
+
+
+## Introdução
+
+O modelo de externalidades de rede proposto por Brian Arthur explora a dinâmica de alocação sob retornos crescentes, em um contexto no qual agentes escolhem entre tecnologias que competem entre si para serem adotadas. Quando duas ou mais tecnologias, com retornos crescentes, competem por um mercado de consumidores em potencial, eventos aleatórios podem, por mero acaso, dar uma vantagem inicial para uma delas. Com isso, essa tecnologia passa a ser mais adotada, o que pode fazer com que ela seja mais aperfeiçoada e, como consequência, adotada por mais consumidores ainda. Dessa forma, uma tecnologia que, por acaso, ganhe uma liderança inicial em adoções, pode dominar o mercado, bloqueando --- *locking out* --- o crescimento das demais.
+
+Isso ocorre, de acordo com Brian Arthur, pois os consumidores valorizam um produto (ou tecnologia) por dois motivos:
+
+- Suas próprias preferências pessoais (como pressuposto na teoria econômica clássica)
+- Externalidades de rede, ou seja, a qualidade adicionada a um produto devido ao fato de outros agentes o usarem.
+
+A partir disso, o modelo proposto por Arthur busca examinar explicitamente os efeitos, sobre a dinâmica da adoção de uma tecnologia (ou escolha de um produto), das externalidades de rede.
+
+## Modelo
+
+O modelo aqui discutido considera dois grupos de consumidores, **tipo 0** e **tipo 1**, e dois tipos de produtos, **MS** e **Apple**. Um consumidor avalia um produto atribuindo a ele uma utilidade composta por dois elementos:
+
+- A própria preferência do consumidor
+- O valor de rede do produto
+
+As preferências dos consumidores são fixas, embora divergindo para cada um dos grupos de consumidores e tipos de produto. O valor de rede, por sua vez, muda com o número de outros usuários usando o tipo de produto em questão.
+
+A partir dessas definições, vamos expressar formalmente a utilidade dos consumidores. Sejam $v^{MS}_0$ e $v^{Apple}_0$ as preferências próprias do consumidor **tipo 0** para os produtos **MS** e **Apple**. Adicionalmente, sejam $N^{MS}$ e $N^{Apple}$ os números de outros consumidores que utilizam cada um desses produtos respectivamente. Por fim, seja $x_0$ o efeito da externalidade de rede para o consumidor do tipo 0. O mesmo é feito para o consumidor **tipo 1**:
+
+#### Tipo 0
+
+- $U^{MS}_0 = v^{MS}_0 + x_0 \times N^{MS}$, escolhendo MS
+- $U^{Apple}_0 = v^{Apple}_0 + x_0 \times N^{Apple}$, escolhendo Apple
+
+#### Tipo 1
+
+- $U^{MS}_1 = v^{MS}_1 + x_1 \times N^{MS}$, escolhendo MS
+- $U^{Apple}_1 = v^{Apple}_1 + x_1 \times N^{Apple}$, escolhendo Apple
+
+Com isso, quando um agente precisa escolher qual produto comprar, MS ou Apple, ele simplesmente compara as utilidades:
+
+#### Tipo 0
+
+- Escolhe MS se $U_0^{MS} > U_0^{Apple}$
+- Escolhe Apple se $U_0^{MS} < U_0^{Apple}$
+
+#### Tipo 1
+
+- Escolhe MS se $U_1^{MS} > U_1^{Apple}$
+- Escolhe Apple se $U_1^{MS} < U_1^{Apple}$
+
+<br>
+
+O modelo funciona da seguinte maneira:
+
+1. Crie aleatoriamente, com 50% de probabilidade para cada, um agente do tipo 0 ou 1.
+2. Compute suas utilidades ao escolher MS ou Apple.
+3. Escolha, para esse novo agente, o produto com a maior utilidade.
+4. Atualize o $N^{MS}$ caso o agente escolha MS ou o $N^{Apple}$ caso ele escolha Apple.
+
+## Equações
+
+A equações requeridas para rodar o modelo derivam dos itens apontados acima (sobre como o modelo funciona), sendo necessário, todavia, uma equação (tanto para utilidade, quanto para número consumidores e sua consequente participação de mercado) para cada tipo de produto. O modelo inteiro é constituido, assim, por 7 equações:
+
+```{#numCode .Cpp}
+//#define EIGENLIB			// uncomment to use Eigen linear algebra library
+//#define NO_POINTER_INIT	// uncomment to disable pointer checking
+#include "fun_head_fast.h"
+// do not add Equations in this area
+MODELBEGIN
+// insert your equations here, between the MODELBEGIN and MODELEND words
+
+EQUATION("NewAgent")
+/*
+Type of new agent
+*/
+if(RND < 0.5)
+	v[0] = 1;
+else
+	v[0] = 0;
+RESULT(v[0])
+
+
+EQUATION("UtilityMS")
+/*
+Utility in using MS
+*/
+v[0] = V("NewAgent"); // type of new agent
+if(v[0] == 0)
+	{
+	v[1] = V("User0MS"); // value for agent type 0 using MS
+	v[2] = V("User0Net"); // network externalitie coefficiente for agent type 0
+	}
+else
+	{
+	v[1] = V("User1MS"); // value for agent type 1 using MS
+	v[2] = V("User1Net"); // network externalitie coefficiente for agent type 1
+	}
+v[3] = VL("NumMS", 1); // number of existing consumers using MS
+v[4] = v[1] + (v[2] * v[3])
+RESULT(v[4])
+
+
+EQUATION("UtilityApple")
+/*
+Utility in using Apple
+*/
+v[0] = V("NewAgent"); // type of new agent
+if(v[0] == 0)
+	{
+	v[1] = V("User0Apple"); // value for agent type 0 using Apple
+	v[2] = V("User0Net"); // network externalitie coefficiente for agent type 0
+	}
+else
+	{
+	v[1] = V("User1Apple"); // value for agent type 1 using Apple
+	v[2] = V("User1Net"); // network externalitie coefficiente for agent type 1
+	}
+v[3] = VL("NumApple", 1); // number of existing consumers using Apple
+v[4] = v[1] + (v[2] * v[3])
+RESULT(v[4])
+
+
+EQUATION("NumMS")
+/*
+Number of MS users
+*/
+v[0] = VL("NumMS", 1);
+v[1] = V("UtilityApple");
+v[2] = V("UtilityMS");
+if(v[2] > v[1])
+	v[3] = v[0] + 1;
+else
+	v[3] = v[0];
+RESULT(v[3])
+
+
+EQUATION("NumApple")
+/*
+Number of Apple users
+*/
+v[0] = VL("NumApple", 1);
+v[1] = V("UtilityApple");
+v[2] = V("UtilityMS");
+if(v[2] < v[1])
+	v[3] = v[0] + 1;
+else
+	v[3] = v[0];
+RESULT(v[3])
+
+
+EQUATION("ShareMS")
+/*
+Share of MS users
+*/
+v[0] = V("NumMS");
+v[1] = V("NumApple");
+v[2] = v[0] / (v[0] + v[1])
+RESULT(v[2])
+
+
+EQUATION("ShareApple")
+/*
+Share of Apple users
+*/
+v[0] = V("NumMS");
+v[1] = V("NumApple");
+v[2] = v[1] / (v[0] + v[1])
+RESULT(v[2])
+
+
+MODELEND
+// do not add Equations in this area
+void close_sim( void )
+{
+	// close simulation special commands go here
+}
+```
+
+
+Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis que fazem parte do modelo.
+
+##### EQUATION("NewAgent")
+
+A primeira equação do modelo (lembrando que no LSD a ordem das equações não importa) é bem simples e serve para decidir, com probabilidade de 50%, o tipo de agente, **tipo 0** ou **tipo 1**. Em cada período de tempo (da simulação), a variável "NewAgent" assume o valor 0 ou 1, com probabilidade de 50% para cada. 
+
+```{#numCode .Cpp}
+EQUATION("NewAgent")
+/*
+Type of new agent
+*/
+if(RND < 0.5)
+    v[0] = 1;
+else
+    v[0] = 0;
+RESULT(v[0])
+```
+
+Por exemplo, seja uma simulação com 50 períodos, a variável "NewAgent" apresenta o seguinte comportamento:
+
+```{r}
+ggplot(data = data.frame(x = 1:50, y = rbinom(n = 50, size = 1, prob = 0.5))) + 
+  geom_point(aes(x = x, y = y)) + 
+  theme_hc() + 
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"), 
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "darkblue"), 
+        legend.position = "right") + 
+  xlab("t") + 
+  ylab("NewAgent") + 
+  ggtitle('EQUATION("NewAgent")')
+```
+
+
+##### EQUATION("UtilityMS") | EQUATION("UtilityApple")
+
+As proximas duas equações servem para calcular a utilidade de cada produto (MS e Apple). Como mencionado anteriormente, essa utilidade depende das preferências individuais dos consumidores (tipo 0 e tipo 1) e das externalidades de rede, que por sua vez dependem do número de usuários de cada produto. Ou seja, $U^{i}_j = v^{i}_j + x_j \times N^{i}$, onde $i$ pode ser $MS$ ou $Apple$ e $j$ pode ser 0 ou 1. 
+
+- $v^{i}_j$ é um parâmetro que pode assumir 4 valores, a depender do tipo de consumidor e do tipo de produto.
+- $x_j$ é um parâmetro que pode assumir 2 valores, a depender do tipo de consumidor.
+- $N^{i}$ é uma variável que conta a quandidade de consumidores de cda tipo de produto.
+
+No código abaixo, que calcula a utilidade de MS em cada período (seja o novo consumidor sendo do tipo 0 sendo do tipo 1), $v^{MS}_0$ é representado pelo parâmetro "User0MS" e $x_0$ é representado por "User0Net". O mesmo ocorre para oa parâmetros do consumidor tipo 1.
+
+```{#numCode .Cpp}
+EQUATION("UtilityMS")
+/*
+Utility in using MS
+*/
+v[0] = V("NewAgent"); // type of new agent
+if(v[0] == 0)
+    {
+    v[1] = V("User0MS"); // value for agent type 0 using MS
+    v[2] = V("User0Net"); // network externalitie coefficiente for agent type 0
+    }
+else
+    {
+    v[1] = V("User1MS"); // value for agent type 1 using MS
+    v[2] = V("User1Net"); // network externalitie coefficiente for agent type 1
+    }
+v[3] = VL("NumMS", 1); // number of existing consumers using MS
+v[4] = v[1] + (v[2] * v[3])
+RESULT(v[4])
+```
+
+Por exemplo, digamos que os parâmetros sejam escolhidos com os seguintes valores:
+
+- $v^{MS}_0 = 10$
+- $v^{MS}_1 = 5$
+- $v^{Apple}_0 = 5$
+- $v^{Apple}_1 = 10$
+
+Ou seja, consumidores **tipo 0** dão 5 de utilidade para MS e 10 para Apple, e consumidores **tipo 1** fazem o contrário, dão 10 de utilidade para MS e 5 para Apple. 
+Além disso, digamos que tanto $x_0$ quanto $x_1$ possuam um valor de $0.2$, ou seja, essa é a influência que cada número adicional de consumidores possui sobre a externalidade de rede tanto para consumidores do tipo 0 quanto para do tipo 1.
+Vejamo a evolução das variáveis "UtilityMS" e "UtilityApple", conforme novos agentes vão aparecendo e escolhendo entre um produto e outro.
+
+```{r}
+utilitytable <- read_delim("utilitytable.txt",
+                           "\t", 
+                           escape_double = FALSE, 
+                           trim_ws = TRUE)
+
+knitr::kable(utilitytable,
+             col.names = c("t", "NewAgent", "UtilityApple", "UtilityMS"),
+             row.names = F)
+
+```
+
+Como visto na tabela, o primeiro agente foi do **tipo 0**, que atribui utilidade 10 para MS e 5 para Apple. Como 10 > 5, esse agente escolhe MS. O segundo agente também é do **tipo 0** e atribui 10 para MS e 5 para Apple, porém como já há 1 consumidor utilizando MS, e a externalidade de rede é $x \times N = 0.2 \times 1 = 0.2$, a utilidade total de MS é 10.2. O terceiro agente é do **tipo 1**, que atribui 5 para MS e 10 para Apple. Nesse terceiro períoro já há 2 agentes utilizando MS, portanto a utilidade de MS é acrescida de 0.4. De toda forma, porém, 10 > 5.4, e esse agente escolhe Apple. 
+No longo prazo essas variáveis evoluem da seguinte forma:
+
+```{r}
+# Acessar resultados do LSD
+utilityplot <- read.raw.lsd("utilityplot.res.gz")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(utilityplot) <- c("UtilityApple", "UtilityMS")
+
+# Transformar em TS
+utilityplot <- as.ts(utilityplot)
+
+# Visualizar Gráfico
+autoplot(utilityplot) +
+  ggtitle("Utilidades Apple e MS") +
+  xlab("t") +
+  ylab("Utilidade") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"), 
+        legend.position = "top") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 400, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 5,to = 65, by = 5))
+```
+
+É possívle observar que após um certo período (em torno de $t=250$) a utilidade de apple sempre será maior que a de MS, independente do tipo de agente que entrará em seguida. Isso por que a externalidade de rede ultrapassa a diferença de preferências próprias entre os tipos de agentes. A partir desse ponto, todo novo agente irá escolher Apple, o que faz com que o número de usuários desse produto cresça continuamente, enquanto o número de usuários MS permaneça constante (a sua curva de utilidade irá alternar entre os valores 10 e 5 acrescidos da externalidade derivada do número de agentes que escolheram MS até o ponto em que a utilidade MS ultrapassava a de Apple a depender do tipo do agente).
+
+
+##### EQUATION("NumMS") | EQUATION("NumApple")
+
+A equação do número de usuários de cada produto simplemente compara os valores das utilidades de MS e Apple, calculadas nas equações mostradas anteriormente, e aumenta em uma unidade o valor do número de usuários a depender de qual utilidade é maior.
+
+```{#numCode .Cpp}
+EQUATION("NumMS")
+/*
+Number of MS users
+*/
+v[0] = VL("NumMS", 1);
+v[1] = V("UtilityApple");
+v[2] = V("UtilityMS");
+if(v[2] > v[1])
+    v[3] = v[0] + 1;
+else
+    v[3] = v[0];
+RESULT(v[3])
+```
+
+
+A sua evolução é semelhante à da utilidade, dadas que ambas incrementam quando há uma adição de um agente nesse produto em específico. Recapitulando, em cada período surge um novo agente que deve escolher entre MS e Apple; para fazer tal escolha, esse agente compara as utilidades desses dois tipos de produtos. Além disso, há dois tipos de agentes, que atribuem valores diferentes para sua preferência individual entre MS e Apple. Assim, em cada período, cada novo agente computa as utilidades dos dois produtos --- a partir da sua preferência individual e da externalidade de rede, que depende do número de usuários em cada produto --- e escolhe o produto com maior utilidade. Com isso, vai aumentando o número de usuários de cada produto.
+
+```{r}
+# Acessar resultados do LSD
+numplot <- read.raw.lsd("numplot.res")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(numplot) <- c("NumApple", "NumMS")
+
+# Transformar em TS
+numplot <- as.ts(numplot)
+
+# Visualizar Gráfico
+autoplot(numplot) +
+  ggtitle("Número de Usuários Apple e MS") +
+  xlab("t") +
+  ylab("Usuários") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"), 
+        legend.position = "top") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 400, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 300, by = 20))
+```
+
+
+##### EQUATION("ShareMS") | EQUATION("ShareApple")
+
+Por fim, é computado também o *market share* dos dois tipos de produtos, o que é feito apenas dividindo o número de usuários de cada produto pelo número total de agentes.
+
+```{#numCode .Cpp}
+EQUATION("ShareMS")
+/*
+Share of MS users
+*/
+v[0] = V("NumMS");
+v[1] = V("NumApple");
+v[2] = v[0] / (v[0] + v[1])
+RESULT(v[2])
+```
+
+
+```{r, preview=TRUE}
+# Acessar resultados do LSD
+shareplot <- read.raw.lsd("shareplot.res")
+
+# Mudar nome das Variáveis (Colunas)
+colnames(shareplot) <- c("ShareApple", "ShareMS")
+
+# Transformar em TS
+shareplot <- as.ts(shareplot)
+
+# Visualizar Gráfico
+autoplot(shareplot) +
+  ggtitle("Market Share Apple e MS") +
+  xlab("t") +
+  ylab("Market Share") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"), 
+        legend.position = "top") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 400, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+
+## Conclusão
+
+Esse modelo explora a dinâmica de um mercado com dois produtos em competição, onde cada usuário adicional de um dos produtos aumenta a externalidade de rede desse produto. Como visto, após certo período o mercado é dominado por um dos tipos de produto e todo usuário novo passa a escolher esse produto, bloqueado --- *locking out* --- o outro.
+Para entender melhor o modelo, foi muito útil analisar as equações de forma separada, buscando observar os *inputs* que cada equação recebe (parâmetros e outras variáveis) e os *outputs* que ela retorna em cada período de tempo (os possíveis valores da variável em questão). 
+
+
+
+
