@@ -7,7 +7,18 @@
     <description>Esse Blog apresenta posts relacioandos à modelagem baseada em agentes aplicada em macroeconomia.
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>ter, 09 fev 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>qua, 10 fev 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Modelo - Informações Imperfeitas para Consumidor</title>
+      <dc:creator>Rafael Peixoto</dc:creator>
+      <link>https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf</link>
+      <description>Este post apresenta uma versão em LSD de um modelo que analisa a escolha, por produtos, de consumidores em um mercado com informações imperfeitas.</description>
+      <category>Modelos</category>
+      <category>LSD</category>
+      <guid>https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf</guid>
+      <pubDate>qua, 10 fev 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf/infoimperf_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="802" height="729"/>
+    </item>
     <item>
       <title>Modelo - Externalidades de Rede</title>
       <dc:creator>Rafael Peixoto</dc:creator>

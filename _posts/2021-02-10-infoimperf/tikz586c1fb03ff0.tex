@@ -1,0 +1,30 @@
+\documentclass{article}
+\include{preview}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\begin{document}
+\begin{preview}
+%% TIKZ_CODE %%
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width = 2.5cm, 
+                         minimum height = 1cm, text centered, draw = black, 
+                         fill = lightgray!30]
+\tikzstyle{arrow} = [thick, ->, >= stealth]
+
+\begin{tikzpicture}[node distance = 3cm]
+  \node (mercado) [startstop] {Mercado};
+  \node (oferta) [startstop, below left of = mercado] {Oferta};
+  \node (demanda) [startstop, below right of = mercado] {Demanda};
+  \node (firma) [startstop, below of = oferta] {Firma};
+  \node (consumidor) [startstop, below of = demanda] {Consumidor};
+
+  \draw [arrow] (mercado) -- (oferta);
+  \draw [arrow] (mercado) -- (demanda);
+  \draw [arrow] (oferta) -- (firma);
+  \draw [arrow] (demanda) -- (consumidor);
+\end{tikzpicture}
+\end{preview}
+\end{document}
