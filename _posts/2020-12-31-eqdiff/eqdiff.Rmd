@@ -30,6 +30,13 @@ library(ggthemes)
 library(DiagrammeR)
 ```
 
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+}
+```
+
+
 ## Definição
 
 A equação em diferença descreve a evolução de alguma variável (ou grupo de variáveis) ao longo do tempo. O valor dessa variável no período $t$ é denotado por $x_t$. O índice de tempo $t$ assume valores discretos e tipicamente abrange todos os números inteiros, ou seja, $t = \dots, -2, -1, 0, 1, 2, \dots$.

@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
@@ -100,7 +101,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Este post apresenta uma versão em LSD do modelo de externalidades de rede proposto por Brian Arthur."/>
 <meta property="og:url" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/"/>
-<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-5-1.png"/>
+<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-6-1.png"/>
 <meta property="og:image:width" content="1248"/>
 <meta property="og:image:height" content="768"/>
 <meta property="og:locale" content="en_US"/>
@@ -111,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Modelo - Externalidades de Rede"/>
 <meta property="twitter:description" content="Este post apresenta uma versão em LSD do modelo de externalidades de rede proposto por Brian Arthur."/>
 <meta property="twitter:url" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/"/>
-<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-5-1.png"/>
+<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-6-1.png"/>
 <meta property="twitter:image:width" content="1248"/>
 <meta property="twitter:image:height" content="768"/>
 
@@ -132,7 +133,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","externrede.bib","externrede_files/anchor-4.2.2/anchor.min.js","externrede_files/bowser-1.9.3/bowser.min.js","externrede_files/crosstalk-1.1.0.1/css/crosstalk.css","externrede_files/crosstalk-1.1.0.1/js/crosstalk.js","externrede_files/crosstalk-1.1.0.1/js/crosstalk.js.map","externrede_files/crosstalk-1.1.0.1/js/crosstalk.min.js","externrede_files/crosstalk-1.1.0.1/js/crosstalk.min.js.map","externrede_files/datatables-binding-0.16/datatables.js","externrede_files/datatables-css-0.0.0/datatables-crosstalk.css","externrede_files/distill-2.2.21/template.v2.js","externrede_files/dt-core-1.10.20/css/jquery.dataTables.extra.css","externrede_files/dt-core-1.10.20/css/jquery.dataTables.min.css","externrede_files/dt-core-1.10.20/js/jquery.dataTables.min.js","externrede_files/figure-html5/unnamed-chunk-1-1.png","externrede_files/figure-html5/unnamed-chunk-3-1.png","externrede_files/figure-html5/unnamed-chunk-4-1.png","externrede_files/figure-html5/unnamed-chunk-5-1.png","externrede_files/htmlwidgets-1.5.3/htmlwidgets.js","externrede_files/jquery-1.11.3/jquery.min.js","externrede_files/jquery-1.12.4/jquery.min.js","externrede_files/jquery-1.12.4/LICENSE.txt","externrede_files/webcomponents-2.0.0/webcomponents.js","numplot.res","shareplot.res","texput.log","utilityplot.res.gz","utilitytable.txt"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","externrede.bib","externrede_files/anchor-4.2.2/anchor.min.js","externrede_files/bowser-1.9.3/bowser.min.js","externrede_files/crosstalk-1.1.0.1/css/crosstalk.css","externrede_files/crosstalk-1.1.0.1/js/crosstalk.js","externrede_files/crosstalk-1.1.0.1/js/crosstalk.js.map","externrede_files/crosstalk-1.1.0.1/js/crosstalk.min.js","externrede_files/crosstalk-1.1.0.1/js/crosstalk.min.js.map","externrede_files/datatables-binding-0.16/datatables.js","externrede_files/datatables-css-0.0.0/datatables-crosstalk.css","externrede_files/distill-2.2.21/template.v2.js","externrede_files/dt-core-1.10.20/css/jquery.dataTables.extra.css","externrede_files/dt-core-1.10.20/css/jquery.dataTables.min.css","externrede_files/dt-core-1.10.20/js/jquery.dataTables.min.js","externrede_files/figure-html5/unnamed-chunk-1-1.png","externrede_files/figure-html5/unnamed-chunk-2-1.png","externrede_files/figure-html5/unnamed-chunk-3-1.png","externrede_files/figure-html5/unnamed-chunk-4-1.png","externrede_files/figure-html5/unnamed-chunk-5-1.png","externrede_files/figure-html5/unnamed-chunk-6-1.png","externrede_files/header-attrs-2.5/header-attrs.js","externrede_files/htmlwidgets-1.5.3/htmlwidgets.js","externrede_files/jquery-1.11.3/jquery.min.js","externrede_files/jquery-1.12.4/jquery.min.js","externrede_files/jquery-1.12.4/LICENSE.txt","externrede_files/webcomponents-2.0.0/webcomponents.js","numplot.res","shareplot.res","texput.log","utilityplot.res.gz","utilitytable.txt"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2012,6 +2013,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2083,6 +2085,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </nav>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+</style>
+</div>
 <h2 id="introdução">Introdução</h2>
 <p>O modelo de externalidades de rede proposto por Brian Arthur explora a dinâmica de alocação sob retornos crescentes, em um contexto no qual agentes escolhem entre tecnologias que competem entre si para serem adotadas. Quando duas ou mais tecnologias, com retornos crescentes, competem por um mercado de consumidores em potencial, eventos aleatórios podem, por mero acaso, dar uma vantagem inicial para uma delas. Com isso, essa tecnologia passa a ser mais adotada, o que pode fazer com que ela seja mais aperfeiçoada e, como consequência, adotada por mais consumidores ainda. Dessa forma, uma tecnologia que, por acaso, ganhe uma liderança inicial em adoções, pode dominar o mercado, bloqueando — <em>locking out</em> — o crescimento das demais.</p>
 <p>Isso ocorre, de acordo com Brian Arthur, pois os consumidores valorizam um produto (ou tecnologia) por dois motivos:</p>
@@ -2130,133 +2144,133 @@ document.addEventListener('DOMContentLoaded', function() {
 </ol>
 <h2 id="equações">Equações</h2>
 <p>A equações requeridas para rodar o modelo derivam dos itens apontados acima (sobre como o modelo funciona), sendo necessário, todavia, uma equação (tanto para utilidade, quanto para número consumidores e sua consequente participação de mercado) para cada tipo de produto. O modelo inteiro é constituido, assim, por 7 equações:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="co">//#define EIGENLIB          // uncomment to use Eigen linear algebra library</span></a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">//#define NO_POINTER_INIT   // uncomment to disable pointer checking</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="pp">#include </span><span class="im">&quot;fun_head_fast.h&quot;</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">// do not add Equations in this area</span></a>
-<a class="sourceLine" id="numCode-5" title="5">MODELBEGIN</a>
-<a class="sourceLine" id="numCode-6" title="6"><span class="co">// insert your equations here, between the MODELBEGIN and MODELEND words</span></a>
-<a class="sourceLine" id="numCode-7" title="7"></a>
-<a class="sourceLine" id="numCode-8" title="8">EQUATION(<span class="st">&quot;NewAgent&quot;</span>)</a>
-<a class="sourceLine" id="numCode-9" title="9"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-10" title="10"><span class="co">Type of new agent</span></a>
-<a class="sourceLine" id="numCode-11" title="11"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-12" title="12"><span class="cf">if</span>(RND &lt; <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="numCode-13" title="13">    v[<span class="dv">0</span>] = <span class="dv">1</span>;</a>
-<a class="sourceLine" id="numCode-14" title="14"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-15" title="15">    v[<span class="dv">0</span>] = <span class="dv">0</span>;</a>
-<a class="sourceLine" id="numCode-16" title="16">RESULT(v[<span class="dv">0</span>])</a>
-<a class="sourceLine" id="numCode-17" title="17"></a>
-<a class="sourceLine" id="numCode-18" title="18"></a>
-<a class="sourceLine" id="numCode-19" title="19">EQUATION(<span class="st">&quot;UtilityMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-20" title="20"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-21" title="21"><span class="co">Utility in using MS</span></a>
-<a class="sourceLine" id="numCode-22" title="22"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-23" title="23">v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></a>
-<a class="sourceLine" id="numCode-24" title="24"><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</a>
-<a class="sourceLine" id="numCode-25" title="25">    {</a>
-<a class="sourceLine" id="numCode-26" title="26">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0MS&quot;</span>); <span class="co">// value for agent type 0 using MS</span></a>
-<a class="sourceLine" id="numCode-27" title="27">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></a>
-<a class="sourceLine" id="numCode-28" title="28">    }</a>
-<a class="sourceLine" id="numCode-29" title="29"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-30" title="30">    {</a>
-<a class="sourceLine" id="numCode-31" title="31">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1MS&quot;</span>); <span class="co">// value for agent type 1 using MS</span></a>
-<a class="sourceLine" id="numCode-32" title="32">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></a>
-<a class="sourceLine" id="numCode-33" title="33">    }</a>
-<a class="sourceLine" id="numCode-34" title="34">v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using MS</span></a>
-<a class="sourceLine" id="numCode-35" title="35">v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</a>
-<a class="sourceLine" id="numCode-36" title="36">RESULT(v[<span class="dv">4</span>])</a>
-<a class="sourceLine" id="numCode-37" title="37"></a>
-<a class="sourceLine" id="numCode-38" title="38"></a>
-<a class="sourceLine" id="numCode-39" title="39">EQUATION(<span class="st">&quot;UtilityApple&quot;</span>)</a>
-<a class="sourceLine" id="numCode-40" title="40"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-41" title="41"><span class="co">Utility in using Apple</span></a>
-<a class="sourceLine" id="numCode-42" title="42"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-43" title="43">v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></a>
-<a class="sourceLine" id="numCode-44" title="44"><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</a>
-<a class="sourceLine" id="numCode-45" title="45">    {</a>
-<a class="sourceLine" id="numCode-46" title="46">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0Apple&quot;</span>); <span class="co">// value for agent type 0 using Apple</span></a>
-<a class="sourceLine" id="numCode-47" title="47">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></a>
-<a class="sourceLine" id="numCode-48" title="48">    }</a>
-<a class="sourceLine" id="numCode-49" title="49"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-50" title="50">    {</a>
-<a class="sourceLine" id="numCode-51" title="51">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1Apple&quot;</span>); <span class="co">// value for agent type 1 using Apple</span></a>
-<a class="sourceLine" id="numCode-52" title="52">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></a>
-<a class="sourceLine" id="numCode-53" title="53">    }</a>
-<a class="sourceLine" id="numCode-54" title="54">v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumApple&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using Apple</span></a>
-<a class="sourceLine" id="numCode-55" title="55">v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</a>
-<a class="sourceLine" id="numCode-56" title="56">RESULT(v[<span class="dv">4</span>])</a>
-<a class="sourceLine" id="numCode-57" title="57"></a>
-<a class="sourceLine" id="numCode-58" title="58"></a>
-<a class="sourceLine" id="numCode-59" title="59">EQUATION(<span class="st">&quot;NumMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-60" title="60"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-61" title="61"><span class="co">Number of MS users</span></a>
-<a class="sourceLine" id="numCode-62" title="62"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-63" title="63">v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>);</a>
-<a class="sourceLine" id="numCode-64" title="64">v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-65" title="65">v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-66" title="66"><span class="cf">if</span>(v[<span class="dv">2</span>] &gt; v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-67" title="67">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</a>
-<a class="sourceLine" id="numCode-68" title="68"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-69" title="69">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</a>
-<a class="sourceLine" id="numCode-70" title="70">RESULT(v[<span class="dv">3</span>])</a>
-<a class="sourceLine" id="numCode-71" title="71"></a>
-<a class="sourceLine" id="numCode-72" title="72"></a>
-<a class="sourceLine" id="numCode-73" title="73">EQUATION(<span class="st">&quot;NumApple&quot;</span>)</a>
-<a class="sourceLine" id="numCode-74" title="74"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-75" title="75"><span class="co">Number of Apple users</span></a>
-<a class="sourceLine" id="numCode-76" title="76"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-77" title="77">v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumApple&quot;</span>, <span class="dv">1</span>);</a>
-<a class="sourceLine" id="numCode-78" title="78">v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-79" title="79">v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-80" title="80"><span class="cf">if</span>(v[<span class="dv">2</span>] &lt; v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-81" title="81">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</a>
-<a class="sourceLine" id="numCode-82" title="82"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-83" title="83">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</a>
-<a class="sourceLine" id="numCode-84" title="84">RESULT(v[<span class="dv">3</span>])</a>
-<a class="sourceLine" id="numCode-85" title="85"></a>
-<a class="sourceLine" id="numCode-86" title="86"></a>
-<a class="sourceLine" id="numCode-87" title="87">EQUATION(<span class="st">&quot;ShareMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-88" title="88"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-89" title="89"><span class="co">Share of MS users</span></a>
-<a class="sourceLine" id="numCode-90" title="90"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-91" title="91">v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-92" title="92">v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-93" title="93">v[<span class="dv">2</span>] = v[<span class="dv">0</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-94" title="94">RESULT(v[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="numCode-95" title="95"></a>
-<a class="sourceLine" id="numCode-96" title="96"></a>
-<a class="sourceLine" id="numCode-97" title="97">EQUATION(<span class="st">&quot;ShareApple&quot;</span>)</a>
-<a class="sourceLine" id="numCode-98" title="98"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-99" title="99"><span class="co">Share of Apple users</span></a>
-<a class="sourceLine" id="numCode-100" title="100"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-101" title="101">v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-102" title="102">v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-103" title="103">v[<span class="dv">2</span>] = v[<span class="dv">1</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-104" title="104">RESULT(v[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="numCode-105" title="105"></a>
-<a class="sourceLine" id="numCode-106" title="106"></a>
-<a class="sourceLine" id="numCode-107" title="107">MODELEND</a>
-<a class="sourceLine" id="numCode-108" title="108"><span class="co">// do not add Equations in this area</span></a>
-<a class="sourceLine" id="numCode-109" title="109"><span class="dt">void</span> close_sim( <span class="dt">void</span> )</a>
-<a class="sourceLine" id="numCode-110" title="110">{</a>
-<a class="sourceLine" id="numCode-111" title="111">    <span class="co">// close simulation special commands go here</span></a>
-<a class="sourceLine" id="numCode-112" title="112">}</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="co">//#define EIGENLIB          // uncomment to use Eigen linear algebra library</span></span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">//#define NO_POINTER_INIT   // uncomment to disable pointer checking</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fun_head_fast.h&quot;</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>MODELBEGIN</span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="co">// insert your equations here, between the MODELBEGIN and MODELEND words</span></span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NewAgent&quot;</span>)</span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a><span class="co">Type of new agent</span></span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; <span class="fl">0.5</span>)</span>
+<span id="numCode-13"><a href="#numCode-13" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = <span class="dv">1</span>;</span>
+<span id="numCode-14"><a href="#numCode-14" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-15"><a href="#numCode-15" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = <span class="dv">0</span>;</span>
+<span id="numCode-16"><a href="#numCode-16" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span>
+<span id="numCode-17"><a href="#numCode-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-18"><a href="#numCode-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-19"><a href="#numCode-19" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;UtilityMS&quot;</span>)</span>
+<span id="numCode-20"><a href="#numCode-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-21"><a href="#numCode-21" aria-hidden="true" tabindex="-1"></a><span class="co">Utility in using MS</span></span>
+<span id="numCode-22"><a href="#numCode-22" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-23"><a href="#numCode-23" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></span>
+<span id="numCode-24"><a href="#numCode-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</span>
+<span id="numCode-25"><a href="#numCode-25" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-26"><a href="#numCode-26" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0MS&quot;</span>); <span class="co">// value for agent type 0 using MS</span></span>
+<span id="numCode-27"><a href="#numCode-27" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></span>
+<span id="numCode-28"><a href="#numCode-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-29"><a href="#numCode-29" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-30"><a href="#numCode-30" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-31"><a href="#numCode-31" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1MS&quot;</span>); <span class="co">// value for agent type 1 using MS</span></span>
+<span id="numCode-32"><a href="#numCode-32" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></span>
+<span id="numCode-33"><a href="#numCode-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-34"><a href="#numCode-34" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using MS</span></span>
+<span id="numCode-35"><a href="#numCode-35" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</span>
+<span id="numCode-36"><a href="#numCode-36" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span>
+<span id="numCode-37"><a href="#numCode-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-38"><a href="#numCode-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-39"><a href="#numCode-39" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;UtilityApple&quot;</span>)</span>
+<span id="numCode-40"><a href="#numCode-40" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-41"><a href="#numCode-41" aria-hidden="true" tabindex="-1"></a><span class="co">Utility in using Apple</span></span>
+<span id="numCode-42"><a href="#numCode-42" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-43"><a href="#numCode-43" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></span>
+<span id="numCode-44"><a href="#numCode-44" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</span>
+<span id="numCode-45"><a href="#numCode-45" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-46"><a href="#numCode-46" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0Apple&quot;</span>); <span class="co">// value for agent type 0 using Apple</span></span>
+<span id="numCode-47"><a href="#numCode-47" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></span>
+<span id="numCode-48"><a href="#numCode-48" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-49"><a href="#numCode-49" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-50"><a href="#numCode-50" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-51"><a href="#numCode-51" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1Apple&quot;</span>); <span class="co">// value for agent type 1 using Apple</span></span>
+<span id="numCode-52"><a href="#numCode-52" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></span>
+<span id="numCode-53"><a href="#numCode-53" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-54"><a href="#numCode-54" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumApple&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using Apple</span></span>
+<span id="numCode-55"><a href="#numCode-55" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</span>
+<span id="numCode-56"><a href="#numCode-56" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span>
+<span id="numCode-57"><a href="#numCode-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-58"><a href="#numCode-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-59"><a href="#numCode-59" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumMS&quot;</span>)</span>
+<span id="numCode-60"><a href="#numCode-60" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-61"><a href="#numCode-61" aria-hidden="true" tabindex="-1"></a><span class="co">Number of MS users</span></span>
+<span id="numCode-62"><a href="#numCode-62" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-63"><a href="#numCode-63" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>);</span>
+<span id="numCode-64"><a href="#numCode-64" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</span>
+<span id="numCode-65"><a href="#numCode-65" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</span>
+<span id="numCode-66"><a href="#numCode-66" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">2</span>] &gt; v[<span class="dv">1</span>])</span>
+<span id="numCode-67"><a href="#numCode-67" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</span>
+<span id="numCode-68"><a href="#numCode-68" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-69"><a href="#numCode-69" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</span>
+<span id="numCode-70"><a href="#numCode-70" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">3</span>])</span>
+<span id="numCode-71"><a href="#numCode-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-72"><a href="#numCode-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-73"><a href="#numCode-73" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumApple&quot;</span>)</span>
+<span id="numCode-74"><a href="#numCode-74" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-75"><a href="#numCode-75" aria-hidden="true" tabindex="-1"></a><span class="co">Number of Apple users</span></span>
+<span id="numCode-76"><a href="#numCode-76" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-77"><a href="#numCode-77" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumApple&quot;</span>, <span class="dv">1</span>);</span>
+<span id="numCode-78"><a href="#numCode-78" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</span>
+<span id="numCode-79"><a href="#numCode-79" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</span>
+<span id="numCode-80"><a href="#numCode-80" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">2</span>] &lt; v[<span class="dv">1</span>])</span>
+<span id="numCode-81"><a href="#numCode-81" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</span>
+<span id="numCode-82"><a href="#numCode-82" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-83"><a href="#numCode-83" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</span>
+<span id="numCode-84"><a href="#numCode-84" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">3</span>])</span>
+<span id="numCode-85"><a href="#numCode-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-86"><a href="#numCode-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-87"><a href="#numCode-87" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ShareMS&quot;</span>)</span>
+<span id="numCode-88"><a href="#numCode-88" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-89"><a href="#numCode-89" aria-hidden="true" tabindex="-1"></a><span class="co">Share of MS users</span></span>
+<span id="numCode-90"><a href="#numCode-90" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-91"><a href="#numCode-91" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</span>
+<span id="numCode-92"><a href="#numCode-92" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</span>
+<span id="numCode-93"><a href="#numCode-93" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</span>
+<span id="numCode-94"><a href="#numCode-94" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="numCode-95"><a href="#numCode-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-96"><a href="#numCode-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-97"><a href="#numCode-97" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ShareApple&quot;</span>)</span>
+<span id="numCode-98"><a href="#numCode-98" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-99"><a href="#numCode-99" aria-hidden="true" tabindex="-1"></a><span class="co">Share of Apple users</span></span>
+<span id="numCode-100"><a href="#numCode-100" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-101"><a href="#numCode-101" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</span>
+<span id="numCode-102"><a href="#numCode-102" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</span>
+<span id="numCode-103"><a href="#numCode-103" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">1</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</span>
+<span id="numCode-104"><a href="#numCode-104" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="numCode-105"><a href="#numCode-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-106"><a href="#numCode-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-107"><a href="#numCode-107" aria-hidden="true" tabindex="-1"></a>MODELEND</span>
+<span id="numCode-108"><a href="#numCode-108" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="numCode-109"><a href="#numCode-109" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> close_sim( <span class="dt">void</span> )</span>
+<span id="numCode-110"><a href="#numCode-110" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="numCode-111"><a href="#numCode-111" aria-hidden="true" tabindex="-1"></a>    <span class="co">// close simulation special commands go here</span></span>
+<span id="numCode-112"><a href="#numCode-112" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis que fazem parte do modelo.</p>
 <h5 id="equationnewagent">EQUATION(“NewAgent”)</h5>
 <p>A primeira equação do modelo (lembrando que no LSD a ordem das equações não importa) é bem simples e serve para decidir, com probabilidade de 50%, o tipo de agente, <strong>tipo 0</strong> ou <strong>tipo 1</strong>. Em cada período de tempo (da simulação), a variável “NewAgent” assume o valor 0 ou 1, com probabilidade de 50% para cada.</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION(<span class="st">&quot;NewAgent&quot;</span>)</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Type of new agent</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-5" title="5"><span class="cf">if</span>(RND &lt; <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="numCode-6" title="6">    v[<span class="dv">0</span>] = <span class="dv">1</span>;</a>
-<a class="sourceLine" id="numCode-7" title="7"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-8" title="8">    v[<span class="dv">0</span>] = <span class="dv">0</span>;</a>
-<a class="sourceLine" id="numCode-9" title="9">RESULT(v[<span class="dv">0</span>])</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NewAgent&quot;</span>)</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Type of new agent</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; <span class="fl">0.5</span>)</span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = <span class="dv">1</span>;</span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = <span class="dv">0</span>;</span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 50 períodos, a variável “NewAgent” apresenta o seguinte comportamento:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="externrede_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+<p><img src="externrede_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
 </div>
 <h5 id="equationutilityms-equationutilityapple">EQUATION(“UtilityMS”) | EQUATION(“UtilityApple”)</h5>
 <p>As proximas duas equações servem para calcular a utilidade de cada produto (MS e Apple). Como mencionado anteriormente, essa utilidade depende das preferências individuais dos consumidores (tipo 0 e tipo 1) e das externalidades de rede, que por sua vez dependem do número de usuários de cada produto. Ou seja, <span class="math inline">\(U^{i}_j = v^{i}_j + x_j \times N^{i}\)</span>, onde <span class="math inline">\(i\)</span> pode ser <span class="math inline">\(MS\)</span> ou <span class="math inline">\(Apple\)</span> e <span class="math inline">\(j\)</span> pode ser 0 ou 1.</p>
@@ -2266,24 +2280,24 @@ document.addEventListener('DOMContentLoaded', function() {
 <li><span class="math inline">\(N^{i}\)</span> é uma variável que conta a quandidade de consumidores de cda tipo de produto.</li>
 </ul>
 <p>No código abaixo, que calcula a utilidade de MS em cada período (seja o novo consumidor sendo do tipo 0 sendo do tipo 1), <span class="math inline">\(v^{MS}_0\)</span> é representado pelo parâmetro “User0MS” e <span class="math inline">\(x_0\)</span> é representado por “User0Net”. O mesmo ocorre para oa parâmetros do consumidor tipo 1.</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION(<span class="st">&quot;UtilityMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Utility in using MS</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-5" title="5">v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></a>
-<a class="sourceLine" id="numCode-6" title="6"><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</a>
-<a class="sourceLine" id="numCode-7" title="7">    {</a>
-<a class="sourceLine" id="numCode-8" title="8">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0MS&quot;</span>); <span class="co">// value for agent type 0 using MS</span></a>
-<a class="sourceLine" id="numCode-9" title="9">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></a>
-<a class="sourceLine" id="numCode-10" title="10">    }</a>
-<a class="sourceLine" id="numCode-11" title="11"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-12" title="12">    {</a>
-<a class="sourceLine" id="numCode-13" title="13">    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1MS&quot;</span>); <span class="co">// value for agent type 1 using MS</span></a>
-<a class="sourceLine" id="numCode-14" title="14">    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></a>
-<a class="sourceLine" id="numCode-15" title="15">    }</a>
-<a class="sourceLine" id="numCode-16" title="16">v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using MS</span></a>
-<a class="sourceLine" id="numCode-17" title="17">v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</a>
-<a class="sourceLine" id="numCode-18" title="18">RESULT(v[<span class="dv">4</span>])</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;UtilityMS&quot;</span>)</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Utility in using MS</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NewAgent&quot;</span>); <span class="co">// type of new agent</span></span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">0</span>)</span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User0MS&quot;</span>); <span class="co">// value for agent type 0 using MS</span></span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User0Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 0</span></span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="numCode-13"><a href="#numCode-13" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;User1MS&quot;</span>); <span class="co">// value for agent type 1 using MS</span></span>
+<span id="numCode-14"><a href="#numCode-14" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = V(<span class="st">&quot;User1Net&quot;</span>); <span class="co">// network externalitie coefficiente for agent type 1</span></span>
+<span id="numCode-15"><a href="#numCode-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="numCode-16"><a href="#numCode-16" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>); <span class="co">// number of existing consumers using MS</span></span>
+<span id="numCode-17"><a href="#numCode-17" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = v[<span class="dv">1</span>] + (v[<span class="dv">2</span>] * v[<span class="dv">3</span>])</span>
+<span id="numCode-18"><a href="#numCode-18" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span></code></pre></div>
 <p>Por exemplo, digamos que os parâmetros sejam escolhidos com os seguintes valores:</p>
 <ul>
 <li><span class="math inline">\(v^{MS}_0 = 10\)</span></li>
@@ -2368,46 +2382,46 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <p>Como visto na tabela, o primeiro agente foi do <strong>tipo 0</strong>, que atribui utilidade 10 para MS e 5 para Apple. Como 10 &gt; 5, esse agente escolhe MS. O segundo agente também é do <strong>tipo 0</strong> e atribui 10 para MS e 5 para Apple, porém como já há 1 consumidor utilizando MS, e a externalidade de rede é <span class="math inline">\(x \times N = 0.2 \times 1 = 0.2\)</span>, a utilidade total de MS é 10.2. O terceiro agente é do <strong>tipo 1</strong>, que atribui 5 para MS e 10 para Apple. Nesse terceiro períoro já há 2 agentes utilizando MS, portanto a utilidade de MS é acrescida de 0.4. De toda forma, porém, 10 &gt; 5.4, e esse agente escolhe Apple. No longo prazo essas variáveis evoluem da seguinte forma:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="externrede_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+<p><img src="externrede_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
 </div>
 <p>É possívle observar que após um certo período (em torno de <span class="math inline">\(t=250\)</span>) a utilidade de apple sempre será maior que a de MS, independente do tipo de agente que entrará em seguida. Isso por que a externalidade de rede ultrapassa a diferença de preferências próprias entre os tipos de agentes. A partir desse ponto, todo novo agente irá escolher Apple, o que faz com que o número de usuários desse produto cresça continuamente, enquanto o número de usuários MS permaneça constante (a sua curva de utilidade irá alternar entre os valores 10 e 5 acrescidos da externalidade derivada do número de agentes que escolheram MS até o ponto em que a utilidade MS ultrapassava a de Apple a depender do tipo do agente).</p>
 <h5 id="equationnumms-equationnumapple">EQUATION(“NumMS”) | EQUATION(“NumApple”)</h5>
 <p>A equação do número de usuários de cada produto simplemente compara os valores das utilidades de MS e Apple, calculadas nas equações mostradas anteriormente, e aumenta em uma unidade o valor do número de usuários a depender de qual utilidade é maior.</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION(<span class="st">&quot;NumMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Number of MS users</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-5" title="5">v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>);</a>
-<a class="sourceLine" id="numCode-6" title="6">v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-7" title="7">v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-8" title="8"><span class="cf">if</span>(v[<span class="dv">2</span>] &gt; v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-9" title="9">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</a>
-<a class="sourceLine" id="numCode-10" title="10"><span class="cf">else</span></a>
-<a class="sourceLine" id="numCode-11" title="11">    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</a>
-<a class="sourceLine" id="numCode-12" title="12">RESULT(v[<span class="dv">3</span>])</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumMS&quot;</span>)</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Number of MS users</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumMS&quot;</span>, <span class="dv">1</span>);</span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;UtilityApple&quot;</span>);</span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;UtilityMS&quot;</span>);</span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">2</span>] &gt; v[<span class="dv">1</span>])</span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>] + <span class="dv">1</span>;</span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = v[<span class="dv">0</span>];</span>
+<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">3</span>])</span></code></pre></div>
 <p>A sua evolução é semelhante à da utilidade, dadas que ambas incrementam quando há uma adição de um agente nesse produto em específico. Recapitulando, em cada período surge um novo agente que deve escolher entre MS e Apple; para fazer tal escolha, esse agente compara as utilidades desses dois tipos de produtos. Além disso, há dois tipos de agentes, que atribuem valores diferentes para sua preferência individual entre MS e Apple. Assim, em cada período, cada novo agente computa as utilidades dos dois produtos — a partir da sua preferência individual e da externalidade de rede, que depende do número de usuários em cada produto — e escolhe o produto com maior utilidade. Com isso, vai aumentando o número de usuários de cada produto.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="externrede_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="externrede_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
 <h5 id="equationsharems-equationshareapple">EQUATION(“ShareMS”) | EQUATION(“ShareApple”)</h5>
 <p>Por fim, é computado também o <em>market share</em> dos dois tipos de produtos, o que é feito apenas dividindo o número de usuários de cada produto pelo número total de agentes.</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION(<span class="st">&quot;ShareMS&quot;</span>)</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Share of MS users</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-5" title="5">v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</a>
-<a class="sourceLine" id="numCode-6" title="6">v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</a>
-<a class="sourceLine" id="numCode-7" title="7">v[<span class="dv">2</span>] = v[<span class="dv">0</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="numCode-8" title="8">RESULT(v[<span class="dv">2</span>])</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ShareMS&quot;</span>)</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Share of MS users</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;NumMS&quot;</span>);</span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumApple&quot;</span>);</span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] / (v[<span class="dv">0</span>] + v[<span class="dv">1</span>])</span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="externrede_files/figure-html5/unnamed-chunk-5-1.png" width="624" data-distill-preview=1 /></p>
+<p><img src="externrede_files/figure-html5/unnamed-chunk-6-1.png" width="624" data-distill-preview=1 /></p>
 </div>
 <h2 id="conclusão">Conclusão</h2>
 <p>Esse modelo explora a dinâmica de um mercado com dois produtos em competição, onde cada usuário adicional de um dos produtos aumenta a externalidade de rede desse produto. Como visto, após certo período o mercado é dominado por um dos tipos de produto e todo usuário novo passa a escolher esse produto, bloqueado — <em>locking out</em> — o outro. Para entender melhor o modelo, foi muito útil analisar as equações de forma separada, buscando observar os <em>inputs</em> que cada equação recebe (parâmetros e outras variáveis) e os <em>outputs</em> que ela retorna em cada período de tempo (os possíveis valores da variável em questão).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<div id="refs" class="references" role="doc-bibliography">
-<div id="ref-arthur1989competing">
-<p>ARTHUR, W. B. Competing technologies, increasing returns, and lock-in by historical events. <strong>The economic journal</strong>, v. 99, n. 394, p. 116–131, 1989. </p>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-arthur1989competing" class="csl-entry" role="doc-biblioentry">
+ARTHUR, W. B. Competing technologies, increasing returns, and lock-in by historical events. <strong>The economic journal</strong>, v. 99, n. 394, p. 116–131, 1989.
 </div>
 </div>
 <!--radix_placeholder_article_footer-->

@@ -29,6 +29,18 @@ library(forecast)
 library(ggthemes)
 ```
 
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+```
+
+
 ## Introdução
 
 Em contextos em que o tempo é tomado como uma variável discreta --- ou seja, a variável $t$ só pode assumir valores inteiros ---, o padrão de mudança de uma variável $x$ deve ser descrito pelas chamadas *equações em diferença*, ao invés de por equações diferenciais ou derivativas.

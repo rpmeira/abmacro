@@ -31,6 +31,17 @@ library(readr)
 library(ggfortify)
 ```
 
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+```
+
 ## Introdução
 
 Esse modelo é inspirado no artigo *Product Quality in Markets where Consumers are Imperfectly Informed*, de Smallwood e Conlisk (1979), no qual os autores procuram analisar a escolha de produtos em um mercado onde os consumidores não possuem informação perfeita a respeito da qualidade dos produtos. Nesse contexto, tais consumidores acabam recorrendo a uma regra de bolso que diz que a popularidade de um produto é um sinal da sua qualidade. Assim, a questão chave que o modelo pretende analisar é se os consumidores, incapazes de avaliar qualidades de forma individual, conseguem fazê-lo de forma coletiva.
@@ -115,27 +126,25 @@ O modelo, no LSD, possui a seguinte estrutura (de objetos, ou agentes):
 O Mercado é o objeto *origem*, do qual descendem os objetos Oferta e Demanda. Por sua vez, Oferta possui o objeto Firma como descentende, e Demanda possui Consumidor como descendente.\
 Cada um desses objetos contêm um conjunto de variáveis (com seus *lag* indicados quando necessário) e parâmetros (cujos valores podem variar para cada *cópia* do objeto):
 
-::: {style="display: flex;   justify-content: center;"}
-+----------------------+---------------+---------------+
-|                      | Variável      | Parâmetro     |
-+======================+:=============:+:=============:+
-| **Mercado**          | `Init`        | `TotalUsers`  |
-+----------------------+---------------+---------------+
-| **Oferta**           | `InitTrade`   | `alpha`       |
-+----------------------+---------------+---------------+
-| **Firma**            | `NumUsers(1)` | `IdFirm`      |
-|                      |               |               |
-|                      | `ms_users(1)` | `BD`          |
-|                      |               |               |
-|                      | `Visibility`  | `Sales`       |
-|                      |               |               |
-|                      |               | `NumLost`     |
-+----------------------+---------------+---------------+
-| **Demanda**          | `EndTrade`    | \-            |
-+----------------------+---------------+---------------+
-| **Consumidor**       | `ProdUsed(1)` | \-            |
-+----------------------+---------------+---------------+
+::: {style="display: flex; justify-content: center; line-height: 20px;"}
++-----------------+-----------------+-----------------+
+|                 | Variável        | Parâmetro       |
++=================+:===============:+:===============:+
+| **Mercado**     | `Init`          | `TotalUsers`    |
++-----------------+-----------------+-----------------+
+| **Oferta**      | `InitTrade`     | `alpha`         |
++-----------------+-----------------+-----------------+
+| **Firma**       | `NumUsers(1)`   | `IdFirm`        |
+|                 | `ms_users(1)`   | `BD`            |
+|                 | `Visibility`    | `Sales`         |
+|                 |                 | `NumLost`       |
++-----------------+-----------------+-----------------+
+| **Demanda**     | `EndTrade`      | \-              |
++-----------------+-----------------+-----------------+
+|**Consumidor**   | `ProdUsed(1)`   | \-              |
++-----------------+-----------------+-----------------+
 :::
+
 
 Além disso, alguns dos objetos desse modelo contêm também **funções**, que são semelhantes às variáveis, mas que podem ser computadas diversas vezes dentro de um mesmo período de tempo da simulação. Assim como as variáveis, precisam ser invocadas com um bloco de *Equação* específico. As funções (e os objetos que as contêm) presentes nesse modelo são:
 

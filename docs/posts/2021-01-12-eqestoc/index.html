@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
@@ -100,7 +101,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Este Post discute Equações em Diferença Estocásticas."/>
 <meta property="og:url" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/"/>
-<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="og:image:width" content="1248"/>
 <meta property="og:image:height" content="768"/>
 <meta property="og:locale" content="en_US"/>
@@ -111,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Equações em Diferença Estocásticas"/>
 <meta property="twitter:description" content="Este Post discute Equações em Diferença Estocásticas."/>
 <meta property="twitter:url" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/"/>
-<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="twitter:image:width" content="1248"/>
 <meta property="twitter:image:height" content="768"/>
 
@@ -132,7 +133,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","drift.res.gz","EqDiff.bib","eqestoc_files/anchor-4.2.2/anchor.min.js","eqestoc_files/bowser-1.9.3/bowser.min.js","eqestoc_files/distill-2.2.21/template.v2.js","eqestoc_files/figure-html5/unnamed-chunk-1-1.png","eqestoc_files/figure-html5/unnamed-chunk-2-1.png","eqestoc_files/figure-html5/unnamed-chunk-3-1.png","eqestoc_files/figure-html5/unnamed-chunk-4-1.png","eqestoc_files/figure-html5/unnamed-chunk-5-1.png","eqestoc_files/figure-html5/unnamed-chunk-6-1.png","eqestoc_files/figure-html5/unnamed-chunk-7-1.png","eqestoc_files/figure-html5/unnamed-chunk-8-1.png","eqestoc_files/jquery-1.11.3/jquery.min.js","eqestoc_files/webcomponents-2.0.0/webcomponents.js","homog.res.gz","naohom1.res.gz","naohom2.res","naohom3.res","passeio.res.gz","rndhom.res.gz","ruido.res.gz"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","drift.res.gz","EqDiff.bib","eqestoc_files/anchor-4.2.2/anchor.min.js","eqestoc_files/bowser-1.9.3/bowser.min.js","eqestoc_files/distill-2.2.21/template.v2.js","eqestoc_files/figure-html5/unnamed-chunk-1-1.png","eqestoc_files/figure-html5/unnamed-chunk-2-1.png","eqestoc_files/figure-html5/unnamed-chunk-3-1.png","eqestoc_files/figure-html5/unnamed-chunk-4-1.png","eqestoc_files/figure-html5/unnamed-chunk-5-1.png","eqestoc_files/figure-html5/unnamed-chunk-6-1.png","eqestoc_files/figure-html5/unnamed-chunk-7-1.png","eqestoc_files/figure-html5/unnamed-chunk-8-1.png","eqestoc_files/figure-html5/unnamed-chunk-9-1.png","eqestoc_files/header-attrs-2.5/header-attrs.js","eqestoc_files/jquery-1.11.3/jquery.min.js","eqestoc_files/webcomponents-2.0.0/webcomponents.js","homog.res.gz","naohom1.res.gz","naohom2.res","naohom3.res","passeio.res.gz","rndhom.res.gz","ruido.res.gz"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2012,6 +2013,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2083,17 +2085,29 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </nav>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+</style>
+</div>
 <h2 id="introdução">Introdução</h2>
 <p>Equações em diferença estocásticas, como o nome deixa claro, são equações em difereça que possuem algum componente estocástico. É comum encontrá-las em modelos de séries temporais, como, por exemplo, <em>ruído branco</em> <span class="math inline">\(x_t = \epsilon_t\)</span> ou <em>passeio aleatório</em> <span class="math inline">\(x_t = x_{t-1} + \epsilon_t\)</span>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
 <p>O ruído branco é um processo com média zero e variância constante. No caso do gráfico, está sendo utilizado uma ruído branco com distribuição normal e variância igual a um. O passeio aleatório é uma equação em diferença de primeira ordem não-homogênea, <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span>, onde o termo <span class="math inline">\(f(t)\)</span> é um processo de ruído branco e o termo <span class="math inline">\(\theta\)</span> é igual a um. Caso <span class="math inline">\(\theta &gt; 1\)</span> ou <span class="math inline">\(\theta &lt; -1\)</span>, a equação explode. Caso <span class="math inline">\(-1 &lt; \theta &lt; 1\)</span>, a equação oscila em torno de um valor. Caso o termo <span class="math inline">\(f(t)\)</span> seja composto por um ruído branco mais uma constante, ou seja <span class="math inline">\(f(t) = \epsilon_t + c\)</span>, a equação apresenta uma um <em>drift</em>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
 </div>
 <p>Seja uma equação em diferença de primeira ordem não-homogênea</p>
 <p><span class="math display">\[
@@ -2119,23 +2133,23 @@ x_t = C(\theta)^t
 </ul>
 <p>Caso <span class="math inline">\(\theta\)</span> seja uma variável estocástica, é possível que ela apresente diferentes valores ao longo do tempo, fazendo com que o comportamento da equação varie ao longo do tempo, conforme o valor de <span class="math inline">\(\theta\)</span>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
 </div>
 <h2 id="equação-não-homogênea">Equação não-homogênea</h2>
 <p>Para resolver uma equação não-homogênea, <span class="math inline">\(x_t - \theta x_{t-1} = f(t)\)</span>, é preciso achar a solução particular e depois somá-la com a função complementar da equação homogênea. Para tanto, é possível escolher <em>qualquer</em> solução da equação.</p>
 <p>Como visto, o passeio aleatório, <span class="math inline">\(x_t = x_{t-1} + \epsilon_t\)</span>, é uma equação em diferença de primeira ordem não-homogênea em que <span class="math inline">\(\theta = 1\)</span>. Caso haja drift, <span class="math inline">\(f(t) = \epsilon_t + c\)</span>.</p>
 <p>Assim como foi feito para a equação homogêna, vejamos o comportamento da equação não-homogênea para diferentes <span class="math inline">\(\theta\)</span>:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqestoc_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
-</div>
-<div class="layout-chunk" data-layout="l-body">
 <p><img src="eqestoc_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="eqestoc_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="eqestoc_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
 </div>
 <p>Assim como nas equações homogêneas, nas não-homogêneas:</p>
 <ul>
@@ -2152,9 +2166,9 @@ x_t = C(\theta)^t
 </iframe>
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<div id="refs" class="references" role="doc-bibliography">
-<div id="ref-reginatto2019eqestoc">
-<p>REGINATTO, V. O. <strong>Equações a diferenças</strong>. Disponível em: &lt;<a href="https://www.modelodomundo.com/2019/03/equa%C3%A7%C3%B5es-a-diferen%C3%A7as/">https://www.modelodomundo.com/2019/03/equa%C3%A7%C3%B5es-a-diferen%C3%A7as/</a>&gt;. </p>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-reginatto2019eqestoc" class="csl-entry" role="doc-biblioentry">
+REGINATTO, V. O. <strong>Equações a diferenças</strong>. Disponível em: &lt;<a href="https://www.modelodomundo.com/2019/03/equa">https://www.modelodomundo.com/2019/03/equa</a>&gt;.
 </div>
 </div>
 <!--radix_placeholder_article_footer-->

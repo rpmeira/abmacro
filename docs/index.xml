@@ -7,7 +7,18 @@
     <description>Esse Blog apresenta posts relacioandos à modelagem baseada em agentes aplicada em macroeconomia.
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>qua, 10 fev 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>qui, 18 fev 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Modelo - Competição, inovação e retornos crescentes</title>
+      <dc:creator>Rafael Peixoto</dc:creator>
+      <link>https://rpmeira.github.io/abmacro/posts/2021-02-18-compinov</link>
+      <description>Este post apresenta uma versão em LSD de um modelo baseado no artigo *Competition, innovation and increasing returns*, de Richardson, G. B. (1996). O modelo mostra que competição pode co-existir com retornos crescentes e altas taxas de inovação.</description>
+      <category>Modelos</category>
+      <category>LSD</category>
+      <guid>https://rpmeira.github.io/abmacro/posts/2021-02-18-compinov</guid>
+      <pubDate>qui, 18 fev 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-18-compinov/compinov_files/figure-html5/unnamed-chunk-18-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Modelo - Informações Imperfeitas para Consumidor</title>
       <dc:creator>Rafael Peixoto</dc:creator>
@@ -17,7 +28,7 @@
       <category>LSD</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf</guid>
       <pubDate>qua, 10 fev 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf/infoimperf_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="802" height="729"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-10-infoimperf/infoimperf_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="802" height="729"/>
     </item>
     <item>
       <title>Modelo - Externalidades de Rede</title>
@@ -28,7 +39,7 @@
       <category>LSD</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede</guid>
       <pubDate>ter, 09 fev 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-5-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>LSD Linguagem Macro</title>
@@ -50,7 +61,7 @@
       <category>Matemática</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc</guid>
       <pubDate>qua, 13 jan 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc/eqestoc_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>Equações de Segunda Ordem</title>
@@ -61,7 +72,7 @@
       <category>Matemática</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem</guid>
       <pubDate>ter, 12 jan 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>Equações de Primeira Ordem</title>
@@ -72,7 +83,7 @@
       <category>Matemática</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem</guid>
       <pubDate>seg, 11 jan 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/primordem_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-06-primordem/primordem_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>Equações em Diferença</title>
@@ -83,7 +94,7 @@
       <category>Matemática</category>
       <guid>https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff</guid>
       <pubDate>qua, 06 jan 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="360" height="193"/>
+      <media:content url="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="360" height="193"/>
     </item>
   </channel>
 </rss>

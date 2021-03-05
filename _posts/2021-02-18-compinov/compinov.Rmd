@@ -1,0 +1,889 @@
+---
+title: "Modelo - Competição, inovação e retornos crescentes"
+description: |
+  Este post apresenta uma versão em LSD de um modelo baseado no artigo *Competition, innovation and increasing returns*, de Richardson, G. B. (1996). O modelo mostra que competição pode co-existir com retornos crescentes e altas taxas de inovação.
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2021compinov
+date: 02-18-2021
+bibliography: compinov.bib
+nocite: | 
+  @richardson1996competition
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Modelos
+  - LSD
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+library(readr)
+library(ggfortify)
+library(ggrepel)
+library(kableExtra)
+```
+
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+```
+
+
+## Introdução
+
+Esse modelo é inspirado no artigo *Competition, innovation and increasing returns*, de @richardson1996competition, no qual o autor procura analisar o comportamento da competição entre firmas quando há altas taxas de inovação e retornos crescentes. O resultado encontrado pelo autor é que, em livre competição, é provável que exista uma tendência em direção a um "Equilíbrio dinâmico" no qual a taxa de investimento em desenvolvimento de novos produtos cresce ou diminui até o nível em que esse investimento gere retornos normais. Tal resultado vai de encontro um pressuposto muito utilizado por modelos clássicos: em competição perfeita as firmas experenciam retornos decrescentes, uma vez que experenciam custos marginais crescentes.  
+No modelo aqui descrito, as firmas competem por mercado colocando à venda seus produtos, que se diferenciam um do outro em qualidade e conveniência. Ao longo do tempo, para cada produto, a qualidade permanece constante e a conveniência aumenta a uma taxa decrecente. Quando a firma adota uma inovação, a qualidade do produto aumenta e a conveniência é restabelecida a um valor mínimo.
+
+## Modelo
+
+O modelo é composto por um conjunto de `N` firmas (parâmetro) que oferecem um produto caracterizado, em cada período de tempo, por uma qualidade, `Quality`, e uma convenciência, `Convenience` (abreviado aqui para *Conv* ). Essa conveniência é o inverso do preço do produto, $\small price = 1/Conv$.\
+Cada consumidor escolhe um produto (uma firma), em cada período de tempo, com probabilidade, `Prob`, proporcional à combinação linear das duas características (qualidade e conveniência):
+
+$$
+\small
+\begin{aligned}
+Prob_{j,t} \sim (\alpha) \times Quality_{i,t} + (1 - \alpha) \times Conv_{i,t}
+\end{aligned}
+$$
+
+onde $\alpha$ (`alpha`) é um parâmetro entre 0 e 1.
+
+A conveniência cresce (e o preço reduz) ao longo do tempo a uma taxa decrescente, aproximando-se assintoticamente de um nível máximo `Cmax`:
+
+$$
+\small
+\begin{aligned}
+Conv_{i,t} = Conv_{i,t-1} \times (1 - \tau \times ms_{i,t-1})+C_{max} \times \tau \times ms_{i,t-1}
+\end{aligned}
+$$
+
+onde `ms` é o *market share* de cada firma e $\tau$ (`tau`) é um parâmetro.
+
+`Quality` permanece constante ao longo do tempo até que uma inovação feita pela firma a aumente. Quando uma firma inova, a `Convenience` retorna ao seu valor mínimo `Cmin`.  
+Dessa forma, uma firma adota uma inovação apenas quando essa aumenta a possibilidade de o produto dessa firma ser escolhido por um consumidor, o que depende tanto da qualidade quanto da conveniência. Indicando os valores potenciais após a adoção de uma inovação por '*', a firma irá adotar uma inovação apenas quando:
+
+
+$$
+\small
+\begin{aligned}
+(\alpha) \times Quality_{i,t} + (1 - \alpha) \times Conv_{i,t} < (\alpha) \times Quality^*_{i,t} + (1 - \alpha) \times C_{min}
+\end{aligned}
+$$
+
+Quando essa expressão for verdadeira, e a inovação for adotada, o conhecimento acumulado da firma, $\sigma$ (`sigma`), e as novas qualidade e conveniência são configuradas para:
+
+
+$$
+\begin{aligned}
+\begin{cases}
+\sigma_{i,t} = 0 \\
+Quality_{i,t} = Quality^*_{i,t}  \\
+Conv_{i,t} = C_{min}
+\end{cases}\\
+\end{aligned}
+$$
+
+Caso a inovação não seja adota, a qualidade não se altera e o conhecimento, $\sigma$, aumenta:
+
+
+$$
+\begin{aligned}
+\begin{cases}
+\sigma_{i,t} = \sigma_{i,t-1}+ \delta \\
+Quality_{i,t} = Quality_{i,t-1}  \\
+\end{cases}\\
+\end{aligned}
+$$
+
+onde $\delta$ (`delta`) é um parâmetro constante.
+
+A qualidade potencial ($\small Quality^*$) de um novo produto, após a adoção de uma inovação, é calculada a partir de um sorteio aleatório com distribuição normal e com média igual a qualidade existente (dessa firma) e desvio padrão igual ao conhecimento acumulado desde a última inovação bem-sucedida:
+
+
+$$
+\small
+\begin{aligned}
+Quality^*_{i,t} \sim \mathcal{N}(Quality_{i,t-1}, \  \sigma_{i,t-1})
+\end{aligned}
+$$
+
+
+Por fim, o *market share* (`ms`) de uma firma é definida como a proporção:
+
+
+$$
+\small
+\begin{aligned}
+ms_{i,t} = \frac{Prob_{i,t}}{\sum Prob_{i,t}}
+\end{aligned}
+$$
+
+
+#### Estrutura do modelo
+
+O modelo, no LSD, possui a seguinte estrutura (de objetos, ou agentes):
+
+```{tikz, out.width = "20%", fig.align='center'}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width = 2.5cm, 
+                         minimum height = 1cm, text centered, draw = black, 
+                         fill = lightgray!30]
+\tikzstyle{arrow} = [thick, ->, >= stealth]
+
+\begin{tikzpicture}[node distance = 3cm]
+  \node (mercado) [startstop] {Mercado};
+  \node (firma) [startstop, below of = mercado] {Firma};
+
+  \draw [arrow] (mercado) -- (firma);
+\end{tikzpicture}
+```
+
+O Mercado é o objeto *origem*, do qual descende o objeto Firma.\
+Cada um dos dois objetos contêm um conjunto de variáveis (com seus *lags* indicados em parênteses quando necessário) e parâmetros (cujos valores podem variar para cada *cópia* do objeto):
+
+::: {style="display: flex; justify-content: center; line-height: 20px;"}
++--------------+--------------------------+---------------------+
+|              | Variável                 | Parâmetro           |
++==============+:========================:+:===================:+
+| **Mercado**  | `Init`\                  | `alpha` ($\alpha$)\ |
+|              | `HHI`\                   | `delta` ($\delta$)\ |
+|              | `HPI`\                   | `tau` ($\tau$)\     |
+|              | `TotProb`\               | `Cmin`\             |
+|              |                          | `Cmax`\             |
+|              |                          | `C0`\               |
+|              |                          | `Q0`\               |
+|              |                          | `N`\                |
++--------------+--------------------------+---------------------+
+| **Firma**    | `Prob`\                  |                     |
+|              | `Quality(1)`\            |                     |
+|              | `Convenience(1)`\        |                     |
+|              | `sigma(1)` ($\sigma$)\   |                     |
+|              | `ms(1)`\                 |                     |
++--------------+--------------------------+---------------------+
+:::
+
+Vejamos como é implementada cada Equação para essas variáveis, juntamente com os parâmetros necessários.
+
+## Equações
+
+O modelo inteiro é constituido por 9 equações (9 variáveis). Dessas 9, apenas a Equação de `Init` retorna sempre o valor 1, sendo sua finalidade configurar alguns parâmetros e outras variáveis. A variável `ms` é a de maior interesse para análise do modelo, uma vez que retorna o *market share* cada produto (Firma). Para tanto, ela se baseia nos valores de `Prob` e `TotProb` (que é apenas a soma das `Prob`). `Prob` depende das variáveis `Quality` e `Convenience` e do parâmetro `alpha`. Existem duas equações que calculam índices de mercado, a fim de medir a concorrência: `HHI` e `HPI`.  
+Vejamos o modelo completo:
+
+
+```{.cpp .Cpp}
+//#define NO_POINTER_INIT	// uncomment to disable pointer checking
+#include "fun_head_fast.h"
+MODELBEGIN
+
+EQUATION("Init")
+/*
+Model initialization
+*/
+v[0] = V("N");
+v[1] = V("C0");
+v[2] = V("Q0");
+v[3] = COUNT("Firm");
+for (i = v[3] + 1; i <= v[0]; ++i)
+	ADDOBJ("Firm");				// add missing objects
+i = 1;
+CYCLE(cur, "Firm")				// set initial conditions (t=0)
+{
+	WRITELS(cur, "Convenience", v[1], 0);
+	WRITELS(cur, "Quality", v[2], 0);
+	WRITELS(cur, "Prob", 0, 0);
+	WRITELS(cur, "sigma", 0, 0);
+	WRITELS(cur, "ms", 1 / v[0], 0);
+}
+PARAMETER;
+RESULT(1)
+
+EQUATION("Prob")
+/*
+Probability of firm being chosen
+*/
+v[0] = V("alpha");
+v[1] = V("Quality");
+v[2] = V("Convenience");
+v[3] = v[0] * v[1] + (1 - v[0]) * v[2];
+RESULT(v[3])
+
+EQUATION("Quality")
+/*
+New product quality, possibly obtained by innovation
+*/
+v[0] = V("alpha");
+v[1] = V("Cmin");
+v[2] = VL("Quality", 1);
+v[3] = VL("Convenience", 1);
+v[4] = VL("sigma", 1);
+v[5] = norm(v[2], v[4]);				// innovation potential
+v[6] = v[0] * v[2] + (1 - v[0]) * v[3];	// current probability
+v[7] = v[0] * v[5] + (1 - v[0]) * v[1];	// innovation probability
+if (v[6] < v[7])	// does innovation increase probability?
+	v[8] = v[5];	// yes - adopt innovation
+else
+ 	v[8] = v[2];	// no - keep current product quality
+RESULT(v[8])
+
+EQUATION("sigma")
+/*
+Accumulated knowledge
+*/
+v[0] = VL("Quality", 1);
+v[1] = V("Quality");
+if (v[1] == v[0])			// if there was no innovation
+{
+	v[2] = VL("sigma", 1);
+	v[3] = V("delta");
+	
+	v[4] = v[2] + v[3];		// increase knowledge
+}
+else
+ 	v[4] = 0; 				// if not, reset knowledge
+RESULT(v[4])
+
+EQUATION("Convenience")
+/*
+Product convenience (inverse of price)
+*/
+v[0] = VL("Quality", 1);
+v[1] = V("Quality");
+if (v[1] == v[0])			// if there was no innovation
+{
+	v[2] = V("tau");
+	v[3] = V("Cmax");
+	v[4] = VL("Convenience", 1);
+	v[5] = VL("ms", 1);
+	v[6] = v[4] * (1 - v[2] * v[5]) + v[3] * v[2] * v[5];
+}
+else
+	v[6] = V("Cmin"); 
+RESULT(v[6])
+
+EQUATION("ms")
+/*
+Market share of a firm
+*/
+v[0] = V("Prob");
+v[1] = V("TotProb");
+if (v[1] != 0)				// handle all prob's zero
+	v[2] = v[0] / v[1];
+else
+	v[2] = 0;
+RESULT(v[2])
+
+EQUATION("TotProb")
+/*
+Sum of probabilities of all firms
+*/
+RESULT(SUM("Prob"))
+
+EQUATION("HHI")
+/*
+Herfindhal-Hirschman Index
+Sum of the squared firm market shares 
+*/
+v[0] = 0;
+CYCLE(cur, "Firm")
+{
+	v[1] = VS(cur, "ms");
+	v[0] += v[1] * v[1];
+}
+RESULT(v[0])
+
+EQUATION("HPI")
+/*
+Hymer & Pashigian Instability Index
+Sum of the absolute changes in firm market shares
+*/
+v[0] = 0;
+CYCLE(cur, "Firm")
+{
+	v[1] = VLS(cur, "ms", 1);
+	v[2] = VS(cur, "ms");
+	v[0] += abs(v[2] - v[1]);
+}
+RESULT(v[0])
+
+MODELEND
+void close_sim( void )
+{
+}
+```
+
+
+Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis (ou funções) que fazem parte do modelo.
+
+A menos que seja dito o contrário, todos os exemplos abaixo (que procuram demonstrar o comportamento de cada variável) utilizam a mesma configuração de simulação: 
+
+::: {style="display: flex; justify-content: center; line-height: 20px;"}
++---------------------+--------+
+| Parâmetro           | Valor  |
++:====================+:======:+
+| `alpha` ($\alpha$)\ | 0.5\   |
++---------------------+--------+
+| `delta` ($\delta$)\ | 0.005\ |
++---------------------+--------+
+| `tau` ($\tau$)\     | 0.005\ |
++---------------------+--------+
+| `Cmin`\             | 1.0\   |
++---------------------+--------+
+| `Cmax`\             | 10.0\  |
++---------------------+--------+
+| `C0`\               | 1.0\   |
++---------------------+--------+
+| `Q0`\               | 0.0\   |
++---------------------+--------+
+| `N`\                | 5.0\   |
++---------------------+--------+
+:::
+
+
+
+##### EQUATION("Init")
+
+Essa equação tem como finalidade inicializar o modelo. Mais especificamente, ela cria uma quantidade de cópias do objeto "Firm" igual ao número estabelecido pelo parâmetro `N`. Para cada uma dessas cópias, inicializa as 5 variáveis possuidas pelo objeto "Firm", por meio da macro WRITELS(obj, “X”, valor, tempo). Todas as variáveis são ajustadas para o período 0. À `Convenience` é dado o valor do parâmetro `C0`; à `Quality` é dado o valor do parâmetro `Q0`; à `Prob` é dado o valor 0; à `sigma` é dado o valor 0; à `ms` é dado o valor $\small 1 / N$. No final, a equação transforma a variável `Init` em um parâmetro.
+
+
+```{.cpp .Cpp}
+EQUATION("Init")
+/*
+Model initialization
+*/
+v[0] = V("N");
+v[1] = V("C0");
+v[2] = V("Q0");
+v[3] = COUNT("Firm");
+for (i = v[3] + 1; i <= v[0]; ++i)
+	ADDOBJ("Firm");				// add missing objects
+i = 1;
+CYCLE(cur, "Firm")				// set initial conditions (t=0)
+{
+	WRITELS(cur, "Convenience", v[1], 0);
+	WRITELS(cur, "Quality", v[2], 0);
+	WRITELS(cur, "Prob", 0, 0);
+	WRITELS(cur, "sigma", 0, 0);
+	WRITELS(cur, "ms", 1 / v[0], 0);
+}
+PARAMETER;
+RESULT(1)
+```
+
+
+##### EQUATION("Prob")
+
+Essa equação tem como finalidade calcular a probabilidade de uma firma ser escolhida por um consumidor, ou seja, de a firma vender seu produto. Como ja mencionado, essa probabilidade é uma combinação linear de `Quality` e `Convenience`, balanceado pelo parâmetro `alpha`.
+
+
+```{.cpp .Cpp}
+EQUATION("Prob")
+/*
+Probability of firm being chosen
+*/
+v[0] = V("alpha");
+v[1] = V("Quality");
+v[2] = V("Convenience");
+v[3] = v[0] * v[1] + (1 - v[0]) * v[2];
+RESULT(v[3])
+```
+
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Lembrando que enquanto não há a adoção de uma inovação a variável `Quality` se mantém constante e `Convenience` aumenta continuamente; e quando há uma inovação `Quality` sofre um aumento e `Convenience` é reduziada a `C0`. Portanto espera-se que `Prob` aumente continuamente (devido à `Convenience`) e as vezes sofra um grande aumento discreto em um período (devido à `Quality`). Vale ressaltar, aqui, que essa variável não representa exatamente uma probabilidade estatística (com o gráfico aponta, ela não se mantém entre 0 e 1).
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+prob <- read.raw.lsd("prob.res.gz") %>%
+  as.ts()
+
+colnames(prob) <- c(paste0(rep("Firma "), 1:5))
+
+# Visualizar Gráfico
+autoplot(prob) +
+  ggtitle("Probabilidade de Venda") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 4, by = 0.25))
+```
+
+
+
+##### EQUATION("Quality")
+
+Essa equação tem como finalidade calcular a qualidade do produto de uma firma. Em cada período de tempo, a qualidade pode ser igual à do período anterior, caso não haja adoção de inovação, ou igual à qualidade pós-inovação. Para decidir entre as duas, a firma compara qual irá gerar uma probabilidade maior de venda do produto --- `if (v[6] < v[7])`. Caso a inovação gere um aprobabilidade maior, então ela é adotada e a qualidade do produto muda. A qualidade potencial --- quando há inovação --- é calculada a partir de um sorteio aleaório --- `v[5]` --- com distribuição normal, média igual à qualidade do período anterior e desvio padrão igual ao conhecimento acumulado desde a última inovação (`sigma`). 
+
+
+```{.cpp .Cpp}
+EQUATION("Quality")
+/*
+New product quality, possibly obtained by innovation
+*/
+v[0] = V("alpha");
+v[1] = V("Cmin");
+v[2] = VL("Quality", 1);
+v[3] = VL("Convenience", 1);
+v[4] = VL("sigma", 1);
+v[5] = norm(v[2], v[4]);                // innovation potential
+v[6] = v[0] * v[2] + (1 - v[0]) * v[3]; // current probability
+v[7] = v[0] * v[5] + (1 - v[0]) * v[1]; // innovation probability
+if (v[6] < v[7])    // does innovation increase probability?
+    v[8] = v[5];    // yes - adopt innovation
+else
+    v[8] = v[2];    // no - keep current product quality
+RESULT(v[8])
+```
+
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Espera-se que a qualidade se mova em saltos, quando há inovação, permanecendo constante quando não houver. Em cada período, tem-se, por um lado, o `sigma` aumentando e, por outro, a `Convenience` também aumentando. 
+
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+quality <- read.raw.lsd("quality.res.gz") %>%
+  as.ts()
+
+colnames(quality) <- c(paste0(rep("Firma "), 1:5))
+
+# Visualizar Gráfico
+autoplot(quality) +
+  ggtitle("Qualidade do Produto") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 6, by = 0.5))
+```
+
+
+##### EQUATION("sigma")
+
+Essa equação tem como finalidade calcular o conhecimento acumulado da firma, `sigma`. Em cada período de tempo em que a qualidade do produto da firma não se altera --- ou seja, não há adoção de inovação ---, essa variável aumenta em um montante igual a `delta`, que é um parâmetro constante do modelo. Quando a firma adota uma inovação, `sigma` é ajustado para 0, ou seja, o conhecimento acumulado é utilizado e então volta-se a um novo processo de acumulação de conhecimento, partindo do zero. Para realizar isso, a equação compara a qualidade do produto no período corrente com a qualidade no período anterior; caso sejam iguais, `sigma` é incrementado no valor de `delta`; caso sejam diferentes, `sigma` é ajustado para zero.
+
+```{.cpp .Cpp}
+EQUATION("sigma")
+/*
+Accumulated knowledge
+*/
+v[0] = VL("Quality", 1);
+v[1] = V("Quality");
+if (v[1] == v[0])           // if there was no innovation
+{
+    v[2] = VL("sigma", 1);
+    v[3] = V("delta");
+    
+    v[4] = v[2] + v[3];     // increase knowledge
+}
+else
+    v[4] = 0;               // if not, reset knowledge
+RESULT(v[4])
+```
+
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Espera-se que `sigma` aumente em `delta` --- que foi estabelecido em 0.005 --- cada período, até que haja uma inovação, quando então ela é reajustada para zero. Esse processo se repete inúmeras vezes. Quanto maior o pico que essa variável atinge, maior o tempo decorrido para que a empresa tenha adotado uma inovação.
+
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+sigma <- read.raw.lsd("sigma.res.gz") %>%
+  as.ts()
+
+colnames(sigma) <- c(paste0(rep("Firma "), 1:5))
+
+# Visualizar Gráfico
+autoplot(sigma) +
+  ggtitle("Sigma") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 0.5, by = 0.1), limits = c(0, 0.5))
+```
+
+
+##### EQUATION("Convenience")
+
+Essa equação tem como finalidade calcular a conveniência da firma. Em cada período de tempo em que não há inovação, essa variável cresce. Quando a firma inova, `Convenience` retorna ao seu valor mínimo, o parâmetro `Cmin` --- que no caso foi estabelecido para 1. O modo como essa variável cresce, quando não há inovação, é apontado por `v[6]`, levando em consideração os parâmetros `tau` e `Cmax` e as variáveis (com lag 1) `ms` e a própria `Convenience`. 
+
+```{.cpp .Cpp}
+EQUATION("Convenience")
+/*
+Product convenience (inverse of price)
+*/
+v[0] = VL("Quality", 1);
+v[1] = V("Quality");
+if (v[1] == v[0])           // if there was no innovation
+{
+    v[2] = V("tau");
+    v[3] = V("Cmax");
+    v[4] = VL("Convenience", 1);
+    v[5] = VL("ms", 1);
+    v[6] = v[4] * (1 - v[2] * v[5]) + v[3] * v[2] * v[5];
+}
+else
+    v[6] = V("Cmin"); 
+RESULT(v[6])
+```
+
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Assim como ocorre com `sigma`, `Convenience` aumenta em cada período em que não há inovação e retorna a um certo valor quando a inovação ocorre. Porém, tanto esse aumento quanto o valor ao qual a variável retorna são diferentes dos de `sigma`.
+
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+conv <- read.raw.lsd("conv.res.gz") %>%
+  as.ts()
+
+colnames(conv) <- c(paste0(rep("Firma "), 1:5))
+
+# Visualizar Gráfico
+autoplot(conv) +
+  ggtitle("Convenience") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 1,to = 2, by = 0.1))
+```
+
+
+##### EQUATION("ms")
+
+Essa equação tem como finalidade calcular o *market share* da firma. Em cada período de tempo, cada firma tem o seu `ms` calculado apenas dividindo-se a sua probabilidade de venda (do seu produto), `Prob`, pela soma das probabilidades de todas as firmas, `TotProb`. A equação ainda, por segurança, implementa uma verificação da variável `TotProb`, para o cado de ela ser igual a zero --- o que resultaria em uma divisão por zero.
+
+```{.cpp .Cpp}
+EQUATION("ms")
+/*
+Market share of a firm
+*/
+v[0] = V("Prob");
+v[1] = V("TotProb");
+if (v[1] != 0)              // handle all prob's zero
+    v[2] = v[0] / v[1];
+else
+    v[2] = 0;
+RESULT(v[2])
+```
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Como visto, a variável `Prob`, para cada firma, tende a crescer ao longo do tempo. De forma contínua, quando não há inovação (devido ao aumento de `Convenience`); e com alguns saltos, as veses, quando há inovação (devido ao aumento de `Quality`).
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+mshare <- read.raw.lsd("mshare.res.gz") %>%
+  as.ts()
+
+colnames(mshare) <- c(paste0(rep("Firma "), 1:5))
+
+# Visualizar Gráfico
+autoplot(mshare) +
+  ggtitle("Market Share") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.005),
+                     labels = scales::label_percent(0.5))
+```
+
+
+##### EQUATION("TotProb")
+
+Essa equação tem como finalidade calcular a soma das probabilidades de todas as firmas. A sua equação é simples e evidente: a macro SUM(“X”) soma a variável `Prob` de cada firma.
+
+```{.cpp .Cpp}
+EQUATION("TotProb")
+/*
+Sum of probabilities of all firms
+*/
+RESULT(SUM("Prob"))
+```
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. espera-se que `TotProb`, assim como cada instância de `Prob`, aumente continuamente (devido à `Convenience`) e as vezes sofra um grande aumento discreto em um período (devido à `Quality`).
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+totprob <- read.raw.lsd("totprob.res.gz") %>%
+  as.ts()
+
+# Visualizar Gráfico
+autoplot(totprob, colour = "darkblue") +
+  ggtitle("Soma das Probabilidades") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 16, by = 2))
+```
+
+
+##### EQUATION("HHI")
+
+Essa equação tem como finalidade calcular o Índice Herfindahl–Hirschman, `HHI`, que é um indicador do grau de concorrência de uma indústria. Esse índice pode variar entre 0 e 1, sendo que quanto mais perto de 0 mais competitivo o mercado e quanto mais perto de 1 mais oligopolista o mercado --- o índice será 1 no caso de monopólio. Assim, quanto maior o índice, mais concentrado é o mercado. Ele é definido como a soma dos quadrados dos *market shares* das firmas que compõem um mercado. Essa equação simplesmente recupera o valor de `ms` de cada firma e o multiplica por ele mesmo, somando o resultado de cada firma.   
+
+```{.cpp .Cpp}
+EQUATION("HHI")
+/*
+Herfindhal-Hirschman Index
+Sum of the squared firm market shares 
+*/
+v[0] = 0;
+CYCLE(cur, "Firm")
+{
+    v[1] = VS(cur, "ms");
+    v[0] += v[1] * v[1];
+}
+RESULT(v[0])
+```
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. Como ja visto, os *market shares* das 5 firmas inicialmente são todos iguais a 20% e vão se distanciando ao longo do tempo. O `HHI` reflete essa concentração de *market share*.
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+hhi <- read.raw.lsd("hhi.res.gz") %>%
+  as.ts()
+
+# Visualizar Gráfico
+autoplot(hhi, colour = "darkblue") +
+  ggtitle("Herfindhal-Hirschman Index (HHI)") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0.200,to = 0.201, by = 0.0002))
+```
+
+
+##### EQUATION("HPI")
+
+Essa equação tem como finalidade calcular o Índice de Instabilidade Hymer & Pashigian, `HPI`, que também é um indicador do nível de concorrência de uma indústria --- Assim como o `HHI`. Ele é definido como a soma, de todas as firmas, da mudança de *market share* de cada uma dessas firmar, em cada período de tempo. Portanto, ele mede a instabilidade de um mercado, no que diz respeito a variações de *market share* das firmas. 
+
+```{.cpp .Cpp}
+EQUATION("HPI")
+/*
+Hymer & Pashigian Instability Index
+Sum of the absolute changes in firm market shares
+*/
+v[0] = 0;
+CYCLE(cur, "Firm")
+{
+    v[1] = VLS(cur, "ms", 1);
+    v[2] = VS(cur, "ms");
+    v[0] += abs(v[2] - v[1]);
+}
+RESULT(v[0])
+```
+
+Vejamos o comportamento dessa variável em uma simulação de 500 períodos. O gráfico dos *market shares* mostra que em dois momentos (perto dos períodos 50 e 100) houve bruscas mudanças de do `ms` de algumas firmas. Essas variações grandes são refletidas no gráfico do `HPI`.
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+hpi <- read.raw.lsd("hpi.res.gz") %>%
+  as.ts()
+
+# Visualizar Gráfico
+autoplot(hpi, colour = "darkblue") +
+  ggtitle("Hymer & Pashigian Instability Index (HPI)") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 500, by = 50)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 0.05, by = 0.005))
+```
+
+
+## Análise de Sensibilidade
+
+A análise de sensibilidade (*SA*) busca avaliar como a incerteza nos resultados das simulações pode ser atribuída a diferentes fontes de incerteza nas equações e configurações do modelo. De forma mais concreta, a SA permite explicar o quanto os resultados produzidos por uma simulação dependem dos seguintes fatores:
+
+- Eventos estocásticos
+- Parâmetros e valores iniciais das variáveis com *lag*
+- Forma funcional das equações
+
+O LSD possui um conjunto de ferramentas para a realização de uma análise de sensibilidade, dividido em dois grupos:
+
+- Ferramentas de amostragem
+- Ferramentas de análise estastítica
+
+O primeiro permite coletar amostras de diferentes resultados do modelo para diferentes configurações dentro do seu espaço paramétrico (todas as possíveis combinações de valores iniciais, para parâmetros e variáveis, e formas funcionais das equações). Tal coleta é referida como *Design of Experiments* (DoE). Existem diversos métodos de amostragem, como: Full Factorial, Monte Carlo Sampled Factorial, Elementary Effects, and Near-Orthogonal Latin Hypercube.
+
+O segundo permite realizar a análise de sensibilidade através de dois métodos: *Morris Elementary Effects* (EE) e *Sobol Variance Decomposition* (SVD). O primeiro emprega uma SA mais simples ---  *one-factor-at-a-time* (OAT) --- e usualmente é utilizado como um método inicial de triagem e seleção dos fatores mais relevantes que, depois, serão analisados pela SVD SA.
+
+Para o modelo analisado nesse post, será feita uma análise de sensibilidade para duas variáveis: `HHI` e `HPI`. Para cada uma será aplicado tanto o método EE quanto o SVD.
+
+### HHI
+
+Como visto, `HHI`, que é um índice de concorrência, se comportou de forma a aumentar nos primeiro períodos da simulação e depois reduzir um pouco no final, refletindo a forma como os *market shares* evoluíram. Porém, esse foi o comportamento em 1 simulação, ajustada com os parâmetros indicados. Vejamos se alterações nesses parâmetros levariam a resultados diferentes. Como se trata de um índice de concorrência, espera-se que o número de firmas, `N`, tenha um impacto relevante. 
+
+#### Elementary Effects
+
+O termo Elementary Effect é utilizado para se fazer referência tanto ao método de amostragem quanto à análise estatística que dai segue. Esse é o método de amostragem mais simples em análises de sensibilidade, e é utilizado para identificar os fatores menos influentes nos resultados das simulações. O método varia um fator (no caso, parâmetro) de cada vez, a fim de analisar o efeito que essa mudança (e, portanto, o parâmetro) tem sobre o resultado do modelo.  
+Esse método de SA produz duas medidas de sensibilidade para cada fator:
+
+- $\mu$: importância global do fator para o resultado do modelo
+- $\sigma$: efeitos não-lineares e interações
+
+Esse método apliacado para a variável `HHI` mostra a importância do parâmetro `N` (como já esperado):
+
+```{r}
+HHIee <- read_csv("C:/FAO/R/LSDtesteSA/HHI-r10.csv")
+```
+
+```{r}
+ggplot(HHIee, mapping = aes(x = mu.star, y = sigma)) + 
+  geom_point(aes(color = HHIee$X1)) +
+  geom_label_repel(aes(label=ifelse(mu.star>0.1,as.character(HHIee$X1),'')), box.padding = 0.35, point.padding = 0.5) +
+#  geom_text(aes(label=ifelse(mu.star>3e-04,as.character(eeSA$X1),'')),hjust=1.1,vjust=1) +
+  ggtitle("HHI - Elementary Efects", subtitle = "Trajectories (r) = 10") +
+  labs(caption = "mu.star: overall effects \nsigma: non-linear/non-additive effects") +
+    theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"), 
+        plot.caption = element_text(hjust = 0, face = "italic"), 
+        legend.position = "right") +
+  scale_colour_discrete("Parâmetro") 
+```
+
+#### Variance Decomposition
+
+Esse método de SA decompõe a variância do resultado (*output*) do modelo em frações atribuidas a diferentes fatores (*input*). Cada fator (sua variância) seria responsável por uma porcentagem da variancia do modelo, e essa influência se daria de forma tanto direta quanto através de interações com outros fatores. Por exemplo, em um modelo com 2 fatores, 60% da variância do resultado do modelo pode ser devido ao primeiro fator, 30% ao segundo fator, e 10% à interação entre esses dois vatores.  
+Como já previsto, e observado no método EE, espera-se que o parâmetro `N` apresente uma influência grande no resultado de `HHI` nesse modelo.
+
+
+```{r}
+HHIsob <- read_csv("C:/FAO/R/LSDtesteSA/Sobol-HHI.csv")
+```
+
+```{r}
+param <- HHIsob$X1
+HHIsob <- HHIsob[2:3] %>%
+  gather("key", "value")
+HHIsob$param <- c(param, param)
+
+ggplot(HHIsob, aes(x = reorder(param, value), y =  value, group = key, fill = key)) + 
+  geom_col(position = position_stack(reverse = TRUE)) +
+  labs(title = "HHI - Variance Decomposition") +
+  coord_flip() +
+  ylab("Sobol Index") +
+  xlab("") +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "top") +
+  scale_fill_brewer("", palette = "Paired") +
+  scale_y_continuous(breaks = seq(from = 0, to = 1, by = 0.1), limits = c(0, 1))
+```
+
+
+### HPI
+
+O `HPI`, assim como o `HHI`, é um índice de concorrência, mas que mede a instabilidade dessa concorrência, ao invés do seu grau total de concentração. Assim, espera-se que os parâmetros que mais tenham efeito sobre seus resultados em diferentes simulações sejam aqueles que tenham mais impacto direto sobre variações de *market share*. Nesse modelo, o que mais impacta os *market shares*, como visto no gráfico da sua evolução, são as inovações, que geram saltos na `Quality` dos produtos --- a `Convenience` aumenta de forma linear. Portanto, quanto maior a importância da qualidade para a probabilidade de venda de um produto, maiores são as mudanças bruscas de *market share* nesse mercado, e isso é determinado pelo parâmetro `alpha`.
+
+#### Elementary Effects
+
+Como ja era esperado, o método de EE aponta a improtância do parâmetro `alpha` para os resultados da variável `HPI`.
+
+```{r}
+HPIee <- read_csv("C:/FAO/R/LSDtesteSA/HPI-r10.csv")
+```
+
+```{r}
+ggplot(HPIee, mapping = aes(x = mu.star, y = sigma)) + 
+  geom_point(aes(color = HPIee$X1)) +
+  geom_label_repel(aes(label=ifelse(mu.star>1e-04,as.character(HPIee$X1),'')), 
+                   box.padding = 0.35, point.padding = 0.5) +
+#  geom_text(aes(label=ifelse(mu.star>3e-04,as.character(eeSA$X1),'')),hjust=1.1,vjust=1) +
+  ggtitle("HPI - Elementary Efects", subtitle = "Trajectories (r) = 10") +
+  labs(caption = "mu.star: overall effects \nsigma: non-linear/non-additive effects") +
+    theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"), 
+        plot.caption = element_text(hjust = 0, face = "italic"), 
+        legend.position = "right") +
+  scale_colour_discrete("Parâmetro") +
+  scale_x_continuous(labels = scales::scientific) +
+  scale_y_continuous(labels = scales::scientific)
+```
+
+
+#### Variance Decomposition
+
+Para essa variável, o método de SVD apresenta resultados ligeiramente diferentes dos de EE. Em ambos, o parâmetro `alpha` aparece como o de maior impacto, porém aqui o parâmetro `N` se mostra como sendo o segundo de maior impacto.
+
+```{r}
+HPIsob <- read_csv("C:/FAO/R/LSDtesteSA/Sobol-HPI.csv")
+```
+
+```{r, preview=TRUE}
+param <- HPIsob$X1
+HPIsob <- HPIsob[2:3] %>%
+  gather("key", "value")
+HPIsob$param <- c(param, param)
+
+ggplot(HPIsob, aes(x = reorder(param, value), y =  value, group = key, fill = key)) + 
+  geom_col(position = position_stack(reverse = TRUE)) +
+  labs(title = "HPI - Variance Decomposition") +
+  coord_flip() +
+  ylab("Sobol Index") +
+  xlab("") +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "top") +
+  scale_fill_brewer("", palette = "Paired") +
+  scale_y_continuous(breaks = seq(from = 0, to = 1, by = 0.1), limits = c(0, 1))
+```
+
+## Conclusão
+
+Esse modelo busca analisar um mercado no qual as firmas competem entre si através de diferenciações na qualidade e na conveniência de seus produtos --- a probabilidade de venda depende desses dois fatores. O modelo sugere que é possível haver competição mesmo quando há retornos crescentes, caso haja alta taxa de inovação, o que faz com que as qualidades do produtos mudem ao longo do tempo. A análise de sensibilidade mostrou que o número de firmas tem grande impacto sobre a concentração desse mercado e que a proporção entre qualidade de conveniência, dada pelo parâmetro `alpha`, tem grande impacto sobre a instabilidade da concorrência, uma vez que a inovação gera oscilações consideráveis nos *market shares* das firmas.
+
+
+
+
+
+

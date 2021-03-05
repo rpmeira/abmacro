@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { background-color: #f8f8f8; }
+  {  background-color: #f8f8f8; }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -130,7 +131,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","lsd.png","lsdmacro_files/anchor-4.2.2/anchor.min.js","lsdmacro_files/bowser-1.9.3/bowser.min.js","lsdmacro_files/distill-2.2.21/template.v2.js","lsdmacro_files/jquery-1.11.3/jquery.min.js","lsdmacro_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","lsd.png","lsdmacro_files/anchor-4.2.2/anchor.min.js","lsdmacro_files/bowser-1.9.3/bowser.min.js","lsdmacro_files/distill-2.2.21/template.v2.js","lsdmacro_files/header-attrs-2.5/header-attrs.js","lsdmacro_files/jquery-1.11.3/jquery.min.js","lsdmacro_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2010,6 +2011,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2084,91 +2086,103 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </nav>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+</style>
+</div>
 <h2 id="estrutura-do-arquivo-de-equação">Estrutura do arquivo de Equação</h2>
 <p>Os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis que fazem parte do modelo. Os cógidos para cada Equação são separados um do outro, em blocos.</p>
 <p>A estrutura mínima de um modelo do LSD é a seguinte:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="pp">#include </span><span class="im">&quot;../src/fun_head_fast.h&quot;</span></a>
-<a class="sourceLine" id="numCode-2" title="2"></a>
-<a class="sourceLine" id="numCode-3" title="3">MODELBEGIN</a>
-<a class="sourceLine" id="numCode-4" title="4"></a>
-<a class="sourceLine" id="numCode-5" title="5">MODELEND</a>
-<a class="sourceLine" id="numCode-6" title="6"></a>
-<a class="sourceLine" id="numCode-7" title="7"><span class="dt">void</span> close_sim( )  </a>
-<a class="sourceLine" id="numCode-8" title="8">{  </a>
-<a class="sourceLine" id="numCode-9" title="9">}</a></code></pre></div>
-<p>As equações do modelo devem ser inseridas entre <span class="math inline">\(MODELBEGIN\)</span> e <span class="math inline">\(MODELEND\)</span>.</p>
-<p>Cada variável do modelo possui sua própria Equação, e essa pode ser executada diversas vezes, a depender da quantidade de objetos (agentes) que a chamam. As variáveis e os parâmetros são localizadas dentro dos objetos, portanto cada objeto, ou cópia do objeto, possui uma cópia diferente das variáveis e dos parâmetros. Por exemplo, suponha um objeto, chamado <span class="math inline">\(Firma\)</span>, que contém a variável chamada <span class="math inline">\(Q\)</span> que depende de outra variável chamda <span class="math inline">\(K\)</span>. Se são criadas diversas cópias do objeto <span class="math inline">\(Firma\)</span>, cada cópia da Equação para <span class="math inline">\(Q\)</span>, que necessita da variável <span class="math inline">\(K\)</span> para seu cálculo, utilizará sua própria cópia de <span class="math inline">\(K\)</span>, ou seja a cópia de <span class="math inline">\(K\)</span> contida no mesmo objeto que a cópia da Equação para <span class="math inline">\(Q\)</span> que está sendo computada.</p>
-<p>A ordem com que as Equações aparecem no arquivo de Equação é irrelevante, uma vez que o LSD avalia de forma automática a sequencia de variáveis que será executada, com base nos períodos <span class="math inline">\(t\)</span> dessa variáveis — Cada variável, e sua Equação associada, deve ser pensada como uma equação em diferença:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;../src/fun_head_fast.h&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>MODELBEGIN</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>MODELEND</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> close_sim( )  </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>As equações do modelo devem ser inseridas entre <code>MODELBEGIN</code> e <code>MODELEND</code>.</p>
+<p>Cada variável do modelo possui sua própria Equação, e essa pode ser executada diversas vezes, a depender da quantidade de objetos (agentes) que a chamam. As variáveis e os parâmetros são localizadas dentro dos objetos, portanto cada objeto, ou cópia do objeto, possui uma cópia diferente das variáveis e dos parâmetros. Por exemplo, suponha um objeto, chamado <code>Firma</code>, que contém a variável chamada <code>Q</code> que depende de outra variável chamada <code>K</code>. Se são criadas diversas cópias do objeto <code>Firma</code>, cada cópia da Equação para <code>Q</code>, que necessita da variável <code>K</code> para seu cálculo, utilizará sua própria cópia de <code>K</code>, ou seja a cópia de <code>K</code> contida no mesmo objeto que a cópia da Equação para <code>Q</code> que está sendo computada.</p>
+<p>A ordem com que as Equações aparecem no arquivo de Equação é irrelevante, uma vez que o LSD avalia de forma automática a sequencia de variáveis que será executada, com base nos períodos <code>t</code> dessa variáveis — Cada variável, e sua Equação associada, deve ser pensada como uma equação em diferença:</p>
 <p><span class="math display">\[
 \begin{aligned}
 X_t = f(Y_{t-lag}, Z_{t-lag}, \dots)
 \end{aligned}
 \]</span></p>
-<p>As Equações podem ser compostas também por parâmetros que, na maioria das vezes, são constantes durante as simulações — a menos que sejam modificados por outras variáveis, o que é possível por meio dos macros <span class="math inline">\(WRITE(\dots)\)</span> ou <span class="math inline">\(INCR(\dots)\)</span>.</p>
+<p>As Equações podem ser compostas também por parâmetros que, na maioria das vezes, são constantes durante as simulações — a menos que sejam modificados por outras variáveis, o que é possível por meio dos macros <code>WRITE(\dots)</code> ou <code>INCR(\dots)</code>.</p>
 <h2 id="equationvariável">EQUATION(“variável”)</h2>
-<p>A macro <span class="math inline">\(EQUATION\)</span> inicia um bloco de código associado a uma variável. Por exemplo:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;X&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*</span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Comentário especificando o que a equação faz  </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span> </a>
-<a class="sourceLine" id="numCode-5" title="5"></a>
-<a class="sourceLine" id="numCode-6" title="6">RESULT( <span class="dv">3</span> ) <span class="co">// Neste exemplo a equação sempre retorna o valor 3 para a variável X</span></a></code></pre></div>
+<p>A macro <code>EQUATION</code> inicia um bloco de código associado a uma variável. Por exemplo:</p>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;X&quot;</span> )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Comentário especificando o que a equação faz  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span> </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>RESULT( <span class="dv">3</span> ) <span class="co">// Neste exemplo a equação sempre retorna o valor 3 para a variável X</span></span></code></pre></div>
 <p>A primeira linha indica que o código se refere à variável X. A última linha indica o resultado que será atribuído para essa variável em cada período de tempo. No exemplo acima, é atriuído um valor constante para a variável, mas usulmente esse não é o caso. Esse resultado dependerá dos cálculos feitos pela Equação. O LSD oferece diversas macros para esses cálculos. Ao longo desse texto, serão vistas as macros mais frequentemente utilizadas.</p>
-<p>A macro mais utilizada é a <span class="math inline">\(V(\dots)\)</span>, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;PROF&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/***************************  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">A equação computa a taxa de lucro:</span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn  </span></a>
-<a class="sourceLine" id="numCode-5" title="5"><span class="co">lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior</span></a>
-<a class="sourceLine" id="numCode-6" title="6"><span class="co">menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  </span></a>
-<a class="sourceLine" id="numCode-7" title="7"><span class="co">***************************/</span></a>
-<a class="sourceLine" id="numCode-8" title="8">RESULT( V(<span class="st">&quot;Price&quot;</span>) * VL(<span class="st">&quot;A&quot;</span>, <span class="dv">1</span>) - V(<span class="st">&quot;C&quot;</span>) - V(<span class="st">&quot;RIM&quot;</span>) - V(<span class="st">&quot;RIN&quot;</span>) * V(<span class="st">&quot;Inn&quot;</span>) )</a></code></pre></div>
+<p>A macro mais utilizada é a <code>V(\dots)</code>, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:</p>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;PROF&quot;</span> )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/***************************  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">A equação computa a taxa de lucro:</span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn  </span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a><span class="co">lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior</span></span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="co">menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  </span></span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a><span class="co">***************************/</span></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>RESULT( V(<span class="st">&quot;Price&quot;</span>) * VL(<span class="st">&quot;A&quot;</span>, <span class="dv">1</span>) - V(<span class="st">&quot;C&quot;</span>) - V(<span class="st">&quot;RIM&quot;</span>) - V(<span class="st">&quot;RIN&quot;</span>) * V(<span class="st">&quot;Inn&quot;</span>) )</span></code></pre></div>
 <h2 id="armazenamento-temporário-vn">Armazenamento temporário: v[n]</h2>
 <p>O modo padrão de expressar a Equação é coletando um conjunto de dados gerados pelo modelo (variáveis e parâmetros) e elaborar em cima disso para chegar no resultado desejado para o valor da variável. v[n] fornece uma forma de armazenar valores temporários que serão utilizados pela Equação. Estão disponíveis até mil posições para v[n], para cada Equação: de v[0] a v[999]. Os valores de v[n] são redefinidos para cada Equação, portanto não podem ser utilizados para transferir informação de uma Equação para outra. ou entre periodos de tempo diferentes na mesma Equação. Exemplo:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;PROF&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/***************************  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">A equação computa a taxa de lucro:  </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn    </span></a>
-<a class="sourceLine" id="numCode-5" title="5"><span class="co">lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior</span></a>
-<a class="sourceLine" id="numCode-6" title="6"><span class="co">menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  </span></a>
-<a class="sourceLine" id="numCode-7" title="7"><span class="co">***************************/</span></a>
-<a class="sourceLine" id="numCode-8" title="8">v[<span class="dv">0</span>] = V( <span class="st">&quot;Price&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-9" title="9">v[<span class="dv">1</span>] = VL( <span class="st">&quot;A&quot;</span>, <span class="dv">1</span> );  </a>
-<a class="sourceLine" id="numCode-10" title="10">v[<span class="dv">2</span>] = V( <span class="st">&quot;C&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-11" title="11">v[<span class="dv">3</span>] = V( <span class="st">&quot;RIM&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-12" title="12">v[<span class="dv">4</span>] = V( <span class="st">&quot;RIN&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-13" title="13">v[<span class="dv">5</span>] = V( <span class="st">&quot;Inn&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-14" title="14"></a>
-<a class="sourceLine" id="numCode-15" title="15">RESULT( v[<span class="dv">0</span>] * v[<span class="dv">1</span>] - v[<span class="dv">2</span>] - v[<span class="dv">3</span>] - v[<span class="dv">4</span>] * v[<span class="dv">5</span>] )</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;PROF&quot;</span> )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/***************************  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">A equação computa a taxa de lucro:  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">PROF(t) = P(t) * A(t-1) - C - RIM – RIN * Inn    </span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a><span class="co">lucros por unidade de capital são iguais ao preço corrente vezes a produtividade no período anterior</span></span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="co">menos o custo para pesquisa (firmas inovativas gastam para os dois tipos de pesquisa) e custos fixos.  </span></span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a><span class="co">***************************/</span></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V( <span class="st">&quot;Price&quot;</span> );  </span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VL( <span class="st">&quot;A&quot;</span>, <span class="dv">1</span> );  </span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V( <span class="st">&quot;C&quot;</span> );  </span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = V( <span class="st">&quot;RIM&quot;</span> );  </span>
+<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = V( <span class="st">&quot;RIN&quot;</span> );  </span>
+<span id="numCode-13"><a href="#numCode-13" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">5</span>] = V( <span class="st">&quot;Inn&quot;</span> );  </span>
+<span id="numCode-14"><a href="#numCode-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-15"><a href="#numCode-15" aria-hidden="true" tabindex="-1"></a>RESULT( v[<span class="dv">0</span>] * v[<span class="dv">1</span>] - v[<span class="dv">2</span>] - v[<span class="dv">3</span>] - v[<span class="dv">4</span>] * v[<span class="dv">5</span>] )</span></code></pre></div>
 <p>Existem varias vantagens em utilizar v[n]: i) o código fica mais fácil de ler; ii) os valores intermediários podem ser observados usando o <em>LSD Debugger</em>; iii) se um valor é usado muitas vezes na mesma Equação, é mais rápido e menos propenso a erro guardar esse valor em um v[n].</p>
 <h2 id="objetos-e-ponteiros">Objetos e Ponteiros</h2>
-<p>A maioria das macros do LSD são operados <em>dentro</em> de um objeto, que é definido pelo ponteiro <span class="math inline">\(p\)</span>. As macros são operadas nos objetos para que uma mesma Equação possa ser reusada por diversas cópias do objeto. Por exemplo, seja um modelo com um objeto chamado <strong>Firma</strong>, que contém as variáveis <strong>Lucro</strong>, <strong>Preço</strong> e <strong>Quantidade</strong>, sendo que a Equação para o Lucro é:</p>
+<p>A maioria das macros do LSD são operados <em>dentro</em> de um objeto, que é definido pelo ponteiro <code>p</code>. As macros são operadas nos objetos para que uma mesma Equação possa ser reusada por diversas cópias do objeto. Por exemplo, seja um modelo com um objeto chamado <strong>Firma</strong>, que contém as variáveis <strong>Lucro</strong>, <strong>Preço</strong> e <strong>Quantidade</strong>, sendo que a Equação para o Lucro é:</p>
 <p><span class="math display">\[
 Lucro = Preço \times Quantidade
 \]</span></p>
 <p>O modelo pode possuir diversas cópias do objeto Firma, com cada uma tendo a sua própria cópia das variáveis Lucro, Preço e Quantidade. Ou seja, cada cópia do objeto Firma pode possuir trajetórias distintas para os valores dessas variáveis. O LSD toma conta dessa correspondência entre objetos e variáveis através dos seguintes meios:</p>
 <ul>
-<li><span class="math inline">\(p\)</span> se refere ao objeto que contém a variável cuja Equação está sendo computada.</li>
-<li><span class="math inline">\(c\)</span> se refere ao objeto que requisitou a computação da variável.</li>
-<li><span class="math inline">\(cur\)</span>, <span class="math inline">\(cur1\)</span>, <span class="math inline">\(cur2\)</span>, etc., são ponteiros temporários que podem guardar os endereços correntes dos objetos obtidos de outras macros.</li>
+<li><code>p</code> se refere ao objeto que contém a variável cuja Equação está sendo computada.</li>
+<li><code>c</code> se refere ao objeto que requisitou a computação da variável.</li>
+<li><code>cur</code>, <code>cur1</code>, <code>cur2</code>, etc., são ponteiros temporários que podem guardar os endereços correntes dos objetos obtidos de outras macros.</li>
 </ul>
 <h4 id="cur">cur</h4>
-<p>De forma um pouco mais detalhada, <span class="math inline">\(cur\)</span> funciona de maneira semelhante a v[n], porém para ponteiros, ao invés de para valores numéricos. Assim como v[n] vai de v[0] a v[999], <span class="math inline">\(cur\)</span> vai de <span class="math inline">\(cur1\)</span> a <span class="math inline">\(cur9\)</span>. O usuário chama macros do LSD que retornam objetos e associam esses a <span class="math inline">\(cur1\)</span>, <span class="math inline">\(cur2\)</span>, <span class="math inline">\(\dots\)</span> e, com isso, usam esses ponteiros em outras macros que requeiram obejetos em seus cálculos.</p>
+<p>De forma um pouco mais detalhada, <code>cur</code> funciona de maneira semelhante a v[n], porém para ponteiros, ao invés de para valores numéricos. Assim como v[n] vai de v[0] a v[999], <code>cur</code> vai de <code>cur1</code> a <code>cur9</code>. O usuário chama macros do LSD que retornam objetos e associam esses a <code>cur1</code>, <code>cur2</code>, <span class="math inline">\(\dots\)</span> e, com isso, usam esses ponteiros em outras macros que requeiram obejetos em seus cálculos.</p>
 <h4 id="hook">HOOK(…)</h4>
-<p>Qualquer objeto em um modelo do LSD pode conter um ou mais elementos chamados <em>hook</em>, que são ponteiros para outros objetos, assim como <span class="math inline">\(cur\)</span>, porém não são temporários, existindo por toda a vida do objeto. Portanto, hooks permitem conectar uma cópia de um objeto a qualquer outra cópia de qualquer outro objeto no modelo. A sua principal vantagem é acelerar operações de busca por objetos.</p>
+<p>Qualquer objeto em um modelo do LSD pode conter um ou mais elementos chamados <em>hook</em>, que são ponteiros para outros objetos, assim como <code>cur</code>, porém não são temporários, existindo por toda a vida do objeto. Portanto, hooks permitem conectar uma cópia de um objeto a qualquer outra cópia de qualquer outro objeto no modelo. A sua principal vantagem é acelerar operações de busca por objetos.</p>
 <h2 id="sufixos-e-famílias-macro">Sufixos e famílias Macro</h2>
-<p>A maioria das macros do LSD, como V(…), pode ser acrescida de alguns sufixos, como <span class="math inline">\(L\)</span>, <span class="math inline">\(S\)</span>, <span class="math inline">\(LS\)</span>, etc. O sufixo <span class="math inline">\(L\)</span> faz referência a <em>Lag</em> e indica que a operação se refere a valores passados. O sufixo <span class="math inline">\(S\)</span> indica uma cópia <em>Specific</em> de um objeto. <span class="math inline">\(LS\)</span> indica que a macro será aplicada tanto com Lag quanto para uma cópia em específico de um objeto.</p>
+<p>A maioria das macros do LSD, como V(…), pode ser acrescida de alguns sufixos, como <code>L</code>, <code>S</code>, <code>LS</code>, etc. O sufixo <code>L</code> faz referência a <em>Lag</em> e indica que a operação se refere a valores passados. O sufixo <code>S</code> indica uma cópia <em>Specific</em> de um objeto. <code>LS</code> indica que a macro será aplicada tanto com Lag quanto para uma cópia em específico de um objeto.</p>
 <h4 id="família-v">Família V(…)</h4>
-<p>Essa é a família de macros do LSD mais usada. Composta por V(“X”), VL(“X”, lag), VS(obj, “X”), VLS(obj, “X”, lag). Essas macros retornam o valor da variável ou parâmetro com nome <em>X</em>. As formas VL(“X”, lag) e VLS(obj, “X”, lag) permitem especificar um <em>lag</em> como, por exemplo, VL(“X”, 2) pra um lag de 2 períodos. As formas VS(obj, “X”) e VLS(obj, “X”, lag) especificam em qual objeto específico o parâmetro ou a variável sevem ser procuradas. Em V(“X”) e VL(“X”, lag), onde não é especificado o objeto, a busca começa de <span class="math inline">\(p\)</span> — objeto corrente.</p>
+<p>Essa é a família de macros do LSD mais usada. Composta por V(“X”), VL(“X”, lag), VS(obj, “X”), VLS(obj, “X”, lag). Essas macros retornam o valor da variável ou parâmetro com nome <em>X</em>. As formas VL(“X”, lag) e VLS(obj, “X”, lag) permitem especificar um <em>lag</em> como, por exemplo, VL(“X”, 2) pra um lag de 2 períodos. As formas VS(obj, “X”) e VLS(obj, “X”, lag) especificam em qual objeto específico o parâmetro ou a variável sevem ser procuradas. Em V(“X”) e VL(“X”, lag), onde não é especificado o objeto, a busca começa de <code>p</code> — objeto corrente.</p>
 <h4 id="família-sum">Família SUM(…)</h4>
 <p>Composta por SUM(“X”), SUML(“X”, lag), SUMS(obj, “X”), SUMLS(obj, “X”, lag). Essas macros procuram uma instância da variável ou parâmetro <em>X</em> e então começam a somar com todos os valores de instâncias de <em>X</em> encontradas no conjunto de objetos que são cópias do primeiro encontrado.</p>
 <p>Por exemplo, seja um modelo composto por um objeto chamado “Mercado”, que contém uma variável chamada “Q_TOT”, e do qual descende um conjunto de objetos chamados “Firmas”, que possuem a variável chamada “Q”. A Equação da soma dos “Q” de todas as firmas seria:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;Q_TOT&quot;</span> )</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/*  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Calcula a soma de todos os Q&#39;s no mercado  </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span></a>
-<a class="sourceLine" id="numCode-5" title="5"></a>
-<a class="sourceLine" id="numCode-6" title="6">RESULT( SUM( <span class="st">&quot;Q&quot;</span> ) )</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;Q_TOT&quot;</span> )</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Calcula a soma de todos os Q&#39;s no mercado  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>RESULT( SUM( <span class="st">&quot;Q&quot;</span> ) )</span></code></pre></div>
 <p>É importante ressaltar, porém, que se o modelo possuir diversas cópias do objeto “Mercado”, a equação acima só irá computar os “Q” pertencentes às firmas que descendem da cópia do “Mercado” em questão, e não todos os “Q” do modelo. Portanto, se existirem 3 cópias de “Mercado” com 10 cópias de “Firma” em cada um, e “Q” for estabelecido como uma constante igual a 1, “Q_TOT” será 10, para cada objeto “Mercado”, e não 30.</p>
 <h4 id="família-max">Família MAX(…)</h4>
 <p>Semelhante a SUM(“X”), mas ao invés da soma, essa família de macro calcula o valor máximo da variável ou parâmetro chamado “X” entre os descendentes do objeto corrente.</p>
@@ -2178,67 +2192,67 @@ Lucro = Preço \times Quantidade
 <h4 id="família-search">Família SEARCH(…)</h4>
 <p>Composta por SEARCH(“A”) e SEARCHS(obj, “A”), essas macros exploram um ramo único do model em busca da primeria instância do objeto chamado “A”. Elas procuram dentro dos descendentes do objeto que as está chamado — SEARCH(“A”) — ou dos descentender de um certo objeto “obj” — SEARCHS(obj, “A”). Assim, a busca não é exaustiva sobre o modelo inteiro, a menos que comece do objeto “<em>root</em>” (objeto “pai” de todo e qualquer modelo). É possível partir do “pai” ou “avô” do objeto corrente, utilizando <code>p-&gt;up</code> (pai) ou <code>p-&gt;up-&gt;up</code> (avô).</p>
 <p>Essas macros retornam um ponteiro — que pode ser usado (chamado) depois — para a primeira instância do objeto “A” ou <code>NULL</code> caso não seja encontrado nenhum objeto. Por exemplo, deseja-se procurar pelo objeto “Mercado” e sabe-se que ele é avô do objeto que está realizando a busca. O endereço de “Mercado” será salvo no ponteiro temporário <code>cur</code> e depois utilizado para acessar a variável “VendasTotais”:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">…  </a>
-<a class="sourceLine" id="numCode-2" title="2">cur = SEARCH( p-&gt;up-&gt;up, <span class="st">&quot;Mercado&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-3" title="3">v[<span class="dv">1</span>] = VS( cur, <span class="st">&quot;VendasTotais&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-4" title="4">…  </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>…  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>cur = SEARCH( p-&gt;up-&gt;up, <span class="st">&quot;Mercado&quot;</span> );  </span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VS( cur, <span class="st">&quot;VendasTotais&quot;</span> );  </span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>…  </span></code></pre></div>
 <h4 id="família-search_cnd">Família SEARCH_CND(…)</h4>
 <p>Semelhante à família SEARCH(…), porém as macros SEARCH_CND(“X”, valor) e suas parentes L, S e LS são usadas para encontrar uma instância de um objeto no modelo que contenha a variável, ou parâmetro, chamada “X” com o valor específico apontado. A variante SEARCH_CNDL(“X”, valor, lag) aponta também o lag, com relação ao periodo de tempo corrente, que se deseja procurar o valor para a variável. A variante SEARCH_CNDS(obj, “X”, valor) aponta também o objeto de onde se parte a busca (ao invés do objeto corrente que está chamando a macro).</p>
 <p>Por exemplo, deseja-se extrair uma instância aleaória do objeto “Firma”, de um grupo de 100 instâncias que possuem o parâmetro “IdFirma” ajustado de 1 a 100, e alocar o enderço desse objeto no ponteiro temporário <code>cur</code>:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">…  </a>
-<a class="sourceLine" id="numCode-2" title="2">v[<span class="dv">0</span>] = uniform_int( <span class="dv">1</span>, <span class="dv">100</span> );  </a>
-<a class="sourceLine" id="numCode-3" title="3">cur = SEARCH_CND( <span class="st">&quot;IdFirma&quot;</span>, v[<span class="dv">0</span>] );  </a>
-<a class="sourceLine" id="numCode-4" title="4">… </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>…  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = uniform_int( <span class="dv">1</span>, <span class="dv">100</span> );  </span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>cur = SEARCH_CND( <span class="st">&quot;IdFirma&quot;</span>, v[<span class="dv">0</span>] );  </span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>… </span></code></pre></div>
 <h4 id="família-search_inst">Família SEARCH_INST(…)</h4>
 <p>Composta por SEARCH_INST(“A”) e SEARCH_INSTS(obj, “A”), essa família de macros procura o número da instância de um objeto cópia do objeto “A”. A variante SEARCH_INSTS(obj, “A”) aponta também o objeto de onde se parte a busca (ao invés do objeto corrente que está chamando a macro). Quando uma instância do objeto é encontrada, a macro retorna um número que representa a posição dessa instância em específico (com relação a essa cadeia de cópias do objeto), começando em 1 e indo até o número total de cópias do objeto em questão.</p>
 <p>Por exemplo, deseja-se confirmar se o parâmetro “IdFirma” está ajustado ao número (posição) de cada instância do objeto “Firma”:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">CYCLE( cur, <span class="st">&quot;Firma&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-2" title="2">{  </a>
-<a class="sourceLine" id="numCode-3" title="3">  v[<span class="dv">1</span>] = VS( cur, <span class="st">&quot;IdFirma&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-4" title="4">  v[<span class="dv">2</span>] = SEARCH_INST( cur );  </a>
-<a class="sourceLine" id="numCode-5" title="5">  <span class="cf">if</span> ( v[<span class="dv">1</span>] != v[<span class="dv">2</span>] )  </a>
-<a class="sourceLine" id="numCode-6" title="6">    LOG( <span class="st">&quot;</span><span class="sc">\n</span><span class="st"> IdFirma=</span><span class="sc">%g</span><span class="st"> diferente da instância número=</span><span class="sc">%g</span><span class="st">&quot;</span>, v[<span class="dv">1</span>], v[<span class="dv">2</span>] );  </a>
-<a class="sourceLine" id="numCode-7" title="7">} </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>CYCLE( cur, <span class="st">&quot;Firma&quot;</span> )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>  v[<span class="dv">1</span>] = VS( cur, <span class="st">&quot;IdFirma&quot;</span> );  </span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>  v[<span class="dv">2</span>] = SEARCH_INST( cur );  </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> ( v[<span class="dv">1</span>] != v[<span class="dv">2</span>] )  </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>    LOG( <span class="st">&quot;</span><span class="sc">\n</span><span class="st"> IdFirma=</span><span class="sc">%g</span><span class="st"> diferente da instância número=</span><span class="sc">%g</span><span class="st">&quot;</span>, v[<span class="dv">1</span>], v[<span class="dv">2</span>] );  </span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>} </span></code></pre></div>
 <h4 id="família-rdndraw">Família RDNDRAW(…)</h4>
 <p>Composta por RDNDRAW(“A”, X“), RDNDRAWL(”A“,”X“, lag), RDNDRAWS(obj,”A“,”X“), RDNDRAWLS(obj,”A“,”X“, lag), essa família de macros procura por um grupo de objetos chamado de”A" e retorna um ponteiro com o endereço de uma das instâncias do objeto “A”, escolhido de forma aleatória com probabilidade proporcional aos valores da variável “X” (possuida pelo mesmo objeto). A variante S pode começar a busca a partir de outro objeto que não o objeto corrente, e a variante L pode especificar um período anterior que o período corrente.</p>
 <p>Por exemplo, deseja-se escolher aleatoriamente uma instância do objeto “Firma” e retornar o valor do seu parâmetro “IdFirma”. O objeto “Firma” é descendente direto do objeto que está rodando a equação. O código atribui o parâmetro “prob”, em cada Firma, ao quadrado do seu market share (“ms”).</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;EscolherFirma&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/***************************  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">***************************/</span> </a>
-<a class="sourceLine" id="numCode-5" title="5">CYCLE( cur, <span class="st">&quot;Firma&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-6" title="6">{  </a>
-<a class="sourceLine" id="numCode-7" title="7">  v[<span class="dv">0</span>] = V( <span class="st">&quot;ms&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-8" title="8">  WRITES( cur, <span class="st">&quot;Prob&quot;</span>, v[<span class="dv">0</span>] * v[<span class="dv">0</span>] );  </a>
-<a class="sourceLine" id="numCode-9" title="9">}  </a>
-<a class="sourceLine" id="numCode-10" title="10">cur = RNDDRAW( <span class="st">&quot;Firma&quot;</span>, <span class="st">&quot;Prob&quot;</span> );  </a>
-<a class="sourceLine" id="numCode-11" title="11">RESULT( VS( cur, <span class="st">&quot;IdFirma&quot;</span> ) )  </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;EscolherFirma&quot;</span> )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/***************************  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">***************************/</span> </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>CYCLE( cur, <span class="st">&quot;Firma&quot;</span> )  </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>  v[<span class="dv">0</span>] = V( <span class="st">&quot;ms&quot;</span> );  </span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>  WRITES( cur, <span class="st">&quot;Prob&quot;</span>, v[<span class="dv">0</span>] * v[<span class="dv">0</span>] );  </span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a>cur = RNDDRAW( <span class="st">&quot;Firma&quot;</span>, <span class="st">&quot;Prob&quot;</span> );  </span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a>RESULT( VS( cur, <span class="st">&quot;IdFirma&quot;</span> ) )  </span></code></pre></div>
 <h4 id="família-rdndraw_fair">Família RDNDRAW_FAIR(…)</h4>
 <p>Composta por RDNDRAW_FAIR(“A”) e RDNDRAW_FAIRS(obj, “A”), essa família de macros é semelhante à Família RDNDRAW(…), porém usa a mesma probabilidade para todos os objetos. Por exemplo:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">EQUATION( <span class="st">&quot;EscolherFirma&quot;</span> )  &lt;p style=<span class="st">&quot;color:green;&quot;</span>&gt;</a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">/***************************  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">***************************/</span> &lt;/p&gt;  </a>
-<a class="sourceLine" id="numCode-5" title="5">cur = RNDDRAW_FAIR( <span class="st">&quot;Firma&quot;</span>);  </a>
-<a class="sourceLine" id="numCode-6" title="6">RESULT( VS( cur, <span class="st">&quot;IdFirma&quot;</span> ) )  </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>EQUATION( <span class="st">&quot;EscolherFirma&quot;</span> )  &lt;p style=<span class="st">&quot;color:green;&quot;</span>&gt;</span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">/***************************  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">Retorna o Id da Firma escolhida aleatoriamente com probabilidade igual ao quadrado do market share.    </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">***************************/</span> &lt;/p&gt;  </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>cur = RNDDRAW_FAIR( <span class="st">&quot;Firma&quot;</span>);  </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>RESULT( VS( cur, <span class="st">&quot;IdFirma&quot;</span> ) )  </span></code></pre></div>
 <h4 id="família-write">Família WRITE(…)</h4>
 <p>Composta por WRITE(“X”, valor), WRITES(obj, “X”, valor), WRITEL(“X”, valor, tempo), WRITELS(obj, “X”, valor, tempo), WRITELL(“X”, valor, tempo, lag), WRITELLS(obj, “X”, valor, tempo, lag), essa família de macros escreve o valor “valor” na variável ou parâmetro “X”. No caso de uma variável, é possível fazer aparecer como se o tempo da ultima computação da variável sendo escrita fosse “tempo”. Ou seja, após a macro ser executada, a variável “X” irá aparecer para o LSD como se sua última computação tivesse sido esecutada no periodo “tempo”, e seu valor fosse “valor”. Se “X” for um prâmetro, o campo “tempo” é ignorado. A variável deve contida pelo objeto corrente ou pelo objeto especificado na variante S. Adicionlamente, a variante LL permite modificar os valores em “lag” da variável (ignorado se for parâmetro), portanto é possível “reescrever o passado”, mudando o valor retornado pelo LSD caso o valor em lag da variável seja requisitado por, por exemplo, uma macro VL(…). Reescrever o passado é algo perigoso e só é recomendado em alguns casos.</p>
 <p>O melhor uso dessa família é para mudar os valores de parâmetros durante uma simulação. Um uso frequente em variáveis é para a inicialização de objetos recentemente adicionados.</p>
 <h4 id="família-cycle">Família CYCLE(…)</h4>
 <p>Composta por CYCLE(cur, “A”), CYCLES(obj, cur, “A”), CYCLE_SAFE(cur, “A”), CYCLE_SAFES(obj, cur, “A”), essa família de macros examina todas as instâncias do objeto “A” — que descende do objeto corrente ou que é apontado na variante S — atribuindo ciclicamente o ponteiro <code>cur</code> para o endenreço de cada instância do objeto. É possivel aninhar dois ou mais CYCLE(…), dado que se utilize diferentes ponteiros (<code>cur</code>, <code>cur1</code>, <code>cur2</code>, etc.) para cada nível.</p>
 <p>Por exemplo, deseja-se calcular o lucro total de todas as Firmas, de todos os Mercados (o objeto Mercado contém o objeto Firma). O ponteiro <code>cur</code> cicla através de todos os objetos chamados “Mercado” (supondo que exista mais de 1). Por sua vez, para cada instância de “Mercado”, o ponteiro <code>cur1</code> cicla através de cada objeto chamado “Firma” que está contido nessa instância em especifico do objeto “Mercado”. Para cada “Firma”</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">…   </a>
-<a class="sourceLine" id="numCode-2" title="2">v[<span class="dv">0</span>] = <span class="dv">0</span>; <span class="co">// ajustar v[0] para ser inicialmente 0  </span></a>
-<a class="sourceLine" id="numCode-3" title="3">CYCLE( cur, <span class="st">&quot;Mercado&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-4" title="4">{ <span class="co">// Para cada Mercado  </span></a>
-<a class="sourceLine" id="numCode-5" title="5">  CYCLES( cur, cur1, <span class="st">&quot;Firma&quot;</span> )  </a>
-<a class="sourceLine" id="numCode-6" title="6">  { <span class="co">// para cada Firma contida em cur (instância de Mercado)  </span></a>
-<a class="sourceLine" id="numCode-7" title="7">    v[<span class="dv">1</span>] = VS( cur1, <span class="st">&quot;Lucro&quot;</span> );  <span class="co">// retorne o lucro dessa Firma em específico  </span></a>
-<a class="sourceLine" id="numCode-8" title="8">    v[<span class="dv">0</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];  </a>
-<a class="sourceLine" id="numCode-9" title="9">  }  </a>
-<a class="sourceLine" id="numCode-10" title="10">}  </a>
-<a class="sourceLine" id="numCode-11" title="11"><span class="co">// A partir daqui v[0] contém os lucros acumulados  </span></a>
-<a class="sourceLine" id="numCode-12" title="12">…   </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>…   </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = <span class="dv">0</span>; <span class="co">// ajustar v[0] para ser inicialmente 0  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>CYCLE( cur, <span class="st">&quot;Mercado&quot;</span> )  </span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>{ <span class="co">// Para cada Mercado  </span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>  CYCLES( cur, cur1, <span class="st">&quot;Firma&quot;</span> )  </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>  { <span class="co">// para cada Firma contida em cur (instância de Mercado)  </span></span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = VS( cur1, <span class="st">&quot;Lucro&quot;</span> );  <span class="co">// retorne o lucro dessa Firma em específico  </span></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];  </span>
+<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a>  }  </span>
+<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a><span class="co">// A partir daqui v[0] contém os lucros acumulados  </span></span>
+<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a>…   </span></code></pre></div>
 <p>Nunca use DELETE(…) dentro de um CYCLE(…) para remover uma das instâncias do objeto sendo ciclado. Deletar qualquer objeto apontado por <code>cur</code> impede a macro CYCLE(…) de identificar a próxima instância do objeto. Como alternativo, utiliza-se a macro CYCLE_SAFE(…)</p>
 <h2 id="funções-matemáticas-e-estatísticas">Funções matemáticas e estatísticas</h2>
 <p>Além das macros específicas do LSD, é possivel utilizar diversas funções matemáticas e estatísticas.</p>
@@ -2302,20 +2316,20 @@ Algumas das funções abaixo só estão disponíveis para compilador C++11 ou ma
 </ul>
 <h2 id="código-c-básico">Código C++ básico</h2>
 <p>Dentro da Equação de uma variável — ou seja, entre EQUATION(…) e RESULT(…) — é possível usar qualquer elemento ou construção legal do C++. Como já visto, toda linha de código dentro da Equação termina com um ponto e vírgula “;” — a menos que seja um comando operando sobre um bloco de código, como “if(…)” —, o que faz parte da sintaxe do C++. Outro exemplo de sintaxe do C++ já visto é a dos comentários:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="co">/*  </span></a>
-<a class="sourceLine" id="numCode-2" title="2"><span class="co">Esse é um comentário  </span></a>
-<a class="sourceLine" id="numCode-3" title="3"><span class="co">com mais de uma linha  </span></a>
-<a class="sourceLine" id="numCode-4" title="4"><span class="co">*/</span>  </a></code></pre></div>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="co">// Esse é um comentário com apenas uma linha  </span></a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*  </span></span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">Esse é um comentário  </span></span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="co">com mais de uma linha  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span>  </span></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Esse é um comentário com apenas uma linha  </span></span></code></pre></div>
 <h4 id="atribuições-operações-aritméticas-e-incrementos">Atribuições, operações aritméticas e incrementos</h4>
-<p>Sendo <span class="math inline">\(a\)</span> uma variável (de C++), é possível lhe atribuir um valor com o comando “=”:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">a = <span class="fl">4.3</span>;</a></code></pre></div>
+<p>Sendo <code>a</code> uma variável (de C++), é possível lhe atribuir um valor com o comando “=”:</p>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>a = <span class="fl">4.3</span>;</span></code></pre></div>
 <p>Toda atribuição em C++ precisa terminar com um ponto e vírgula.<br />
 É possível também atribuir valores de outras variáveis, assim como usar operações matemáticas:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">a = b + <span class="dv">3</span> - d / (e + g) * (h + i);</a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>a = b + <span class="dv">3</span> - d / (e + g) * (h + i);</span></code></pre></div>
 <p>Um pouco menos óbvio, é possível usar a mesma variável nos dois lados da atribuição:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1">a = a + <span class="dv">32</span>;</a></code></pre></div>
-<p>O comando acima atribui a <span class="math inline">\(a\)</span> o seu valor prévio mais um acréscimo de 32. Portanto, caso <span class="math inline">\(a\)</span> tivesse o valor de 5, após o comando acima <span class="math inline">\(a\)</span> teria o valor de 37.<br />
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a>a = a + <span class="dv">32</span>;</span></code></pre></div>
+<p>O comando acima atribui a <code>a</code> o seu valor prévio mais um acréscimo de 32. Portanto, caso <code>a</code> tivesse o valor de 5, após o comando acima <code>a</code> teria o valor de 37.<br />
 Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-lo: <span class="math inline">\(a\ +\!= 32;\)</span>. O mesmo pode ser feito com outras operações aritméticas:</p>
 <ul>
 <li><span class="math inline">\(a = a / 32;\)</span>     é equivalente a     <span class="math inline">\(a\  /\!= 32;\)</span></li>
@@ -2326,20 +2340,20 @@ Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-
 <ul>
 <li><span class="math inline">\(a = a + 1;\)</span>     é equivalente a     <span class="math inline">\(a\  +\!= 1;\)</span>     que é equivalente a     <span class="math inline">\(a++\)</span></li>
 </ul>
-<p>O comando <span class="math inline">\(b = a++;\)</span>, por exemplo, primeiro atribui o valor de <span class="math inline">\(a\)</span> a <span class="math inline">\(b\)</span> e depois incrementa <span class="math inline">\(a\)</span>.<br />
+<p>O comando <span class="math inline">\(b = a++;\)</span>, por exemplo, primeiro atribui o valor de <code>a</code> a <code>b</code> e depois incrementa <code>a</code>.<br />
 É possível também primeiro incrementar a variável e depois atribuir: <span class="math inline">\(++a\)</span>.</p>
 <h4 id="condições-if-then-else">Condições: if …, then …, else …</h4>
 <p>A função <code>if()</code> é uma forma de executar blocos de código apenas sobre determinadas condições:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="cf">if</span> ( condição )  </a>
-<a class="sourceLine" id="numCode-2" title="2">{   </a>
-<a class="sourceLine" id="numCode-3" title="3">  <span class="co">// colocar aqui alguma linha de comando a ser executada caso a &quot;condição&quot; seja verdadeira  </span></a>
-<a class="sourceLine" id="numCode-4" title="4">}  </a>
-<a class="sourceLine" id="numCode-5" title="5"><span class="cf">else</span>  </a>
-<a class="sourceLine" id="numCode-6" title="6">{   </a>
-<a class="sourceLine" id="numCode-7" title="7">  <span class="co">// colocar aqui alguma linha de comando a ser executada caso a &quot;condição&quot; seja falsa  </span></a>
-<a class="sourceLine" id="numCode-8" title="8">} </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> ( condição )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>{   </span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// colocar aqui alguma linha de comando a ser executada caso a &quot;condição&quot; seja verdadeira  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>  </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a>{   </span>
+<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// colocar aqui alguma linha de comando a ser executada caso a &quot;condição&quot; seja falsa  </span></span>
+<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>} </span></code></pre></div>
 <p>Os colchetes “{” e “}” não são necessários caso haja apenas uma linha de comando (terminada com “;”).<br />
-A condição do <code>if()</code> normalmente é baseada nos seguintes operadores de comparação (<span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> são dois valores numéricos ou variáveis contendo valores numéricos):</p>
+A condição do <code>if()</code> normalmente é baseada nos seguintes operadores de comparação (<code>a</code> e <code>b</code> são dois valores numéricos ou variáveis contendo valores numéricos):</p>
 <ul>
 <li><strong>Igual <span class="math inline">\((a == b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> forem iguais</li>
 <li><strong>Diferente <span class="math inline">\((a\ !\!= b)\)</span></strong>: a condição é verdadeira se <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> forem diferentes</li>
@@ -2356,19 +2370,19 @@ A condição do <code>if()</code> normalmente é baseada nos seguintes operadore
 </ul>
 <h4 id="ciclos-for...">Ciclos <code>for(...)</code></h4>
 <p>Esse comando permite a repetição de um bloco de código até que uma condição específica seja satisfeita. A sua sintaxe é a seguinte:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="cf">for</span> ( INI ; CONDIÇÂO ; FIMCICLO )  </a>
-<a class="sourceLine" id="numCode-2" title="2">{  </a>
-<a class="sourceLine" id="numCode-3" title="3">  <span class="co">// Bloco de código do ciclo  </span></a>
-<a class="sourceLine" id="numCode-4" title="4">  <span class="co">// Pode haver qualquer comando aqui </span></a>
-<a class="sourceLine" id="numCode-5" title="5">}  </a></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( INI ; CONDIÇÂO ; FIMCICLO )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Bloco de código do ciclo  </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Pode haver qualquer comando aqui </span></span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>}  </span></code></pre></div>
 <p>Por exemplo:</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><a class="sourceLine" id="numCode-1" title="1"><span class="cf">for</span> ( i = -<span class="dv">2</span>; i &lt; <span class="dv">3</span>; i++ )  </a>
-<a class="sourceLine" id="numCode-2" title="2">{</a>
-<a class="sourceLine" id="numCode-3" title="3">  <span class="co">// na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2 </span></a>
-<a class="sourceLine" id="numCode-4" title="4">  v[i] = i;  </a>
-<a class="sourceLine" id="numCode-5" title="5">}   </a>
-<a class="sourceLine" id="numCode-6" title="6"><span class="co">// aqui, i é igual a 3, porque foi a condição para sair do ciclo </span></a></code></pre></div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="numCode"><pre class="sourceCode Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( i = -<span class="dv">2</span>; i &lt; <span class="dv">3</span>; i++ )  </span>
+<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// na execução dessas linhas, i assume os valores -2, -1, 0, 1, 2 </span></span>
+<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a>  v[i] = i;  </span>
+<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>}   </span>
+<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="co">// aqui, i é igual a 3, porque foi a condição para sair do ciclo </span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <div class="article-footer">
   <p class="social_footer">

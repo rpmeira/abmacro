@@ -28,13 +28,25 @@ library(ggthemes)
 ```
 
 
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+```
+
+
 ## Estrutura do arquivo de Equação
 
 Os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis que fazem parte do modelo. Os cógidos para cada Equação são separados um do outro, em blocos. 
 
 A estrutura mínima de um modelo do LSD é a seguinte:
 
-```{#numCode .Cpp}
+```{.cpp .Cpp}
 #include "../src/fun_head_fast.h"
 
 MODELBEGIN
@@ -48,11 +60,11 @@ void close_sim( )
 
 
 
-As equações do modelo devem ser inseridas entre $MODELBEGIN$ e $MODELEND$.
+As equações do modelo devem ser inseridas entre `MODELBEGIN` e `MODELEND`.
 
-Cada variável do modelo possui sua própria Equação, e essa pode ser executada diversas vezes, a depender da quantidade de objetos (agentes) que a chamam. As variáveis e os parâmetros são localizadas dentro dos objetos, portanto cada objeto, ou cópia do objeto, possui uma cópia diferente das variáveis e dos parâmetros. Por exemplo, suponha um objeto, chamado $Firma$, que contém a variável chamada $Q$ que depende de outra variável chamda $K$. Se são criadas diversas cópias do objeto $Firma$, cada cópia da Equação para $Q$, que necessita da variável $K$ para seu cálculo, utilizará sua própria cópia de $K$, ou seja a cópia de $K$ contida no mesmo objeto que a cópia da Equação para $Q$ que está sendo computada.
+Cada variável do modelo possui sua própria Equação, e essa pode ser executada diversas vezes, a depender da quantidade de objetos (agentes) que a chamam. As variáveis e os parâmetros são localizadas dentro dos objetos, portanto cada objeto, ou cópia do objeto, possui uma cópia diferente das variáveis e dos parâmetros. Por exemplo, suponha um objeto, chamado `Firma`, que contém a variável chamada `Q` que depende de outra variável chamada `K`. Se são criadas diversas cópias do objeto `Firma`, cada cópia da Equação para `Q`, que necessita da variável `K` para seu cálculo, utilizará sua própria cópia de `K`, ou seja a cópia de `K` contida no mesmo objeto que a cópia da Equação para `Q` que está sendo computada.
 
-A ordem com que as Equações aparecem no arquivo de Equação é irrelevante, uma vez que o LSD avalia de forma automática a sequencia de variáveis que será executada, com base nos períodos $t$ dessa variáveis --- Cada variável, e sua Equação associada, deve ser pensada como uma equação em diferença:
+A ordem com que as Equações aparecem no arquivo de Equação é irrelevante, uma vez que o LSD avalia de forma automática a sequencia de variáveis que será executada, com base nos períodos `t` dessa variáveis --- Cada variável, e sua Equação associada, deve ser pensada como uma equação em diferença:
 
 $$
 \begin{aligned}
@@ -60,12 +72,12 @@ X_t = f(Y_{t-lag}, Z_{t-lag}, \dots)
 \end{aligned}
 $$
 
-As Equações podem ser compostas também por parâmetros que, na maioria das vezes, são constantes durante as simulações --- a menos que sejam modificados por outras variáveis, o que é possível por meio dos macros $WRITE(\dots)$ ou $INCR(\dots)$. 
+As Equações podem ser compostas também por parâmetros que, na maioria das vezes, são constantes durante as simulações --- a menos que sejam modificados por outras variáveis, o que é possível por meio dos macros `WRITE(\dots)` ou `INCR(\dots)`. 
 
 
 ## EQUATION("variável")
 
-A macro $EQUATION$ inicia um bloco de código associado a uma variável. Por exemplo:
+A macro `EQUATION` inicia um bloco de código associado a uma variável. Por exemplo:
 
 ```{#numCode .Cpp}
 EQUATION( "X" )  
@@ -80,7 +92,7 @@ RESULT( 3 ) // Neste exemplo a equação sempre retorna o valor 3 para a variáv
 
 A primeira linha indica que o código se refere à variável X. A última linha indica o resultado que será atribuído para essa variável em cada período de tempo. No exemplo acima, é atriuído um valor constante para a variável, mas usulmente esse não é o caso. Esse resultado dependerá dos cálculos feitos pela Equação. O LSD oferece diversas macros para esses cálculos. Ao longo desse texto, serão vistas as macros mais frequentemente utilizadas.
 
-A macro mais utilizada é a $V(\dots)$, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:
+A macro mais utilizada é a `V(\dots)`, que simplesmente computa ou recupera o valor de alguma variável, parâmetro ou função do modelo. Por exemplo:
 
 ```{#numCode .Cpp}
 EQUATION( "PROF" )  
@@ -123,7 +135,7 @@ Existem varias vantagens em utilizar v[n]: i) o código fica mais fácil de ler;
 
 ## Objetos e Ponteiros
 
-A maioria das macros do LSD são operados *dentro* de um objeto, que é definido pelo ponteiro $p$. As macros são operadas nos objetos para que uma mesma Equação possa ser reusada por diversas cópias do objeto. Por exemplo, seja um modelo com um objeto chamado **Firma**, que contém as variáveis **Lucro**, **Preço** e **Quantidade**, sendo que a Equação para o Lucro é:
+A maioria das macros do LSD são operados *dentro* de um objeto, que é definido pelo ponteiro `p`. As macros são operadas nos objetos para que uma mesma Equação possa ser reusada por diversas cópias do objeto. Por exemplo, seja um modelo com um objeto chamado **Firma**, que contém as variáveis **Lucro**, **Preço** e **Quantidade**, sendo que a Equação para o Lucro é:
 
 $$
 Lucro = Preço \times Quantidade
@@ -131,25 +143,25 @@ $$
 
 O modelo pode possuir diversas cópias do objeto Firma, com cada uma tendo a sua própria cópia das variáveis Lucro, Preço e Quantidade. Ou seja, cada cópia do objeto Firma pode possuir trajetórias distintas para os valores dessas variáveis. O LSD toma conta dessa correspondência entre objetos e variáveis através dos seguintes meios:
 
-- $p$ se refere ao objeto que contém a variável cuja Equação está sendo computada.
-- $c$ se refere ao objeto que requisitou a computação da variável.
-- $cur$, $cur1$, $cur2$, etc., são ponteiros temporários que podem guardar os endereços correntes dos objetos obtidos de outras macros.
+- `p` se refere ao objeto que contém a variável cuja Equação está sendo computada.
+- `c` se refere ao objeto que requisitou a computação da variável.
+- `cur`, `cur1`, `cur2`, etc., são ponteiros temporários que podem guardar os endereços correntes dos objetos obtidos de outras macros.
 
 #### cur
 
-De forma um pouco mais detalhada, $cur$ funciona de maneira semelhante a v[n], porém para ponteiros, ao invés de para valores numéricos. Assim como v[n] vai de v[0] a v[999], $cur$ vai de $cur1$ a $cur9$. O usuário chama macros do LSD que retornam objetos e associam esses a $cur1$, $cur2$, $\dots$ e, com isso, usam esses ponteiros em outras macros que requeiram obejetos em seus cálculos. 
+De forma um pouco mais detalhada, `cur` funciona de maneira semelhante a v[n], porém para ponteiros, ao invés de para valores numéricos. Assim como v[n] vai de v[0] a v[999], `cur` vai de `cur1` a `cur9`. O usuário chama macros do LSD que retornam objetos e associam esses a `cur1`, `cur2`, $\dots$ e, com isso, usam esses ponteiros em outras macros que requeiram obejetos em seus cálculos. 
 
 #### HOOK(...)
 
-Qualquer objeto em um modelo do LSD pode conter um ou mais elementos chamados *hook*, que são ponteiros para outros objetos, assim como $cur$, porém não são temporários, existindo por toda a vida do objeto. Portanto, hooks permitem conectar uma cópia de um objeto a qualquer outra cópia de qualquer outro objeto no modelo. A sua principal vantagem é acelerar operações de busca por objetos. 
+Qualquer objeto em um modelo do LSD pode conter um ou mais elementos chamados *hook*, que são ponteiros para outros objetos, assim como `cur`, porém não são temporários, existindo por toda a vida do objeto. Portanto, hooks permitem conectar uma cópia de um objeto a qualquer outra cópia de qualquer outro objeto no modelo. A sua principal vantagem é acelerar operações de busca por objetos. 
 
 ## Sufixos e famílias Macro
 
-A maioria das macros do LSD, como V(...), pode ser acrescida de alguns sufixos, como $L$, $S$, $LS$, etc. O sufixo $L$ faz referência a *Lag* e indica que a operação se refere a valores passados. O sufixo $S$ indica uma cópia *Specific* de um objeto. $LS$ indica que a macro será aplicada tanto com Lag quanto para uma cópia em específico de um objeto.
+A maioria das macros do LSD, como V(...), pode ser acrescida de alguns sufixos, como `L`, `S`, `LS`, etc. O sufixo `L` faz referência a *Lag* e indica que a operação se refere a valores passados. O sufixo `S` indica uma cópia *Specific* de um objeto. `LS` indica que a macro será aplicada tanto com Lag quanto para uma cópia em específico de um objeto.
 
 #### Família V(...)
 
-Essa é a família de macros do LSD mais usada. Composta por V("X"), VL("X", lag), VS(obj, "X"), VLS(obj, "X", lag). Essas macros retornam o valor da variável ou parâmetro com nome *X*. As formas  VL("X", lag) e VLS(obj, "X", lag) permitem especificar um *lag* como, por exemplo, VL("X", 2) pra um lag de 2 períodos. As formas VS(obj, "X") e VLS(obj, "X", lag) especificam em qual objeto específico o parâmetro ou a variável sevem ser procuradas. Em V("X") e VL("X", lag), onde não é especificado o objeto, a busca começa de $p$ --- objeto corrente. 
+Essa é a família de macros do LSD mais usada. Composta por V("X"), VL("X", lag), VS(obj, "X"), VLS(obj, "X", lag). Essas macros retornam o valor da variável ou parâmetro com nome *X*. As formas  VL("X", lag) e VLS(obj, "X", lag) permitem especificar um *lag* como, por exemplo, VL("X", 2) pra um lag de 2 períodos. As formas VS(obj, "X") e VLS(obj, "X", lag) especificam em qual objeto específico o parâmetro ou a variável sevem ser procuradas. Em V("X") e VL("X", lag), onde não é especificado o objeto, a busca começa de `p` --- objeto corrente. 
 
 #### Família SUM(...)
 
@@ -378,7 +390,7 @@ com mais de uma linha
 
 #### Atribuições, operações aritméticas e incrementos
 
-Sendo $a$ uma variável (de C++), é possível lhe atribuir um valor com o comando "=":
+Sendo `a` uma variável (de C++), é possível lhe atribuir um valor com o comando "=":
 
 ```{#numCode .Cpp}
 a = 4.3;
@@ -401,7 +413,7 @@ a = a + 32;
 ```
 
 
-O comando acima atribui a $a$ o seu valor prévio mais um acréscimo de 32. Portanto, caso $a$ tivesse o valor de 5, após o comando acima $a$ teria o valor de 37.  
+O comando acima atribui a `a` o seu valor prévio mais um acréscimo de 32. Portanto, caso `a` tivesse o valor de 5, após o comando acima `a` teria o valor de 37.  
 Esse tipo de operação é tão comum que existe uma forma reduzida de escrevê-lo: $a\ +\!= 32;$. O mesmo pode ser feito com outras operações aritméticas:
 
 - $a = a / 32;$ \ \ \ \ é equivalente a \ \ \ \ $a\  /\!= 32;$
@@ -412,7 +424,7 @@ Um comando peculiar de C++ permite tanto incrementar por 1 uma variável como at
 
 - $a = a + 1;$ \ \ \ \ é equivalente a \ \ \ \ $a\  +\!= 1;$ \ \ \ \ que é equivalente a \ \ \ \ $a++$
 
-O comando $b = a++;$, por exemplo, primeiro atribui o valor de $a$ a $b$ e depois incrementa $a$.  
+O comando $b = a++;$, por exemplo, primeiro atribui o valor de `a` a `b` e depois incrementa `a`.  
 É possível também primeiro incrementar a variável e depois atribuir: $++a$.
 
 
@@ -433,7 +445,7 @@ else
 
 
 Os colchetes "{" e "}" não são necessários caso haja apenas uma linha de comando (terminada com ";").  
-A condição do `if()` normalmente é baseada nos seguintes operadores de comparação ($a$ e $b$ são dois valores numéricos ou variáveis contendo valores numéricos):
+A condição do `if()` normalmente é baseada nos seguintes operadores de comparação (`a` e `b` são dois valores numéricos ou variáveis contendo valores numéricos):
 
 - **Igual $(a == b)$**: a condição é verdadeira se $a$ e $b$ forem iguais
 - **Diferente $(a\ !\!= b)$**: a condição é verdadeira se $a$ e $b$ forem diferentes

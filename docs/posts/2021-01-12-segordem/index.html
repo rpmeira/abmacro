@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
@@ -100,7 +101,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Este Post discute Equações em Diferença de Segunda Ordem."/>
 <meta property="og:url" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"/>
-<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="og:image:width" content="1248"/>
 <meta property="og:image:height" content="768"/>
 <meta property="og:locale" content="en_US"/>
@@ -111,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Equações de Segunda Ordem"/>
 <meta property="twitter:description" content="Este Post discute Equações em Diferença de Segunda Ordem."/>
 <meta property="twitter:url" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"/>
-<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/segordem_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="twitter:image:width" content="1248"/>
 <meta property="twitter:image:height" content="768"/>
 
@@ -127,12 +128,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Equações de Segunda Ordem"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença de Segunda Ordem."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020segordem"]},{"type":"character","attributes":{},"value":["2021-01-12"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdifseg\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Equações de Segunda Ordem"]},{"type":"character","attributes":{},"value":["Este Post discute Equações em Diferença de Segunda Ordem."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2020segordem"]},{"type":"character","attributes":{},"value":["Jan. 12, 2021"]},{"type":"character","attributes":{},"value":["EqDiff.bib"]},{"type":"character","attributes":{},"value":["@neusser2016difference, @wainwright2005fundamental, @sartoris2020eqdifseg\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Introdução","Matemática"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-01-12-segordem/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","segordem.res.gz","segordem_files/anchor-4.2.2/anchor.min.js","segordem_files/bowser-1.9.3/bowser.min.js","segordem_files/distill-2.2.21/template.v2.js","segordem_files/figure-html5/unnamed-chunk-1-1.png","segordem_files/jquery-1.11.3/jquery.min.js","segordem_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","segordem.res.gz","segordem_files/anchor-4.2.2/anchor.min.js","segordem_files/bowser-1.9.3/bowser.min.js","segordem_files/distill-2.2.21/template.v2.js","segordem_files/figure-html5/unnamed-chunk-1-1.png","segordem_files/figure-html5/unnamed-chunk-2-1.png","segordem_files/header-attrs-2.5/header-attrs.js","segordem_files/jquery-1.11.3/jquery.min.js","segordem_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2012,6 +2013,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2068,7 +2070,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="d-byline">
   Rafael Peixoto true (Universidade Estadual de Campinas)
   
-<br/>2021-01-12
+<br/>Jan. 12, 2021
 </div>
 
 <div class="d-article">
@@ -2082,6 +2084,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <li><a href="#conclusão">Conclusão</a></li>
 </ul>
 </nav>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+</style>
 </div>
 <h2 id="introdução">Introdução</h2>
 <p>Uma equação em diferença de segunda ordem é uma equação que envolve a expressão <span class="math inline">\(\Delta ^2 x_t\)</span>, chamada de segunda diferença de <span class="math inline">\(x_t\)</span>, mas que não contém diferenças de ordem maior que <span class="math inline">\(2\)</span>. O símbolo <span class="math inline">\(\Delta ^2\)</span> é uma instrução de que está se tomando a segunda diferença:</p>
@@ -2175,7 +2189,7 @@ A + B = 2 \\
 \]</span></p>
 <p>Como a solução possui um <span class="math inline">\(\lambda &gt; 1\)</span>, a equação apresentará um comportamento explosivo, de forma semelhante a equações de primeira ordem com <span class="math inline">\(\theta &gt;1\)</span>. Vejamos um grafico da sua dinâmica:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="segordem_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+<p><img src="segordem_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
 </div>
 <h2 id="equação-não-homogênea">Equação não-homogênea</h2>
 <p>Assim como para equações de primeira ordem, a equação não-homogênea de segunda ordem tem como solução a soma da função complementar e da solução particular, e pode ser expressa genericamente por:</p>
@@ -2245,15 +2259,15 @@ x_1 = 3
 \end{aligned}
 \]</span></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<div id="refs" class="references" role="doc-bibliography">
-<div id="ref-neusser2016difference">
-<p>NEUSSER, K. Difference equations for economists. <strong>Unpublished manuscript, October</strong>, v. 3, 2016. </p>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-neusser2016difference" class="csl-entry" role="doc-biblioentry">
+NEUSSER, K. Difference equations for economists. <strong>Unpublished manuscript, October</strong>, v. 3, 2016.
 </div>
-<div id="ref-sartoris2020eqdifseg">
-<p>SARTORIS, A. <strong>Equações a diferenças de 2a ordem</strong>. Disponível em: &lt;<a href="https://www.youtube.com/watch?v=Q4Bj6XJtcz4">https://www.youtube.com/watch?v=Q4Bj6XJtcz4</a>&gt;. </p>
+<div id="ref-sartoris2020eqdifseg" class="csl-entry" role="doc-biblioentry">
+SARTORIS, A. <strong>Equações a diferenças de 2a ordem</strong>. Disponível em: &lt;<a href="https://www.youtube.com/watch?v=Q4Bj6XJtcz4">https://www.youtube.com/watch?v=Q4Bj6XJtcz4</a>&gt;.
 </div>
-<div id="ref-wainwright2005fundamental">
-<p>WAINWRIGHT, K.; CHIANG, A. C. <strong>Fundamental methods of mathematical economics</strong>. Traducao. [s.l.] Boston, Mass.: McGraw-Hill/Irwin, 2005. </p>
+<div id="ref-wainwright2005fundamental" class="csl-entry" role="doc-biblioentry">
+WAINWRIGHT, K.; CHIANG, A. C. <strong>Fundamental methods of mathematical economics</strong>. [s.l.] Boston, Mass.: McGraw-Hill/Irwin, 2005.
 </div>
 </div>
 <!--radix_placeholder_article_footer-->

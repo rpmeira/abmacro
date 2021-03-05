@@ -20,26 +20,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
@@ -100,7 +101,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Este Post apresenta uma introdução ao estudo de Equações em Diferença."/>
 <meta property="og:url" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/"/>
-<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="og:image:width" content="360"/>
 <meta property="og:image:height" content="193"/>
 <meta property="og:locale" content="en_US"/>
@@ -111,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Equações em Diferença"/>
 <meta property="twitter:description" content="Este Post apresenta uma introdução ao estudo de Equações em Diferença."/>
 <meta property="twitter:url" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/"/>
-<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-1-1.png"/>
+<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2020-12-31-eqdiff/eqdiff_files/figure-html5/unnamed-chunk-2-1.png"/>
 <meta property="twitter:image:width" content="360"/>
 <meta property="twitter:image:height" content="193"/>
 
@@ -132,7 +133,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","eqdiff_files/anchor-4.2.2/anchor.min.js","eqdiff_files/bowser-1.9.3/bowser.min.js","eqdiff_files/DiagrammeR-styles-0.2/styles.css","eqdiff_files/distill-2.2.21/template.v2.js","eqdiff_files/figure-html5/unnamed-chunk-1-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-1-1.png","eqdiff_files/figure-html5/unnamed-chunk-10-1.png","eqdiff_files/figure-html5/unnamed-chunk-2-1.png","eqdiff_files/figure-html5/unnamed-chunk-3-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-3-1.png","eqdiff_files/figure-html5/unnamed-chunk-4-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-4-1.png","eqdiff_files/figure-html5/unnamed-chunk-5-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-5-1.png","eqdiff_files/figure-html5/unnamed-chunk-6-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-6-1.png","eqdiff_files/figure-html5/unnamed-chunk-7-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-7-1.png","eqdiff_files/figure-html5/unnamed-chunk-8-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-8-1.png","eqdiff_files/figure-html5/unnamed-chunk-9-1.png","eqdiff_files/grViz-binding-1.0.6.1/grViz.js","eqdiff_files/htmlwidgets-1.5.3/htmlwidgets.js","eqdiff_files/jquery-1.11.3/jquery.min.js","eqdiff_files/viz-1.8.2/viz.js","eqdiff_files/webcomponents-2.0.0/webcomponents.js","itmx-4.res.gz","itx2.res.gz","m2.res.gz","m2v2.res.gz","m3.res.gz","m4.res.gz","m4sdic.res.gz","preview.aux","tikz35643803374c.aux","tikz35643803374c.log","tikz35643803374c.pdf","tikz35643803374c.tex","tikz5d5c50ea61e0.log"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","EqDiff.bib","eqdiff_files/anchor-4.2.2/anchor.min.js","eqdiff_files/bowser-1.9.3/bowser.min.js","eqdiff_files/DiagrammeR-styles-0.2/styles.css","eqdiff_files/distill-2.2.21/template.v2.js","eqdiff_files/figure-html5/unnamed-chunk-1-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-1-1.png","eqdiff_files/figure-html5/unnamed-chunk-10-1.png","eqdiff_files/figure-html5/unnamed-chunk-11-1.png","eqdiff_files/figure-html5/unnamed-chunk-2-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-2-1.png","eqdiff_files/figure-html5/unnamed-chunk-3-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-3-1.png","eqdiff_files/figure-html5/unnamed-chunk-4-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-4-1.png","eqdiff_files/figure-html5/unnamed-chunk-5-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-5-1.png","eqdiff_files/figure-html5/unnamed-chunk-6-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-6-1.png","eqdiff_files/figure-html5/unnamed-chunk-7-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-7-1.png","eqdiff_files/figure-html5/unnamed-chunk-8-1.pdf","eqdiff_files/figure-html5/unnamed-chunk-8-1.png","eqdiff_files/figure-html5/unnamed-chunk-9-1.png","eqdiff_files/grViz-binding-1.0.6.1/grViz.js","eqdiff_files/htmlwidgets-1.5.3/htmlwidgets.js","eqdiff_files/jquery-1.11.3/jquery.min.js","eqdiff_files/viz-1.8.2/viz.js","eqdiff_files/webcomponents-2.0.0/webcomponents.js","itmx-4.res.gz","itx2.res.gz","m2.res.gz","m2v2.res.gz","m3.res.gz","m4.res.gz","m4sdic.res.gz","preview.aux","tikz35643803374c.aux","tikz35643803374c.log","tikz35643803374c.pdf","tikz35643803374c.tex","tikz5d5c50ea61e0.log"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2012,6 +2013,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2084,6 +2086,13 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </nav>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+}
+</style>
+</div>
 <h2 id="definição">Definição</h2>
 <p>A equação em diferença descreve a evolução de alguma variável (ou grupo de variáveis) ao longo do tempo. O valor dessa variável no período <span class="math inline">\(t\)</span> é denotado por <span class="math inline">\(x_t\)</span>. O índice de tempo <span class="math inline">\(t\)</span> assume valores discretos e tipicamente abrange todos os números inteiros, ou seja, <span class="math inline">\(t = \dots, -2, -1, 0, 1, 2, \dots\)</span>.</p>
 <p>Uma equação em diferença, então, nada mais é que uma <em>regra</em> uma <em>função</em> que indica como computar o valor da variável de interesse no próximo período, e.g. <span class="math inline">\(t+1\)</span>, dado seu valor presente, <span class="math inline">\(t\)</span>, ou passado, e.g. <span class="math inline">\(t-1\)</span>. Em sua forma mais geral, uma equação em diferença pode ser ecrita como:</p>
@@ -2109,7 +2118,7 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 \]</span></p>
 <p>Assim, o valor da variável <span class="math inline">\(x\)</span> no período <span class="math inline">\(t\)</span> é uma função do seu valor inicial. Para explicitar essa dependência, escreve-se <span class="math inline">\(x_t = \phi(t,x)\)</span>. Como resultado dessa iteração, a equação em diferença gera uma sequência, em <span class="math inline">\(t = 0, 1, 2, \dots\)</span>, chamada de <strong>trajetória</strong>. O conjunto de valores realizados por uma trajetória particular é chamada de <strong>órbita</strong>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-1-1.png" width="40%" style="display: block; margin: auto;" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-2-1.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 <p>Para selecionar uma solução única para a equação em diferença, requerimentos adicionais são necessários, como as <strong>condições de fronteira</strong>. No exemplo acima, foi fornecido um valor inicial para a variável, o que o enquadra em uma <strong>condição de valor inicial</strong>. Se as condições de fronteira são suficientes para fixar uma única solução, o modelo (baseado em equações em diferença) é dito <strong>determinado</strong>.</p>
 <h2 id="estabilidade">Estabilidade</h2>
@@ -2127,11 +2136,11 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 \]</span></p>
 <p>O gráfico abaixo mostra quatro iterações da equação <span class="math inline">\(x_t = x_{t-1}^2\)</span>, para <span class="math inline">\(x_0\)</span> igual a 0; 1; 1.1; -1.2; 0.9.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
 <p>É possível observar que <span class="math inline">\(x\)</span> se mantém constante para <span class="math inline">\(x_0 = 0\)</span> e <span class="math inline">\(x_0 = 1\)</span>. Além disso, para valores de <span class="math inline">\(x_0\)</span> entre <span class="math inline">\(0\)</span> e <span class="math inline">\(1\)</span>, como <span class="math inline">\(0.9\)</span>, <span class="math inline">\(x\)</span> tende ao ponto fixo <span class="math inline">\(0\)</span>; e para valores fora desse intervalo <span class="math inline">\(x\)</span> tente ao infinito. Considerando apenas números positivos, é possivel afirmar que <span class="math inline">\(x = 0\)</span> é um ponto fixo estável, pois conforme se escolhe um <span class="math inline">\(x_0\)</span> cada vez mais longe de <span class="math inline">\(0\)</span>, <span class="math inline">\(x\)</span> sempre irá tender a <span class="math inline">\(0\)</span>, até que se chegue em <span class="math inline">\(x_0 = 1\)</span>. A partir daí, conforme se escolhe um <span class="math inline">\(x_0\)</span> maior que <span class="math inline">\(1\)</span>, <span class="math inline">\(x\)</span> tenderá sempre a se afastar desse ponto fixo, portanto <span class="math inline">\(x = 1\)</span> é um ponto fixo instável.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-3-1.png" width="40%" style="display: block; margin: auto;" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-4-1.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 <p><br></p>
 <p><strong>Exemplo 2:</strong> seja a equação em diferença <span class="math inline">\(x_t = \frac{1}{2}x_{t-1} - 4\)</span>. A função <span class="math inline">\(f(x) = \frac{1}{2}x - 4\)</span> apresenta quais pontos fixos?</p>
@@ -2145,11 +2154,11 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 \]</span></p>
 <p>Vejamos no gráfico:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
 <p>É possível observar que <span class="math inline">\(x\)</span> se mantém constante para <span class="math inline">\(x_0 = -8\)</span>. Além disso, para valores de <span class="math inline">\(x_0\)</span> tanto maiores quanto menores a <span class="math inline">\(-8\)</span>, <span class="math inline">\(x\)</span> tende ao ponto fixo <span class="math inline">\(-8\)</span>. Portanto, este é um ponto fixo estável.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-5-1.png" width="40%" style="display: block; margin: auto;" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-6-1.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 <p><br></p>
 <p><strong>Exemplo 3:</strong> seja a <em>Equação Logística</em> <span class="math inline">\(x_t = m \times x_{t-1} \times (1 - x_{t-1})\)</span>. A função <span class="math inline">\(f(x) = m \times x \times (1 - x)\)</span> apresenta quais pontos fixos?</p>
@@ -2164,16 +2173,16 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 \]</span></p>
 <p>Vejamos o gráfico para <strong>m = 2</strong>:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
 </div>
 <p>É possível observar que <span class="math inline">\(x\)</span> se mantém constante para <span class="math inline">\(x_0 = 0\)</span> e <span class="math inline">\(x_0 = 0.5\)</span>. Além disso, para valores de <span class="math inline">\(x_0\)</span> tanto maiores quanto menores a <span class="math inline">\(0.5\)</span>, <span class="math inline">\(x\)</span> tende ao ponto fixo <span class="math inline">\(0.5\)</span>. Portanto, este é um ponto fixo estável.Já <span class="math inline">\(x_0 = 0\)</span> é um ponto fixo instável, pois conforme <span class="math inline">\(x\)</span> se afasta dele, até <span class="math inline">\(x = 0.5\)</span>, mais ele tende a se afastar, em direção àqele ponto fixo. Fora do intervalo <span class="math inline">\([0,1]\)</span> a equação explode.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-7-1.png" width="40%" style="display: block; margin: auto;" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-8-1.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 <p><br></p>
 <p>Vejamos o gráfico para <strong>m = 3</strong>:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
 </div>
 <p>É possível observar que <span class="math inline">\(x\)</span> se mantém constante para <span class="math inline">\(x_0 = 0\)</span> e <span class="math inline">\(x_0 = 0.666\)</span>. Além disso, para valores de <span class="math inline">\(x_0\)</span> tanto maiores quanto menores a <span class="math inline">\(0.666\)</span>, <span class="math inline">\(x\)</span> tende a oscilar entre esse ponto. Como visto acima, esses são os pontos fixos da equação:</p>
 <p><span class="math display">\[
@@ -2184,13 +2193,13 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 <p>Para <span class="math inline">\(m = 3\)</span>, o segundo ponto fixo é <span class="math inline">\(1 - \frac{1}{3}\)</span>, aproximadamente <span class="math inline">\(0.666\)</span>. Para valores de <span class="math inline">\(x_0\)</span> diferentes dos dois pontos fixos, a iteração da equação gera um ciclo atrator, a <strong>óbita</strong> é periódica. Diferentes valores de <span class="math inline">\(m\)</span>, entre <span class="math inline">\(3\)</span> e <span class="math inline">\(4\)</span> (excluso), geram ciclos atratores com diferentes períodos (número de interações para se repetir um ciclo).</p>
 <p>Vejamos o gráfico para <strong>m = 4</strong>:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
 </div>
 <p>É possível observar que <span class="math inline">\(x\)</span> se mantém constante para <span class="math inline">\(x_0 = 0\)</span> e <span class="math inline">\(x_0 = 0.75\)</span> (segundo ponto fixo). Já para os valores de <span class="math inline">\(x_0\)</span> tanto maiores quanto menores a <span class="math inline">\(0.75\)</span>, <span class="math inline">\(x\)</span> tende a oscilar de forma aperiódica, ou seja, a <strong>óbita</strong> é aperiódica.</p>
 <p>Apesar de a Equação Logística ser determinística, como as órbitas são aperiódicas para <span class="math inline">\(m = 4\)</span>, variações pequenas no <span class="math inline">\(x_0\)</span> levam a trajetórias completamente distintas, o que torna impraticável a previsão de <span class="math inline">\(x\)</span> após um certo número de iterações. Tal comportamento é denominado de <strong>dependência sensível das condições iniciais</strong> (<em>sensitive dependence on initial conditions (SDIC)</em>). Posto de outra forma, um sistema dinâmico possui dependência sensível das condições iniciais se diferenças arbitrariamente pequenas nas condições iniciais eventualmente levam a diferenças arbitrariamente grandes nas órbitas.</p>
 <p>Esse comportamento é bem visível quando se parte de <span class="math inline">\(x_0\)</span> muito próximos:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="eqdiff_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+<p><img src="eqdiff_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
 </div>
 <p>Até o período <span class="math inline">\(14\)</span>, as órbitas se comportam de forma muito semelhante, mas as diferenças vão se acumulando a cada iteração, fazendo com que a partir deste período as órbitas se divirjam enormemente. Caso isso fosse um exercício de previsão, um ‘erro’ de <span class="math inline">\(0.00001\)</span> no valor inicial faria com que essa previsão fosse errônea a partir do período <span class="math inline">\(14\)</span>. Esse comportamento é denominado também de <strong>efeito borboleta</strong>.</p>
 <h4 id="logistic-app">Logistic App</h4>
@@ -2210,12 +2219,12 @@ F(x_{t+1}, x_t, x_{t-1}, \dots, x_{t-p+1}, t) = 0
 </ul>
 <p>Esses comportamentos dependem tanto da estrutura da equação em si como do valor inicial <span class="math inline">\(x_0\)</span>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<div id="refs" class="references" role="doc-bibliography">
-<div id="ref-neusser2016difference">
-<p>NEUSSER, K. Difference equations for economists. <strong>Unpublished manuscript, October</strong>, v. 3, 2016. </p>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-neusser2016difference" class="csl-entry" role="doc-biblioentry">
+NEUSSER, K. Difference equations for economists. <strong>Unpublished manuscript, October</strong>, v. 3, 2016.
 </div>
-<div id="ref-wainwright2005fundamental">
-<p>WAINWRIGHT, K.; CHIANG, A. C. <strong>Fundamental methods of mathematical economics</strong>. Traducao. [s.l.] Boston, Mass.: McGraw-Hill/Irwin, 2005. </p>
+<div id="ref-wainwright2005fundamental" class="csl-entry" role="doc-biblioentry">
+WAINWRIGHT, K.; CHIANG, A. C. <strong>Fundamental methods of mathematical economics</strong>. [s.l.] Boston, Mass.: McGraw-Hill/Irwin, 2005.
 </div>
 </div>
 <!--radix_placeholder_article_footer-->

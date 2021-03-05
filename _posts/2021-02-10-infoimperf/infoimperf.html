@@ -1459,6 +1459,18 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </ul>
 </nav>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+</style>
+</div>
 <h2 id="introdução">Introdução</h2>
 <p>Esse modelo é inspirado no artigo <em>Product Quality in Markets where Consumers are Imperfectly Informed</em>, de Smallwood e Conlisk (1979), no qual os autores procuram analisar a escolha de produtos em um mercado onde os consumidores não possuem informação perfeita a respeito da qualidade dos produtos. Nesse contexto, tais consumidores acabam recorrendo a uma regra de bolso que diz que a popularidade de um produto é um sinal da sua qualidade. Assim, a questão chave que o modelo pretende analisar é se os consumidores, incapazes de avaliar qualidades de forma individual, conseguem fazê-lo de forma coletiva.</p>
 <p>O modelo parte de alguns pressupostos bem irrealistas, a fim de prover uma resposta clara:</p>
@@ -1506,16 +1518,16 @@ p_i = \frac{ms_i^\alpha}{\sum_{j=1}^n ms_j^\alpha}
 <h4 id="estrutura-do-modelo">Estrutura do modelo</h4>
 <p>O modelo, no LSD, possui a seguinte estrutura (de objetos, ou agentes):</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-1-1.png" width="40%" style="display: block; margin: auto;" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-2-1.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 <p>O Mercado é o objeto <em>origem</em>, do qual descendem os objetos Oferta e Demanda. Por sua vez, Oferta possui o objeto Firma como descentende, e Demanda possui Consumidor como descendente.<br />
 Cada um desses objetos contêm um conjunto de variáveis (com seus <em>lag</em> indicados quando necessário) e parâmetros (cujos valores podem variar para cada <em>cópia</em> do objeto):</p>
-<div style="display: flex;   justify-content: center;">
-<table style="width:76%;">
+<div style="display: flex; justify-content: center; line-height: 20px;">
+<table style="width:75%;">
 <colgroup>
-<col style="width: 31%" />
-<col style="width: 22%" />
-<col style="width: 22%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1537,13 +1549,8 @@ Cada um desses objetos contêm um conjunto de variáveis (com seus <em>lag</em> 
 </tr>
 <tr class="odd">
 <td><strong>Firma</strong></td>
-<td style="text-align: center;"><p><code>NumUsers(1)</code></p>
-<p><code>ms_users(1)</code></p>
-<p><code>Visibility</code></p></td>
-<td style="text-align: center;"><p><code>IdFirm</code></p>
-<p><code>BD</code></p>
-<p><code>Sales</code></p>
-<p><code>NumLost</code></p></td>
+<td style="text-align: center;"><code>NumUsers(1)</code> <code>ms_users(1)</code> <code>Visibility</code></td>
+<td style="text-align: center;"><code>IdFirm</code> <code>BD</code> <code>Sales</code> <code>NumLost</code></td>
 </tr>
 <tr class="even">
 <td><strong>Demanda</strong></td>
@@ -1699,7 +1706,7 @@ Cada um desses objetos contêm um conjunto de variáveis (com seus <em>lag</em> 
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>ProdUsed</code> para 2 consumidores:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
 <h5 id="equationisbroken">EQUATION(“IsBroken”)</h5>
 <p>Essa equação, que é de uma função (não uma variável), tem como finalidade indicar se o produto usado por um consumidor irá quebrar no período corrente. Para tanto, primeiramente, ela verifica qual foi o produto usado no período anterior, assim como o ID da sua Firma produtora. Com isso, a equação verifica a probabilidade que esse produto tem de quebrar (com base no parâmetro <code>BD</code> referente à Firma produtora). Então é feito um sorteio aleatório, com distribuição uniforme entre 0 e 1 (Macro <code>RND</code>): caso o valor seja menor que o parâmetro <code>BD</code>, o produto está quebrado nesse período; caso seja maior, o produto não está quebrado. A equação retorna 0 (produto não quebrado) ou 1 (produto quebrado). Além disso, quando o produto está quebrado, a equação faz um acréscimo unitário no parâmetro <code>NumLost</code> da Firma em questão — através da Macro INCRS(obj, “x”, value) que, no caso, fica INCRS(cur, “NumLost”, 1).</p>
@@ -1722,7 +1729,7 @@ Cada um desses objetos contêm um conjunto de variáveis (com seus <em>lag</em> 
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da função <code>IsBroken</code> para 1 consumidor. Lembrando que a probabilidade de quebrar depende do parâmetro <code>BD</code>, que nesse exemplo foi definido com o valor de 10% para a Firma 1, 11% para a Firma 2, …, 19% para a Firma 10. Em cada período de tempo, o produto possuído pelo consumidor irá determinar a probabilidade de quebrar.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
 </div>
 <h5 id="equationpurchase">EQUATION(“Purchase”)</h5>
 <p>Assim como a EQUATION(“IsBroken”), essa equação também é de uma função. Funções podem ser chamadas diversas vezes em um mesmo período de tempo, porém apenas a última vez é salva. No caso de <code>IsBroken</code>, isso não foi muito importante, pois cada consumidor a chamava apenas uma vez por período, sendo salvos todos seus valores para cada consumidor. No caso de <code>Purchase</code>, essa restrição é importante, pois os valores pertencem ao objeto <strong>Oferta</strong>, que possui apenas 1 cópia. Assim, é possível que diversos consumidores chamem a função <code>Purchase</code>, porém apenas o valor do último que o fizer será salvo.<br />
@@ -1738,7 +1745,7 @@ A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, 
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da função <code>Purchase</code> (para o último consumidor que a chamar, em cada período).</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
 <h5 id="equationnumusers">EQUATION(“NumUsers”)</h5>
 <p>Essa equação tem como finalidade indicar o número de usuários de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. Para tanto, ela simplesmente verifica o número de usuários (de cada firma) no período anterior, o número de vendas no período corrente e o número de usuários perdidos também no período corrente, e computa o novo número de usuários.</p>
@@ -1755,11 +1762,11 @@ A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, 
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>NumUsers</code> para cada firma. Lembrando que a probabilidade de quebrar depende do parâmetro <code>BD</code>, que nesse exemplo foi definido com o valor de 10% para a Firma 1, 11% para a Firma 2, …, 19% para a Firma 10.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
 </div>
 <p>Como o gráfico mostra, quanto maior o parâmetro <code>BD</code> (probabilidade de o produto quebrar) da firma, menor é número de usuários que ela consegue manter no longo prazo. Essa divergência é rapidamente atingida no começo e depois mantida ao longo do tempo. Como existem 10000 consumidores e 10 Firmas, inicialmente cada firma fica com um número de consumidores em torno de 1000. Um exame dos primeiros períodos mostra essa rapidez:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
 </div>
 <h5 id="equationms_user">EQUATION(“ms_user”)</h5>
 <p>Essa equação apenas divide o número de usuários de cada Firma, <code>NumUsers</code>, pelo total de usuários, parâmetro <code>TotalUsers</code>.</p>
@@ -1772,7 +1779,7 @@ A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, 
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>] / v[<span class="dv">0</span>])</span></code></pre></div>
 <p>O gráfico dessa variável é igual ao de <code>NumUsers</code>, porém com uma escala diferente, refletindo a porcentagem e não o número total de usuários de cada Firma.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
 </div>
 <h5 id="equationvisibility">EQUATION(“Visibility”)</h5>
 <p>Essa equação tem como finalidade indicar a visibilidade de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. O <em>mark share</em> — que depende das vendas e perdas — é a base da visibilidade. Mais especificamente, essa é calculada elevando-se o <em>market share</em> (no período anterior) ao expoente <code>alpha</code>. Uma Exceção que a equação implemente é que caso o <em>market share</em> seja igual a zero, a visibilidade também será zero. Isso é feito para eliminar a possibilidade de uma Firma possuir <em>market share</em> zero mas visibilidade igual a um — caso o <code>alpha</code> seja igual a zero.</p>
@@ -1789,7 +1796,7 @@ A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, 
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>Visibility</code> para cada firma. Como dito, em cada período, o valor dessa variável é igual ao <em>market share</em> elevado à potencia <code>alpha</code>, que no caso é igual 0.5. Ou seja, o valor de <code>Visibility</code>, em cada período, é simplesmente a raiz quadrada do <em>market share</em>. Portanto, o gráfico terá o mesmo comportamento, porém mais “esticado” — uma vez que os valores estão entre 0 e 1.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
 </div>
 <p>Dessa forma, a <code>Visibility</code> deriva diretamente do <em>market share</em>, que deriva do <code>NumUsers</code>, que depende, em cada período, do número de <code>Sales</code> e de <code>NumLost</code>, que são dois parâmetros das Firmas.<br />
 <code>Sales</code> é determinado pela equação (função) de <code>Purchase</code>: cada consumidor que teve um produto quebrado chama essa função, e a firma escolhida para realizar a venda é determinada por um sorteio aleatório com probabilidades iguais a <code>Visibility</code>.<br />
