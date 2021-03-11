@@ -133,7 +133,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","infoimperf.bib","infoimperf_files/anchor-4.2.2/anchor.min.js","infoimperf_files/bowser-1.9.3/bowser.min.js","infoimperf_files/distill-2.2.21/template.v2.js","infoimperf_files/figure-html5/unnamed-chunk-1-1.pdf","infoimperf_files/figure-html5/unnamed-chunk-1-1.png","infoimperf_files/figure-html5/unnamed-chunk-2-1.pdf","infoimperf_files/figure-html5/unnamed-chunk-2-1.png","infoimperf_files/figure-html5/unnamed-chunk-3-1.png","infoimperf_files/figure-html5/unnamed-chunk-4-1.png","infoimperf_files/figure-html5/unnamed-chunk-5-1.png","infoimperf_files/figure-html5/unnamed-chunk-6-1.png","infoimperf_files/figure-html5/unnamed-chunk-7-1.png","infoimperf_files/figure-html5/unnamed-chunk-8-1.png","infoimperf_files/figure-html5/unnamed-chunk-9-1.png","infoimperf_files/header-attrs-2.5/header-attrs.js","infoimperf_files/jquery-1.11.3/jquery.min.js","infoimperf_files/webcomponents-2.0.0/webcomponents.js","isbroken.res.gz","mshare.res.gz","numlost.res.gz","numusers.res.gz","preview.aux","prodused.res.gz","purchase.res.gz","sales.res.gz","tikz101057411927.log","tikz1e185f1c7427.log","tikz211c1e131a39.log","tikz2944422e1bf2.log","tikz2a8059f42ab1.log","tikz30fc51601adc.log","tikz39007eca1d35.log","tikz39f82132bb4.log","tikz45a46d3e797c.log","tikz47f4355f75bc.log","tikz56646af5beb.log","tikz586c1fb03ff0.aux","tikz586c1fb03ff0.log","tikz586c1fb03ff0.pdf","tikz586c1fb03ff0.tex","visibility.res.gz"]}
+  {"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl","infoimperf.bib","infoimperf_files/anchor-4.2.2/anchor.min.js","infoimperf_files/bowser-1.9.3/bowser.min.js","infoimperf_files/distill-2.2.21/template.v2.js","infoimperf_files/figure-html5/unnamed-chunk-1-1.pdf","infoimperf_files/figure-html5/unnamed-chunk-1-1.png","infoimperf_files/figure-html5/unnamed-chunk-11-1.png","infoimperf_files/figure-html5/unnamed-chunk-12-1.png","infoimperf_files/figure-html5/unnamed-chunk-14-1.png","infoimperf_files/figure-html5/unnamed-chunk-16-1.png","infoimperf_files/figure-html5/unnamed-chunk-2-1.pdf","infoimperf_files/figure-html5/unnamed-chunk-2-1.png","infoimperf_files/figure-html5/unnamed-chunk-3-1.png","infoimperf_files/figure-html5/unnamed-chunk-4-1.png","infoimperf_files/figure-html5/unnamed-chunk-5-1.png","infoimperf_files/figure-html5/unnamed-chunk-6-1.png","infoimperf_files/figure-html5/unnamed-chunk-7-1.png","infoimperf_files/figure-html5/unnamed-chunk-8-1.png","infoimperf_files/figure-html5/unnamed-chunk-9-1.png","infoimperf_files/header-attrs-2.5/header-attrs.js","infoimperf_files/jquery-1.11.3/jquery.min.js","infoimperf_files/webcomponents-2.0.0/webcomponents.js","isbroken.res.gz","mshare.res.gz","numlost.res.gz","numusers.res.gz","preview.aux","prodused.res.gz","purchase.res.gz","sales.res.gz","tikz101057411927.log","tikz1e185f1c7427.log","tikz211c1e131a39.log","tikz2944422e1bf2.log","tikz2a8059f42ab1.log","tikz30fc51601adc.log","tikz39007eca1d35.log","tikz39f82132bb4.log","tikz45a46d3e797c.log","tikz47f4355f75bc.log","tikz56646af5beb.log","tikz586c1fb03ff0.aux","tikz586c1fb03ff0.log","tikz586c1fb03ff0.pdf","tikz586c1fb03ff0.tex","visibility.res.gz"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2095,6 +2095,10 @@ d-article p {
 d-article p code {
   background: rgba(236, 236, 236, 0.8);
 }
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
 </style>
 </div>
 <h2 id="introdução">Introdução</h2>
@@ -2199,230 +2203,244 @@ Cada um desses objetos contêm um conjunto de variáveis (com seus <em>lag</em> 
 <p>Vejamos como é implementada cada Equação para essas variáveis e funções, juntamente com os parâmetros necessários.</p>
 <h2 id="equações">Equações</h2>
 <p>O modelo inteiro é constituido por 9 equações (7 variáveis e 2 funções). Porém, dessas 9, 3 Equações (<code>Init</code>, <code>InitTrade</code>, <code>EndTrade</code>) retornam sempre o valor 1, sendo sua finalidade apenas configurar alguns parâmetros e outras variáveis. A variável <code>NumUsers</code> é a de maior interesse para análise do modelo, uma vez que retorna o número de consumidores de cada produto (Firma). A variável <code>ms_users</code> calcula a proporção de consumidores, baseada no número total. A variável <code>Visibility</code> utiliza o <span class="math inline">\(\alpha\)</span> — que indica o quão importante é o <em>market share</em> — para gerar as probabilidade de cada produto ser comprado. As funções <code>Purchase</code> e <code>IsBroken</code> são necessárias para calcular a variável <code>ProdUsed</code>, que determina qual produto cada consumidor vai usar.</p>
-<div class="sourceCode" id="numCode"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="numCode-1"><a href="#numCode-1" aria-hidden="true" tabindex="-1"></a><span class="co">//#define EIGENLIB          // uncomment to use Eigen linear algebra library</span></span>
-<span id="numCode-2"><a href="#numCode-2" aria-hidden="true" tabindex="-1"></a><span class="co">//#define NO_POINTER_INIT   // uncomment to disable pointer checking</span></span>
-<span id="numCode-3"><a href="#numCode-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fun_head_fast.h&quot;</span></span>
-<span id="numCode-4"><a href="#numCode-4" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
-<span id="numCode-5"><a href="#numCode-5" aria-hidden="true" tabindex="-1"></a>MODELBEGIN</span>
-<span id="numCode-6"><a href="#numCode-6" aria-hidden="true" tabindex="-1"></a><span class="co">// insert your equations here, between the MODELBEGIN and MODELEND words</span></span>
-<span id="numCode-7"><a href="#numCode-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-8"><a href="#numCode-8" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ProdUsed&quot;</span>)</span>
-<span id="numCode-9"><a href="#numCode-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-10"><a href="#numCode-10" aria-hidden="true" tabindex="-1"></a><span class="co">Determine the product used by the consumer at each time step</span></span>
-<span id="numCode-11"><a href="#numCode-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-12"><a href="#numCode-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;IsBroken&quot;</span>); <span class="co">//breaks ?</span></span>
-<span id="numCode-13"><a href="#numCode-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">1</span>)</span>
-<span id="numCode-14"><a href="#numCode-14" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>); <span class="co">//yes, buy a new produc</span></span>
-<span id="numCode-15"><a href="#numCode-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="numCode-16"><a href="#numCode-16" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//no, keep on using the previous one</span></span>
-<span id="numCode-17"><a href="#numCode-17" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span>
-<span id="numCode-18"><a href="#numCode-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-19"><a href="#numCode-19" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;IsBroken&quot;</span>)</span>
-<span id="numCode-20"><a href="#numCode-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-21"><a href="#numCode-21" aria-hidden="true" tabindex="-1"></a><span class="co">Check whether the product breaks down or not.</span></span>
-<span id="numCode-22"><a href="#numCode-22" aria-hidden="true" tabindex="-1"></a><span class="co">Return 1 if the product breaks or 0 if not.</span></span>
-<span id="numCode-23"><a href="#numCode-23" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-24"><a href="#numCode-24" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//product owned by the consumer at t-1</span></span>
-<span id="numCode-25"><a href="#numCode-25" aria-hidden="true" tabindex="-1"></a>cur = SEARCH_CND(<span class="st">&quot;IdFirm&quot;</span>, v[<span class="dv">0</span>]); <span class="co">//search the object with IdFirm</span></span>
-<span id="numCode-26"><a href="#numCode-26" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = VS(cur, <span class="st">&quot;BD&quot;</span>); <span class="co">//read the value of the prob. to break down</span></span>
-<span id="numCode-27"><a href="#numCode-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; v[<span class="dv">2</span>]) <span class="co">//</span></span>
-<span id="numCode-28"><a href="#numCode-28" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="numCode-29"><a href="#numCode-29" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">1</span>; <span class="co">//product broken</span></span>
-<span id="numCode-30"><a href="#numCode-30" aria-hidden="true" tabindex="-1"></a>    V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//just to ensure NumLost is reset</span></span>
-<span id="numCode-31"><a href="#numCode-31" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">1</span>);</span>
-<span id="numCode-32"><a href="#numCode-32" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="numCode-33"><a href="#numCode-33" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="numCode-34"><a href="#numCode-34" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">0</span>; <span class="co">//product not broken</span></span>
-<span id="numCode-35"><a href="#numCode-35" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span>
-<span id="numCode-36"><a href="#numCode-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-37"><a href="#numCode-37" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Purchase&quot;</span>)</span>
-<span id="numCode-38"><a href="#numCode-38" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-39"><a href="#numCode-39" aria-hidden="true" tabindex="-1"></a><span class="co">Make a purchase for the calling object (supposedly a consumer).</span></span>
-<span id="numCode-40"><a href="#numCode-40" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-41"><a href="#numCode-41" aria-hidden="true" tabindex="-1"></a>cur1 = RNDDRAW(<span class="st">&quot;Firm&quot;</span>, <span class="st">&quot;Visibility&quot;</span>); <span class="co">//choose randomly one of the products</span></span>
-<span id="numCode-42"><a href="#numCode-42" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VS(cur1, <span class="st">&quot;IdFirm&quot;</span>); <span class="co">//return the ID of the chosen firm</span></span>
-<span id="numCode-43"><a href="#numCode-43" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//ensure that firms are ready to sell</span></span>
-<span id="numCode-44"><a href="#numCode-44" aria-hidden="true" tabindex="-1"></a>INCRS(cur1, <span class="st">&quot;Sales&quot;</span>, <span class="dv">1</span>); <span class="co">//increase the Sales of the chosen firm</span></span>
-<span id="numCode-45"><a href="#numCode-45" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span>
-<span id="numCode-46"><a href="#numCode-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-47"><a href="#numCode-47" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumUsers&quot;</span>)</span>
-<span id="numCode-48"><a href="#numCode-48" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-49"><a href="#numCode-49" aria-hidden="true" tabindex="-1"></a><span class="co">Number of users, computed, after the end of the trading period, </span></span>
-<span id="numCode-50"><a href="#numCode-50" aria-hidden="true" tabindex="-1"></a><span class="co">by summing to the previous users the new sales and removing the lost users</span></span>
-<span id="numCode-51"><a href="#numCode-51" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-52"><a href="#numCode-52" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;EndTrade&quot;</span>); <span class="co">//ensure that buyers finished the shopping</span></span>
-<span id="numCode-53"><a href="#numCode-53" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumUsers&quot;</span>, <span class="dv">1</span>); <span class="co">//former number of users</span></span>
-<span id="numCode-54"><a href="#numCode-54" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Sales&quot;</span>); <span class="co">//sales at this time</span></span>
-<span id="numCode-55"><a href="#numCode-55" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;NumLost&quot;</span>); <span class="co">//lost users at this time</span></span>
-<span id="numCode-56"><a href="#numCode-56" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>]= v[<span class="dv">0</span>] + v[<span class="dv">1</span>] - v[<span class="dv">2</span>];</span>
-<span id="numCode-57"><a href="#numCode-57" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span>
-<span id="numCode-58"><a href="#numCode-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-59"><a href="#numCode-59" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ms_user&quot;</span>)</span>
-<span id="numCode-60"><a href="#numCode-60" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-61"><a href="#numCode-61" aria-hidden="true" tabindex="-1"></a><span class="co">Market shares of users, computed as the ratio of users over the total number of users</span></span>
-<span id="numCode-62"><a href="#numCode-62" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-63"><a href="#numCode-63" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);</span>
-<span id="numCode-64"><a href="#numCode-64" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumUsers&quot;</span>);</span>
-<span id="numCode-65"><a href="#numCode-65" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>] / v[<span class="dv">0</span>])</span>
-<span id="numCode-66"><a href="#numCode-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-67"><a href="#numCode-67" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Visibility&quot;</span>)</span>
-<span id="numCode-68"><a href="#numCode-68" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-69"><a href="#numCode-69" aria-hidden="true" tabindex="-1"></a><span class="co">Visibility, implemented to avoid the math error of a power of 0.</span></span>
-<span id="numCode-70"><a href="#numCode-70" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-71"><a href="#numCode-71" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;alpha&quot;</span>);</span>
-<span id="numCode-72"><a href="#numCode-72" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VL(<span class="st">&quot;ms_user&quot;</span>, <span class="dv">1</span>);</span>
-<span id="numCode-73"><a href="#numCode-73" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
-<span id="numCode-74"><a href="#numCode-74" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
-<span id="numCode-75"><a href="#numCode-75" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="numCode-76"><a href="#numCode-76" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = pow(v[<span class="dv">1</span>], v[<span class="dv">0</span>]);</span>
-<span id="numCode-77"><a href="#numCode-77" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
-<span id="numCode-78"><a href="#numCode-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-79"><a href="#numCode-79" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTrade&quot;</span>)</span>
-<span id="numCode-80"><a href="#numCode-80" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-81"><a href="#numCode-81" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize the trading period. For each firm set to 0 the parameter Sales and NumLost</span></span>
-<span id="numCode-82"><a href="#numCode-82" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-83"><a href="#numCode-83" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Firm&quot;</span>)</span>
-<span id="numCode-84"><a href="#numCode-84" aria-hidden="true" tabindex="-1"></a>    { <span class="co">//for all firms set to 0 Sales and NumLost</span></span>
-<span id="numCode-85"><a href="#numCode-85" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Sales&quot;</span>, <span class="dv">0</span>);</span>
-<span id="numCode-86"><a href="#numCode-86" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">0</span>);</span>
-<span id="numCode-87"><a href="#numCode-87" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="numCode-88"><a href="#numCode-88" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
-<span id="numCode-89"><a href="#numCode-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-90"><a href="#numCode-90" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;EndTrade&quot;</span>)</span>
-<span id="numCode-91"><a href="#numCode-91" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-92"><a href="#numCode-92" aria-hidden="true" tabindex="-1"></a><span class="co">For each consumer ensures that the variable ProdUsed is updated so that Sales and NumLost are filled with the correct values</span></span>
-<span id="numCode-93"><a href="#numCode-93" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-94"><a href="#numCode-94" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Consumer&quot;</span>)</span>
-<span id="numCode-95"><a href="#numCode-95" aria-hidden="true" tabindex="-1"></a>    VS(cur, <span class="st">&quot;ProdUsed&quot;</span>);</span>
-<span id="numCode-96"><a href="#numCode-96" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
-<span id="numCode-97"><a href="#numCode-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-98"><a href="#numCode-98" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
-<span id="numCode-99"><a href="#numCode-99" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="numCode-100"><a href="#numCode-100" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize demand. It assumes that initially there is only 1 consumer. ms_users[0] are the prob of first purchase</span></span>
-<span id="numCode-101"><a href="#numCode-101" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="numCode-102"><a href="#numCode-102" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Demand&quot;</span>);<span class="co">//search the object Demand</span></span>
-<span id="numCode-103"><a href="#numCode-103" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);<span class="co">//number of consumers</span></span>
-<span id="numCode-104"><a href="#numCode-104" aria-hidden="true" tabindex="-1"></a>ADDNOBJS(cur, <span class="st">&quot;Consumer&quot;</span>, v[<span class="dv">0</span>] - <span class="dv">1</span>);<span class="co">//create new objects</span></span>
-<span id="numCode-105"><a href="#numCode-105" aria-hidden="true" tabindex="-1"></a>CYCLES(cur,cur1, <span class="st">&quot;Consumer&quot;</span>)</span>
-<span id="numCode-106"><a href="#numCode-106" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="numCode-107"><a href="#numCode-107" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>);</span>
-<span id="numCode-108"><a href="#numCode-108" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur1, <span class="st">&quot;ProdUsed&quot;</span>, v[<span class="dv">1</span>], t - <span class="dv">1</span>);<span class="co">//replace the existing value</span></span>
-<span id="numCode-109"><a href="#numCode-109" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="numCode-110"><a href="#numCode-110" aria-hidden="true" tabindex="-1"></a>PARAMETER <span class="co">//transform the variable into a param</span></span>
-<span id="numCode-111"><a href="#numCode-111" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
-<span id="numCode-112"><a href="#numCode-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="numCode-113"><a href="#numCode-113" aria-hidden="true" tabindex="-1"></a>MODELEND</span>
-<span id="numCode-114"><a href="#numCode-114" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
-<span id="numCode-115"><a href="#numCode-115" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> close_sim( <span class="dt">void</span> )</span>
-<span id="numCode-116"><a href="#numCode-116" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="numCode-117"><a href="#numCode-117" aria-hidden="true" tabindex="-1"></a>    <span class="co">// close simulation special commands go here</span></span>
-<span id="numCode-118"><a href="#numCode-118" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb1" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//#define EIGENLIB          // uncomment to use Eigen linear algebra library</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//#define NO_POINTER_INIT   // uncomment to disable pointer checking</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fun_head_fast.h&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>MODELBEGIN</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">// insert your equations here, between the MODELBEGIN and MODELEND words</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ProdUsed&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">Determine the product used by the consumer at each time step</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;IsBroken&quot;</span>); <span class="co">//breaks ?</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>); <span class="co">//yes, buy a new produc</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//no, keep on using the previous one</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;IsBroken&quot;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">Check whether the product breaks down or not.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">Return 1 if the product breaks or 0 if not.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//product owned by the consumer at t-1</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>cur = SEARCH_CND(<span class="st">&quot;IdFirm&quot;</span>, v[<span class="dv">0</span>]); <span class="co">//search the object with IdFirm</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = VS(cur, <span class="st">&quot;BD&quot;</span>); <span class="co">//read the value of the prob. to break down</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; v[<span class="dv">2</span>]) <span class="co">//</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">1</span>; <span class="co">//product broken</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//just to ensure NumLost is reset</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">0</span>; <span class="co">//product not broken</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Purchase&quot;</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">Make a purchase for the calling object (supposedly a consumer).</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>cur1 = RNDDRAW(<span class="st">&quot;Firm&quot;</span>, <span class="st">&quot;Visibility&quot;</span>); <span class="co">//choose randomly one of the products</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VS(cur1, <span class="st">&quot;IdFirm&quot;</span>); <span class="co">//return the ID of the chosen firm</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//ensure that firms are ready to sell</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>INCRS(cur1, <span class="st">&quot;Sales&quot;</span>, <span class="dv">1</span>); <span class="co">//increase the Sales of the chosen firm</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumUsers&quot;</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co">Number of users, computed, after the end of the trading period, </span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co">by summing to the previous users the new sales and removing the lost users</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;EndTrade&quot;</span>); <span class="co">//ensure that buyers finished the shopping</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumUsers&quot;</span>, <span class="dv">1</span>); <span class="co">//former number of users</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Sales&quot;</span>); <span class="co">//sales at this time</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;NumLost&quot;</span>); <span class="co">//lost users at this time</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>]= v[<span class="dv">0</span>] + v[<span class="dv">1</span>] - v[<span class="dv">2</span>];</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ms_user&quot;</span>)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">Market shares of users, computed as the ratio of users over the total number of users</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumUsers&quot;</span>);</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>] / v[<span class="dv">0</span>])</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Visibility&quot;</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="co">Visibility, implemented to avoid the math error of a power of 0.</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;alpha&quot;</span>);</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VL(<span class="st">&quot;ms_user&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = pow(v[<span class="dv">1</span>], v[<span class="dv">0</span>]);</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTrade&quot;</span>)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize the trading period. For each firm set to 0 the parameter Sales and NumLost</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Firm&quot;</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    { <span class="co">//for all firms set to 0 Sales and NumLost</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Sales&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;EndTrade&quot;</span>)</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="co">For each consumer ensures that the variable ProdUsed is updated so that Sales and NumLost are filled with the correct values</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Consumer&quot;</span>)</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    VS(cur, <span class="st">&quot;ProdUsed&quot;</span>);</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize demand. It assumes that initially there is only 1 consumer. ms_users[0] are the prob of first purchase</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Demand&quot;</span>);<span class="co">//search the object Demand</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);<span class="co">//number of consumers</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>ADDNOBJS(cur, <span class="st">&quot;Consumer&quot;</span>, v[<span class="dv">0</span>] - <span class="dv">1</span>);<span class="co">//create new objects</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>CYCLES(cur,cur1, <span class="st">&quot;Consumer&quot;</span>)</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>);</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur1, <span class="st">&quot;ProdUsed&quot;</span>, v[<span class="dv">1</span>], t - <span class="dv">1</span>);<span class="co">//replace the existing value</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>PARAMETER <span class="co">//transform the variable into a param</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>MODELEND</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> close_sim( <span class="dt">void</span> )</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>    <span class="co">// close simulation special commands go here</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
 <p>Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis (ou funções) que fazem parte do modelo.</p>
 <h5 id="equationprodused">EQUATION(“ProdUsed”)</h5>
 <p>Essa equação tem como finalidade indicar, em cada período de tempo, qual o produto (Firma) usado por cada um dos consumidores. Para tanto, ela verifica se o produto atual do consumidor em questão está quebrado ou não (por meio da variável <code>IsBroken</code>). Caso esteja quebrado, é o utilizado a função <code>Purchase</code> para comprar um novo produto; caso não esteja quebrado, é utilizado o mesmo produto que no período anterior, por meio da própria variável <code>prodUsed</code>, com um <em>lag</em> de 1 período. A equação retorna o ID da firma, informado pelo parâmetro <code>IdFirm</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ProdUsed&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">Determine the product used by the consumer at each time step</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;IsBroken&quot;</span>); <span class="co">//breaks ?</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">1</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>); <span class="co">//yes, buy a new produc</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//no, keep on using the previous one</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb2" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ProdUsed&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">Determine the product used by the consumer at each time step</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;IsBroken&quot;</span>); <span class="co">//breaks ?</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">0</span>] == <span class="dv">1</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>); <span class="co">//yes, buy a new produc</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//no, keep on using the previous one</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
+</div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>ProdUsed</code> para 2 consumidores:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
 <h5 id="equationisbroken">EQUATION(“IsBroken”)</h5>
 <p>Essa equação, que é de uma função (não uma variável), tem como finalidade indicar se o produto usado por um consumidor irá quebrar no período corrente. Para tanto, primeiramente, ela verifica qual foi o produto usado no período anterior, assim como o ID da sua Firma produtora. Com isso, a equação verifica a probabilidade que esse produto tem de quebrar (com base no parâmetro <code>BD</code> referente à Firma produtora). Então é feito um sorteio aleatório, com distribuição uniforme entre 0 e 1 (Macro <code>RND</code>): caso o valor seja menor que o parâmetro <code>BD</code>, o produto está quebrado nesse período; caso seja maior, o produto não está quebrado. A equação retorna 0 (produto não quebrado) ou 1 (produto quebrado). Além disso, quando o produto está quebrado, a equação faz um acréscimo unitário no parâmetro <code>NumLost</code> da Firma em questão — através da Macro INCRS(obj, “x”, value) que, no caso, fica INCRS(cur, “NumLost”, 1).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;IsBroken&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">Check whether the product breaks down or not.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">Return 1 if the product breaks or 0 if not.</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//product owned by the consumer at t-1</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>cur = SEARCH_CND(<span class="st">&quot;IdFirm&quot;</span>, v[<span class="dv">0</span>]); <span class="co">//search the object with IdFirm</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = VS(cur, <span class="st">&quot;BD&quot;</span>); <span class="co">//read the value of the prob. to break down</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; v[<span class="dv">2</span>]) <span class="co">//</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">1</span>; <span class="co">//product broken</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//just to ensure NumLost is reset</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">1</span>);</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">0</span>; <span class="co">//product not broken</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb3" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;IsBroken&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">Check whether the product breaks down or not.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">Return 1 if the product breaks or 0 if not.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;ProdUsed&quot;</span>, <span class="dv">1</span>); <span class="co">//product owned by the consumer at t-1</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>cur = SEARCH_CND(<span class="st">&quot;IdFirm&quot;</span>, v[<span class="dv">0</span>]); <span class="co">//search the object with IdFirm</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = VS(cur, <span class="st">&quot;BD&quot;</span>); <span class="co">//read the value of the prob. to break down</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RND &lt; v[<span class="dv">2</span>]) <span class="co">//</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">1</span>; <span class="co">//product broken</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//just to ensure NumLost is reset</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = <span class="dv">0</span>; <span class="co">//product not broken</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>])</span></code></pre></div>
+</div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da função <code>IsBroken</code> para 1 consumidor. Lembrando que a probabilidade de quebrar depende do parâmetro <code>BD</code>, que nesse exemplo foi definido com o valor de 10% para a Firma 1, 11% para a Firma 2, …, 19% para a Firma 10. Em cada período de tempo, o produto possuído pelo consumidor irá determinar a probabilidade de quebrar.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
 </div>
 <h5 id="equationpurchase">EQUATION(“Purchase”)</h5>
 <p>Assim como a EQUATION(“IsBroken”), essa equação também é de uma função. Funções podem ser chamadas diversas vezes em um mesmo período de tempo, porém apenas a última vez é salva. No caso de <code>IsBroken</code>, isso não foi muito importante, pois cada consumidor a chamava apenas uma vez por período, sendo salvos todos seus valores para cada consumidor. No caso de <code>Purchase</code>, essa restrição é importante, pois os valores pertencem ao objeto <strong>Oferta</strong>, que possui apenas 1 cópia. Assim, é possível que diversos consumidores chamem a função <code>Purchase</code>, porém apenas o valor do último que o fizer será salvo.<br />
 A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, com probabilidades iguais às suas <code>Visbility</code> (que dependem do <em>market share</em>); depois, guarda-se o ID dessa firma; por fim, faz-se um incremento unitário no parâmetro <code>Sales</code> dessa firma. A equação retorna o ID da firma sorteada.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Purchase&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">Make a purchase for the calling object (supposedly a consumer).</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>cur1 = RNDDRAW(<span class="st">&quot;Firm&quot;</span>, <span class="st">&quot;Visibility&quot;</span>); <span class="co">//choose randomly one of the products</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VS(cur1, <span class="st">&quot;IdFirm&quot;</span>); <span class="co">//return the ID of the chosen firm</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//ensure that firms are ready to sell</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>INCRS(cur1, <span class="st">&quot;Sales&quot;</span>, <span class="dv">1</span>); <span class="co">//increase the Sales of the chosen firm</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb4" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Purchase&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">Make a purchase for the calling object (supposedly a consumer).</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>cur1 = RNDDRAW(<span class="st">&quot;Firm&quot;</span>, <span class="st">&quot;Visibility&quot;</span>); <span class="co">//choose randomly one of the products</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VS(cur1, <span class="st">&quot;IdFirm&quot;</span>); <span class="co">//return the ID of the chosen firm</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTrade&quot;</span>); <span class="co">//ensure that firms are ready to sell</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>INCRS(cur1, <span class="st">&quot;Sales&quot;</span>, <span class="dv">1</span>); <span class="co">//increase the Sales of the chosen firm</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">0</span>])</span></code></pre></div>
+</div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da função <code>Purchase</code> (para o último consumidor que a chamar, em cada período).</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
 </div>
 <h5 id="equationnumusers">EQUATION(“NumUsers”)</h5>
 <p>Essa equação tem como finalidade indicar o número de usuários de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. Para tanto, ela simplesmente verifica o número de usuários (de cada firma) no período anterior, o número de vendas no período corrente e o número de usuários perdidos também no período corrente, e computa o novo número de usuários.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumUsers&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">Number of users, computed, after the end of the trading period, </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">by summing to the previous users the new sales and removing the lost users</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;EndTrade&quot;</span>); <span class="co">//ensure that buyers finished the shopping</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumUsers&quot;</span>, <span class="dv">1</span>); <span class="co">//former number of users</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Sales&quot;</span>); <span class="co">//sales at this time</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;NumLost&quot;</span>); <span class="co">//lost users at this time</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>]= v[<span class="dv">0</span>] + v[<span class="dv">1</span>] - v[<span class="dv">2</span>];</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb5" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;NumUsers&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">Number of users, computed, after the end of the trading period, </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">by summing to the previous users the new sales and removing the lost users</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;EndTrade&quot;</span>); <span class="co">//ensure that buyers finished the shopping</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;NumUsers&quot;</span>, <span class="dv">1</span>); <span class="co">//former number of users</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Sales&quot;</span>); <span class="co">//sales at this time</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = V(<span class="st">&quot;NumLost&quot;</span>); <span class="co">//lost users at this time</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>]= v[<span class="dv">0</span>] + v[<span class="dv">1</span>] - v[<span class="dv">2</span>];</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">4</span>])</span></code></pre></div>
+</div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>NumUsers</code> para cada firma. Lembrando que a probabilidade de quebrar depende do parâmetro <code>BD</code>, que nesse exemplo foi definido com o valor de 10% para a Firma 1, 11% para a Firma 2, …, 19% para a Firma 10.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
 </div>
 <p>Como o gráfico mostra, quanto maior o parâmetro <code>BD</code> (probabilidade de o produto quebrar) da firma, menor é número de usuários que ela consegue manter no longo prazo. Essa divergência é rapidamente atingida no começo e depois mantida ao longo do tempo. Como existem 10000 consumidores e 10 Firmas, inicialmente cada firma fica com um número de consumidores em torno de 1000. Um exame dos primeiros períodos mostra essa rapidez:</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
 </div>
 <h5 id="equationms_user">EQUATION(“ms_user”)</h5>
 <p>Essa equação apenas divide o número de usuários de cada Firma, <code>NumUsers</code>, pelo total de usuários, parâmetro <code>TotalUsers</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ms_user&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">Market shares of users, computed as the ratio of users over the total number of users</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumUsers&quot;</span>);</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>] / v[<span class="dv">0</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb6" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;ms_user&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">Market shares of users, computed as the ratio of users over the total number of users</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;NumUsers&quot;</span>);</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">1</span>] / v[<span class="dv">0</span>])</span></code></pre></div>
+</div>
 <p>O gráfico dessa variável é igual ao de <code>NumUsers</code>, porém com uma escala diferente, refletindo a porcentagem e não o número total de usuários de cada Firma.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
 </div>
 <h5 id="equationvisibility">EQUATION(“Visibility”)</h5>
 <p>Essa equação tem como finalidade indicar a visibilidade de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. O <em>mark share</em> — que depende das vendas e perdas — é a base da visibilidade. Mais especificamente, essa é calculada elevando-se o <em>market share</em> (no período anterior) ao expoente <code>alpha</code>. Uma Exceção que a equação implemente é que caso o <em>market share</em> seja igual a zero, a visibilidade também será zero. Isso é feito para eliminar a possibilidade de uma Firma possuir <em>market share</em> zero mas visibilidade igual a um — caso o <code>alpha</code> seja igual a zero.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Visibility&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">Visibility, implemented to avoid the math error of a power of 0.</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;alpha&quot;</span>);</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VL(<span class="st">&quot;ms_user&quot;</span>, <span class="dv">1</span>);</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = pow(v[<span class="dv">1</span>], v[<span class="dv">0</span>]);</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb7" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Visibility&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">Visibility, implemented to avoid the math error of a power of 0.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;alpha&quot;</span>);</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = VL(<span class="st">&quot;ms_user&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = pow(v[<span class="dv">1</span>], v[<span class="dv">0</span>]);</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
+</div>
 <p>Por exemplo, seja uma simulação com 500 períodos, <span class="math inline">\(\alpha = 0.5\)</span>, 10 Firmas e 10000 consumidores. Vejamos o comportamento da variável <code>Visibility</code> para cada firma. Como dito, em cada período, o valor dessa variável é igual ao <em>market share</em> elevado à potencia <code>alpha</code>, que no caso é igual 0.5. Ou seja, o valor de <code>Visibility</code>, em cada período, é simplesmente a raiz quadrada do <em>market share</em>. Portanto, o gráfico terá o mesmo comportamento, porém mais “esticado” — uma vez que os valores estão entre 0 e 1.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="infoimperf_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+<p><img src="infoimperf_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
 </div>
 <p>Dessa forma, a <code>Visibility</code> deriva diretamente do <em>market share</em>, que deriva do <code>NumUsers</code>, que depende, em cada período, do número de <code>Sales</code> e de <code>NumLost</code>, que são dois parâmetros das Firmas.<br />
 <code>Sales</code> é determinado pela equação (função) de <code>Purchase</code>: cada consumidor que teve um produto quebrado chama essa função, e a firma escolhida para realizar a venda é determinada por um sorteio aleatório com probabilidades iguais a <code>Visibility</code>.<br />
@@ -2438,44 +2456,50 @@ Vejamos um exemplo: a Firma 1 possui <span class="math inline">\(BD = 0.1\)</spa
 <p>As últimas 3 equações (<code>InitTrade</code>, <code>EndTrade</code>, <code>Init</code>) retornam sempre 1 e servem para configurar o modelo.</p>
 <h5 id="equationinittrade">EQUATION(“InitTrade”)</h5>
 <p>Essa equação tem como finalidade configurar o período de negocioação. Os parâmetros <code>Sales</code> e <code>NumLost</code> computam os ganhos e perdas de consumidores em cada período, portanto precisam ser zeradas ao início de cada período. Essa equação faz apenas isso. Ela ajusta para 0 o valor desses parâmetros para cada uma das firmas.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTrade&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize the trading period. For each firm set to 0 the parameter Sales and NumLost</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Firm&quot;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    { <span class="co">//for all firms set to 0 Sales and NumLost</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Sales&quot;</span>, <span class="dv">0</span>);</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">0</span>);</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb8" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTrade&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize the trading period. For each firm set to 0 the parameter Sales and NumLost</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Firm&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    { <span class="co">//for all firms set to 0 Sales and NumLost</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Sales&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;NumLost&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
 <h5 id="equationendtrade">EQUATION(“EndTrade”)</h5>
 <p>Essa equação apenas faz uma leitura do produto usado, <code>ProdUsed</code>, por cada consumidor, ao fim de cada período, para assegurar que <code>Sales</code> e <code>NumLost</code> sejam preenchidos com os valores corretos.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;EndTrade&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">For each consumer ensures that the variable ProdUsed is updated so that Sales and NumLost are filled with the correct values</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Consumer&quot;</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    VS(cur, <span class="st">&quot;ProdUsed&quot;</span>);</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb9" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;EndTrade&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">For each consumer ensures that the variable ProdUsed is updated so that Sales and NumLost are filled with the correct values</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Consumer&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    VS(cur, <span class="st">&quot;ProdUsed&quot;</span>);</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
 <h5 id="equationinit">EQUATION(“Init”)</h5>
 <p>Essa equação inicializa a demanda. Primeiramente, ela associa o objeto “Demanda” a um ponteiro <code>cur</code> e guarda o valor do parâmetro <code>TotalUsers</code> — que é ajustado pelo modelador no início da simulação. A equação então cria um número de objetos, chamados “Consumidores”, igual a <code>TotalUsers</code> menos 1 (ela assume que o modelo começa com 1 consumidor), e aloca esse objetos como descendentes do objeto “Demanda”, que ela guardou no ponteiro <code>cur</code>. Após isso, equação então faz um ciclo para chamar a função <code>Purchase</code> para cada um dos consumidores recém criados, e utiliza o valor retornado por <code>Purchase</code> para substituir o valor de <code>ProdUsed</code> no período <span class="math inline">\(t-1\)</span>, que foi inicialmente configurado pelo modelador para ser 0 (para esse primeiro e único consumidor existente antes dessa equação ser chamada). Após tudo isso, essa variável <code>Init</code> é transformada em um parâmetro.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode cpp Cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize demand. It assumes that initially there is only 1 consumer. ms_users[0] are the prob of first purchase</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Demand&quot;</span>);<span class="co">//search the object Demand</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);<span class="co">//number of consumers</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ADDNOBJS(cur, <span class="st">&quot;Consumer&quot;</span>, v[<span class="dv">0</span>] - <span class="dv">1</span>);<span class="co">//create new objects</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>CYCLES(cur,cur1, <span class="st">&quot;Consumer&quot;</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>);</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur1, <span class="st">&quot;ProdUsed&quot;</span>, v[<span class="dv">1</span>], t - <span class="dv">1</span>);<span class="co">//replace the existing value</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>PARAMETER <span class="co">//transform the variable into a param</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb10" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize demand. It assumes that initially there is only 1 consumer. ms_users[0] are the prob of first purchase</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Demand&quot;</span>);<span class="co">//search the object Demand</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;TotalUsers&quot;</span>);<span class="co">//number of consumers</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ADDNOBJS(cur, <span class="st">&quot;Consumer&quot;</span>, v[<span class="dv">0</span>] - <span class="dv">1</span>);<span class="co">//create new objects</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>CYCLES(cur,cur1, <span class="st">&quot;Consumer&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">1</span>] = V(<span class="st">&quot;Purchase&quot;</span>);</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur1, <span class="st">&quot;ProdUsed&quot;</span>, v[<span class="dv">1</span>], t - <span class="dv">1</span>);<span class="co">//replace the existing value</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>PARAMETER <span class="co">//transform the variable into a param</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
 <h2 id="conclusão">Conclusão</h2>
 <p>Esse modelo explora a competição entre firmas, por consumidores em um mercado no qual não há informação perfeita e esses consumidores precisam tomar suas decisões com base numa regra de bolso, que no caso é assumir que a firma com maior <em>market share</em> possui o melhor produto. Porém, o modelo assume que o <em>market share</em> depende da qualidade do produto, uma vez que a probabilidade desse quebrar influencia diretamente no número de consumidores da firma. A visibilidade da firma acentua as diferenças de <em>market share</em> entre essas, porém o que determina a dinâmica do modelo de forma mais preponderante é o fato de que as probabilidades <code>BD</code> definem o número de consumidores perdidos e portanto, estabelecem o formato das trajetórias dos <em>market shares</em>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <div id="refs" class="references csl-bib-body" role="doc-bibliography">
 <div id="ref-smallwood1979product" class="csl-entry" role="doc-biblioentry">
 SMALLWOOD, D. E.; CONLISK, J. Product quality in markets where consumers are imperfectly informed. <strong>The Quarterly Journal of Economics</strong>, v. 93, n. 1, p. 1–23, 1979.

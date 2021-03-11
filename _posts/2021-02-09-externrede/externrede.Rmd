@@ -40,6 +40,10 @@ d-article p {
 d-article p code {
   background: rgba(236, 236, 236, 0.8);
 }
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
 ```
 
 ## Introdução
@@ -99,7 +103,7 @@ O modelo funciona da seguinte maneira:
 
 A equações requeridas para rodar o modelo derivam dos itens apontados acima (sobre como o modelo funciona), sendo necessário, todavia, uma equação (tanto para utilidade, quanto para número consumidores e sua consequente participação de mercado) para cada tipo de produto. O modelo inteiro é constituido, assim, por 7 equações:
 
-```{#numCode .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 //#define EIGENLIB			// uncomment to use Eigen linear algebra library
 //#define NO_POINTER_INIT	// uncomment to disable pointer checking
 #include "fun_head_fast.h"
@@ -221,7 +225,7 @@ Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os mod
 
 A primeira equação do modelo (lembrando que no LSD a ordem das equações não importa) é bem simples e serve para decidir, com probabilidade de 50%, o tipo de agente, **tipo 0** ou **tipo 1**. Em cada período de tempo (da simulação), a variável "NewAgent" assume o valor 0 ou 1, com probabilidade de 50% para cada. 
 
-```{#numCode .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("NewAgent")
 /*
 Type of new agent
@@ -258,7 +262,7 @@ As proximas duas equações servem para calcular a utilidade de cada produto (MS
 
 No código abaixo, que calcula a utilidade de MS em cada período (seja o novo consumidor sendo do tipo 0 sendo do tipo 1), $v^{MS}_0$ é representado pelo parâmetro "User0MS" e $x_0$ é representado por "User0Net". O mesmo ocorre para oa parâmetros do consumidor tipo 1.
 
-```{#numCode .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("UtilityMS")
 /*
 Utility in using MS
@@ -335,7 +339,7 @@ autoplot(utilityplot) +
 
 A equação do número de usuários de cada produto simplemente compara os valores das utilidades de MS e Apple, calculadas nas equações mostradas anteriormente, e aumenta em uma unidade o valor do número de usuários a depender de qual utilidade é maior.
 
-```{#numCode .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("NumMS")
 /*
 Number of MS users
@@ -381,7 +385,7 @@ autoplot(numplot) +
 
 Por fim, é computado também o *market share* dos dois tipos de produtos, o que é feito apenas dividindo o número de usuários de cada produto pelo número total de agentes.
 
-```{#numCode .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("ShareMS")
 /*
 Share of MS users

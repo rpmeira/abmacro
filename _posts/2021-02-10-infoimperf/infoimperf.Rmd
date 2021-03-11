@@ -40,6 +40,10 @@ d-article p {
 d-article p code {
   background: rgba(236, 236, 236, 0.8);
 }
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
 ```
 
 ## Introdução
@@ -157,7 +161,7 @@ Vejamos como é implementada cada Equação para essas variáveis e funções, j
 
 O modelo inteiro é constituido por 9 equações (7 variáveis e 2 funções). Porém, dessas 9, 3 Equações (`Init`, `InitTrade`, `EndTrade`) retornam sempre o valor 1, sendo sua finalidade apenas configurar alguns parâmetros e outras variáveis. A variável `NumUsers` é a de maior interesse para análise do modelo, uma vez que retorna o número de consumidores de cada produto (Firma). A variável `ms_users` calcula a proporção de consumidores, baseada no número total. A variável `Visibility` utiliza o $\alpha$ --- que indica o quão importante é o *market share* --- para gerar as probabilidade de cada produto ser comprado. As funções `Purchase` e `IsBroken` são necessárias para calcular a variável `ProdUsed`, que determina qual produto cada consumidor vai usar.
 
-``` {#numCode .cpp .Cpp}
+``` {cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 //#define EIGENLIB          // uncomment to use Eigen linear algebra library
 //#define NO_POINTER_INIT   // uncomment to disable pointer checking
 #include "fun_head_fast.h"
@@ -284,7 +288,7 @@ Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os mod
 
 Essa equação tem como finalidade indicar, em cada período de tempo, qual o produto (Firma) usado por cada um dos consumidores. Para tanto, ela verifica se o produto atual do consumidor em questão está quebrado ou não (por meio da variável `IsBroken`). Caso esteja quebrado, é o utilizado a função `Purchase` para comprar um novo produto; caso não esteja quebrado, é utilizado o mesmo produto que no período anterior, por meio da própria variável `prodUsed`, com um *lag* de 1 período. A equação retorna o ID da firma, informado pelo parâmetro `IdFirm`.
 
-``` {.cpp .Cpp}
+``` {cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("ProdUsed")
 /*
 Determine the product used by the consumer at each time step
@@ -326,7 +330,7 @@ autoplot(prodused, facets = T, colour = T) +
 Essa equação, que é de uma função (não uma variável), tem como finalidade indicar se o produto usado por um consumidor irá quebrar no período corrente. Para tanto, primeiramente, ela verifica qual foi o produto usado no período anterior, assim como o ID da sua Firma produtora. Com isso, a equação verifica a probabilidade que esse produto tem de quebrar (com base no parâmetro `BD` referente à Firma produtora). Então é feito um sorteio aleatório, com distribuição uniforme entre 0 e 1 (Macro `RND`): caso o valor seja menor que o parâmetro `BD`, o produto está quebrado nesse período; caso seja maior, o produto não está quebrado. A equação retorna 0 (produto não quebrado) ou 1 (produto quebrado). Além disso, quando o produto está quebrado, a equação faz um acréscimo unitário no parâmetro `NumLost` da Firma em questão --- através da Macro INCRS(obj, "x", value) que, no caso, fica INCRS(cur, "NumLost", 1).
 
 
-``` {.cpp .Cpp}
+``` {cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("IsBroken")
 /*
 Check whether the product breaks down or not.
@@ -380,7 +384,7 @@ ggplot(isbroken) +
 Assim como a EQUATION("IsBroken"), essa equação também é de uma função. Funções podem ser chamadas diversas vezes em um mesmo período de tempo, porém apenas a última vez é salva. No caso de `IsBroken`, isso não foi muito importante, pois cada consumidor a chamava apenas uma vez por período, sendo salvos todos seus valores para cada consumidor. No caso de `Purchase`, essa restrição é importante, pois os valores pertencem ao objeto **Oferta**, que possui apenas 1 cópia. Assim, é possível que diversos consumidores chamem a função `Purchase`, porém apenas o valor do último que o fizer será salvo.\
 A equação funciona da seguinte maneira: primeiramente, sorteada-se uma firma, com probabilidades iguais às suas `Visbility` (que dependem do *market share*); depois, guarda-se o ID dessa firma; por fim, faz-se um incremento unitário no parâmetro `Sales` dessa firma. A equação retorna o ID da firma sorteada.
 
-``` {.cpp .Cpp}
+``` {cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Purchase")
 /*
 Make a purchase for the calling object (supposedly a consumer).
@@ -421,7 +425,7 @@ autoplot(purchase, ts.geom = 'bar') +
 Essa equação tem como finalidade indicar o número de usuários de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. Para tanto, ela simplesmente verifica o número de usuários (de cada firma) no período anterior, o número de vendas no período corrente e o número de usuários perdidos também no período corrente, e computa o novo número de usuários.
 
 
-``` {.cpp .Cpp}
+``` {cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("NumUsers")
 /*
 Number of users, computed, after the end of the trading period, 
@@ -483,7 +487,7 @@ autoplot(window(numusers, end = 50)) +
 
 Essa equação apenas divide o número de usuários de cada Firma, `NumUsers`, pelo total de usuários, parâmetro `TotalUsers`.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("ms_user")
 /*
 Market shares of users, computed as the ratio of users over the total number of users
@@ -522,7 +526,7 @@ autoplot(mshare) +
 
 Essa equação tem como finalidade indicar a visibilidade de cada produto (firma) ao fim de cada período, após computar as adições (vendas para novos usuários) e subtrações (perdas de usuários devido à quebra de produtos) de consumidores. O *mark share* --- que depende das vendas e perdas --- é a base da visibilidade. Mais especificamente, essa é calculada elevando-se o *market share* (no período anterior) ao expoente `alpha`. Uma Exceção que a equação implemente é que caso o *market share* seja igual a zero, a visibilidade também será zero. Isso é feito para eliminar a possibilidade de uma Firma possuir *market share* zero mas visibilidade igual a um --- caso o `alpha` seja igual a zero.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Visibility")
 /*
 Visibility, implemented to avoid the math error of a power of 0.
@@ -581,7 +585,7 @@ As últimas 3 equações (`InitTrade`, `EndTrade`, `Init`) retornam sempre 1 e s
 
 Essa equação tem como finalidade configurar o período de negocioação. Os parâmetros `Sales` e `NumLost` computam os ganhos e perdas de consumidores em cada período, portanto precisam ser zeradas ao início de cada período. Essa equação faz apenas isso. Ela ajusta para 0 o valor desses parâmetros para cada uma das firmas.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("InitTrade")
 /*
 Initialize the trading period. For each firm set to 0 the parameter Sales and NumLost
@@ -599,7 +603,7 @@ RESULT(1)
 
 Essa equação apenas faz uma leitura do produto usado, `ProdUsed`, por cada consumidor, ao fim de cada período, para assegurar que `Sales` e `NumLost` sejam preenchidos com os valores corretos.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("EndTrade")
 /*
 For each consumer ensures that the variable ProdUsed is updated so that Sales and NumLost are filled with the correct values
@@ -614,7 +618,7 @@ RESULT(1)
 
 Essa equação inicializa a demanda. Primeiramente, ela associa o objeto "Demanda" a um ponteiro `cur` e guarda o valor do parâmetro `TotalUsers` --- que é ajustado pelo modelador no início da simulação. A equação então cria um número de objetos, chamados "Consumidores", igual a `TotalUsers` menos 1 (ela assume que o modelo começa com 1 consumidor), e aloca esse objetos como descendentes do objeto "Demanda", que ela guardou no ponteiro `cur`. Após isso, equação então faz um ciclo para chamar a função `Purchase` para cada um dos consumidores recém criados, e utiliza o valor retornado por `Purchase` para substituir o valor de `ProdUsed` no período $t-1$, que foi inicialmente configurado pelo modelador para ser 0 (para esse primeiro e único consumidor existente antes dessa equação ser chamada). Após tudo isso, essa variável `Init` é transformada em um parâmetro.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Init")
 /*
 Initialize demand. It assumes that initially there is only 1 consumer. ms_users[0] are the prob of first purchase

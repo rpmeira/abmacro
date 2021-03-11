@@ -42,6 +42,10 @@ d-article p {
 d-article p code {
   background: rgba(236, 236, 236, 0.8);
 }
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
 ```
 
 
@@ -187,7 +191,7 @@ O modelo inteiro é constituido por 9 equações (9 variáveis). Dessas 9, apena
 Vejamos o modelo completo:
 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 //#define NO_POINTER_INIT	// uncomment to disable pointer checking
 #include "fun_head_fast.h"
 MODELBEGIN
@@ -362,7 +366,7 @@ A menos que seja dito o contrário, todos os exemplos abaixo (que procuram demon
 Essa equação tem como finalidade inicializar o modelo. Mais especificamente, ela cria uma quantidade de cópias do objeto "Firm" igual ao número estabelecido pelo parâmetro `N`. Para cada uma dessas cópias, inicializa as 5 variáveis possuidas pelo objeto "Firm", por meio da macro WRITELS(obj, “X”, valor, tempo). Todas as variáveis são ajustadas para o período 0. À `Convenience` é dado o valor do parâmetro `C0`; à `Quality` é dado o valor do parâmetro `Q0`; à `Prob` é dado o valor 0; à `sigma` é dado o valor 0; à `ms` é dado o valor $\small 1 / N$. No final, a equação transforma a variável `Init` em um parâmetro.
 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Init")
 /*
 Model initialization
@@ -392,7 +396,7 @@ RESULT(1)
 Essa equação tem como finalidade calcular a probabilidade de uma firma ser escolhida por um consumidor, ou seja, de a firma vender seu produto. Como ja mencionado, essa probabilidade é uma combinação linear de `Quality` e `Convenience`, balanceado pelo parâmetro `alpha`.
 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Prob")
 /*
 Probability of firm being chosen
@@ -435,7 +439,7 @@ autoplot(prob) +
 Essa equação tem como finalidade calcular a qualidade do produto de uma firma. Em cada período de tempo, a qualidade pode ser igual à do período anterior, caso não haja adoção de inovação, ou igual à qualidade pós-inovação. Para decidir entre as duas, a firma compara qual irá gerar uma probabilidade maior de venda do produto --- `if (v[6] < v[7])`. Caso a inovação gere um aprobabilidade maior, então ela é adotada e a qualidade do produto muda. A qualidade potencial --- quando há inovação --- é calculada a partir de um sorteio aleaório --- `v[5]` --- com distribuição normal, média igual à qualidade do período anterior e desvio padrão igual ao conhecimento acumulado desde a última inovação (`sigma`). 
 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Quality")
 /*
 New product quality, possibly obtained by innovation
@@ -485,7 +489,7 @@ autoplot(quality) +
 
 Essa equação tem como finalidade calcular o conhecimento acumulado da firma, `sigma`. Em cada período de tempo em que a qualidade do produto da firma não se altera --- ou seja, não há adoção de inovação ---, essa variável aumenta em um montante igual a `delta`, que é um parâmetro constante do modelo. Quando a firma adota uma inovação, `sigma` é ajustado para 0, ou seja, o conhecimento acumulado é utilizado e então volta-se a um novo processo de acumulação de conhecimento, partindo do zero. Para realizar isso, a equação compara a qualidade do produto no período corrente com a qualidade no período anterior; caso sejam iguais, `sigma` é incrementado no valor de `delta`; caso sejam diferentes, `sigma` é ajustado para zero.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("sigma")
 /*
 Accumulated knowledge
@@ -534,7 +538,7 @@ autoplot(sigma) +
 
 Essa equação tem como finalidade calcular a conveniência da firma. Em cada período de tempo em que não há inovação, essa variável cresce. Quando a firma inova, `Convenience` retorna ao seu valor mínimo, o parâmetro `Cmin` --- que no caso foi estabelecido para 1. O modo como essa variável cresce, quando não há inovação, é apontado por `v[6]`, levando em consideração os parâmetros `tau` e `Cmax` e as variáveis (com lag 1) `ms` e a própria `Convenience`. 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("Convenience")
 /*
 Product convenience (inverse of price)
@@ -584,7 +588,7 @@ autoplot(conv) +
 
 Essa equação tem como finalidade calcular o *market share* da firma. Em cada período de tempo, cada firma tem o seu `ms` calculado apenas dividindo-se a sua probabilidade de venda (do seu produto), `Prob`, pela soma das probabilidades de todas as firmas, `TotProb`. A equação ainda, por segurança, implementa uma verificação da variável `TotProb`, para o cado de ela ser igual a zero --- o que resultaria em uma divisão por zero.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("ms")
 /*
 Market share of a firm
@@ -627,7 +631,7 @@ autoplot(mshare) +
 
 Essa equação tem como finalidade calcular a soma das probabilidades de todas as firmas. A sua equação é simples e evidente: a macro SUM(“X”) soma a variável `Prob` de cada firma.
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("TotProb")
 /*
 Sum of probabilities of all firms
@@ -661,7 +665,7 @@ autoplot(totprob, colour = "darkblue") +
 
 Essa equação tem como finalidade calcular o Índice Herfindahl–Hirschman, `HHI`, que é um indicador do grau de concorrência de uma indústria. Esse índice pode variar entre 0 e 1, sendo que quanto mais perto de 0 mais competitivo o mercado e quanto mais perto de 1 mais oligopolista o mercado --- o índice será 1 no caso de monopólio. Assim, quanto maior o índice, mais concentrado é o mercado. Ele é definido como a soma dos quadrados dos *market shares* das firmas que compõem um mercado. Essa equação simplesmente recupera o valor de `ms` de cada firma e o multiplica por ele mesmo, somando o resultado de cada firma.   
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("HHI")
 /*
 Herfindhal-Hirschman Index
@@ -702,7 +706,7 @@ autoplot(hhi, colour = "darkblue") +
 
 Essa equação tem como finalidade calcular o Índice de Instabilidade Hymer & Pashigian, `HPI`, que também é um indicador do nível de concorrência de uma indústria --- Assim como o `HHI`. Ele é definido como a soma, de todas as firmas, da mudança de *market share* de cada uma dessas firmar, em cada período de tempo. Portanto, ele mede a instabilidade de um mercado, no que diz respeito a variações de *market share* das firmas. 
 
-```{.cpp .Cpp}
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
 EQUATION("HPI")
 /*
 Hymer & Pashigian Instability Index
