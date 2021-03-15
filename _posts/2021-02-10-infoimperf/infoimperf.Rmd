@@ -134,18 +134,18 @@ Cada um desses objetos contêm um conjunto de variáveis (com seus *lag* indicad
 +-----------------+-----------------+-----------------+
 |                 | Variável        | Parâmetro       |
 +=================+:===============:+:===============:+
-| **Mercado**     | `Init`          | `TotalUsers`    |
+| **Mercado**     | `Init`\         | `TotalUsers`\   |
 +-----------------+-----------------+-----------------+
-| **Oferta**      | `InitTrade`     | `alpha`         |
+| **Oferta**      | `InitTrade`\    | `alpha`\        |
 +-----------------+-----------------+-----------------+
-| **Firma**       | `NumUsers(1)`   | `IdFirm`        |
-|                 | `ms_users(1)`   | `BD`            |
-|                 | `Visibility`    | `Sales`         |
-|                 |                 | `NumLost`       |
+| **Firma**       | `NumUsers(1)`\  | `IdFirm`\       |
+|                 | `ms_users(1)`\  | `BD`\           |
+|                 | `Visibility`\   | `Sales`\        |
+|                 |                 | `NumLost`\      |
 +-----------------+-----------------+-----------------+
-| **Demanda**     | `EndTrade`      | \-              |
+| **Demanda**     | `EndTrade`\     | \-              |
 +-----------------+-----------------+-----------------+
-|**Consumidor**   | `ProdUsed(1)`   | \-              |
+|**Consumidor**   | `ProdUsed(1)`\  | \-              |
 +-----------------+-----------------+-----------------+
 :::
 

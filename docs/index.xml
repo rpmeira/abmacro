@@ -42,17 +42,6 @@
       <media:content url="https://rpmeira.github.io/abmacro/posts/2021-02-09-externrede/externrede_files/figure-html5/unnamed-chunk-11-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
-      <title>LSD Linguagem Macro</title>
-      <dc:creator>Rafael Peixoto</dc:creator>
-      <link>https://rpmeira.github.io/abmacro/posts/2021-01-13-lsdmacro</link>
-      <description>Este Post apresenta um breve resumo da linguagem macro do LSD, descrita no manual que acompanha o software.</description>
-      <category>Introdução</category>
-      <category>LSD</category>
-      <guid>https://rpmeira.github.io/abmacro/posts/2021-01-13-lsdmacro</guid>
-      <pubDate>qui, 21 jan 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://rpmeira.github.io/abmacro/posts/2021-01-13-lsdmacro/lsd.png" medium="image" type="image/png" width="253" height="107"/>
-    </item>
-    <item>
       <title>Equações em Diferença Estocásticas</title>
       <dc:creator>Rafael Peixoto</dc:creator>
       <link>https://rpmeira.github.io/abmacro/posts/2021-01-12-eqestoc</link>

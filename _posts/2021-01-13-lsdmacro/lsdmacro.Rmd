@@ -2,6 +2,7 @@
 title: "LSD Linguagem Macro"
 description: |
   Este Post apresenta um breve resumo da linguagem macro do LSD, descrita no manual que acompanha o software.
+draft: true
 preview: lsd.png
 author:
   - name: Rafael Peixoto
