@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+<title>Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza</title>
+
+<meta property="description" itemprop="description" content="Esse texto descreve e analisa o modelo baseado em agentes &quot;Money Model&quot;. Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo."/>
+
+<link rel="canonical" href="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"/>
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2021-04-21"/>
+<meta property="article:created" itemprop="dateCreated" content="2021-04-21"/>
+<meta name="article:author" content="Rafael Peixoto"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="Esse texto descreve e analisa o modelo baseado em agentes &quot;Money Model&quot;. Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo."/>
+<meta property="og:url" content="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"/>
+<meta property="og:image" content="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/distriq_files/figure-html5/unnamed-chunk-19-1.png"/>
+<meta property="og:image:width" content="1248"/>
+<meta property="og:image:height" content="768"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="Macroeconomia Baseada em Agentes"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza"/>
+<meta property="twitter:description" content="Esse texto descreve e analisa o modelo baseado em agentes &quot;Money Model&quot;. Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo."/>
+<meta property="twitter:url" content="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"/>
+<meta property="twitter:image" content="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/distriq_files/figure-html5/unnamed-chunk-19-1.png"/>
+<meta property="twitter:image:width" content="1248"/>
+<meta property="twitter:image:height" content="768"/>
+
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza"/>
+<meta name="citation_fulltext_html_url" content="https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"/>
+<meta name="citation_online_date" content="2021/04/21"/>
+<meta name="citation_publication_date" content="2021/04/21"/>
+<meta name="citation_author" content="Rafael Peixoto"/>
+<meta name="citation_author_institution" content="Universidade Estadual de Campinas"/>
+<!--/radix_placeholder_meta_tags-->
+  
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","slug","date","bibliography","nocite","csl","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Modelo - Distribuição de Riqueza"]},{"type":"character","attributes":{},"value":["Esse texto descreve e analisa o modelo baseado em agentes \"Money Model\". Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Rafael Peixoto"]},{"type":"character","attributes":{},"value":["Universidade Estadual de Campinas"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["peixoto2021moneymodel"]},{"type":"character","attributes":{},"value":["04-21-2021"]},{"type":"character","attributes":{},"value":["moneymodel.bib"]},{"type":"character","attributes":{},"value":["@dragulescu2003statistical\n"]},{"type":"character","attributes":{},"value":["associacao-brasileira-de-normas-tecnicas-ipea.csl"]},{"type":"character","attributes":{},"value":["Modelos","LSD"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"]},{"type":"character","attributes":{},"value":["https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["abavg-1-0.res","abavg-1-1.res","abavg-20-0.res","abavg-20-1.res","associacao-brasileira-de-normas-tecnicas-ipea.csl","distriq_files/anchor-4.2.2/anchor.min.js","distriq_files/bowser-1.9.3/bowser.min.js","distriq_files/crosstalk-1.1.0.1/css/crosstalk.css","distriq_files/crosstalk-1.1.0.1/js/crosstalk.js","distriq_files/crosstalk-1.1.0.1/js/crosstalk.js.map","distriq_files/crosstalk-1.1.0.1/js/crosstalk.min.js","distriq_files/crosstalk-1.1.0.1/js/crosstalk.min.js.map","distriq_files/distill-2.2.21/template.v2.js","distriq_files/figure-html5/unnamed-chunk-10-1.png","distriq_files/figure-html5/unnamed-chunk-11-1.png","distriq_files/figure-html5/unnamed-chunk-12-1.png","distriq_files/figure-html5/unnamed-chunk-13-1.png","distriq_files/figure-html5/unnamed-chunk-14-1.png","distriq_files/figure-html5/unnamed-chunk-15-1.png","distriq_files/figure-html5/unnamed-chunk-16-1.png","distriq_files/figure-html5/unnamed-chunk-17-1.png","distriq_files/figure-html5/unnamed-chunk-19-1.png","distriq_files/figure-html5/unnamed-chunk-2-1.pdf","distriq_files/figure-html5/unnamed-chunk-2-1.png","distriq_files/figure-html5/unnamed-chunk-20-1.png","distriq_files/figure-html5/unnamed-chunk-6-1.png","distriq_files/figure-html5/unnamed-chunk-7-1.png","distriq_files/figure-html5/unnamed-chunk-9-1.png","distriq_files/header-attrs-2.5/header-attrs.js","distriq_files/header-attrs-2.7/header-attrs.js","distriq_files/htmlwidgets-1.5.3/htmlwidgets.js","distriq_files/jquery-1.11.3/jquery-AUTHORS.txt","distriq_files/jquery-1.11.3/jquery.js","distriq_files/jquery-1.11.3/jquery.min.js","distriq_files/jquery-1.11.3/jquery.min.map","distriq_files/plotly-binding-4.9.2.2/plotly.js","distriq_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css","distriq_files/plotly-main-1.52.2/plotly-latest.min.js","distriq_files/popper-2.6.0/popper.min.js","distriq_files/tippy-6.2.7/tippy-bundle.umd.min.js","distriq_files/tippy-6.2.7/tippy-light-border.css","distriq_files/tippy-6.2.7/tippy.css","distriq_files/tippy-6.2.7/tippy.umd.min.js","distriq_files/typedarray-0.1/typedarray.min.js","distriq_files/webcomponents-2.0.0/webcomponents.js","fiscal1.res.gz","fiscal10.res","fiscal20.res","gini-1-0.res.gz","gini-1-1.res","gini-20-0.res","gini-20-1.res","moneymodel.bib","prob-wealth1.res.gz","prob-wealth20.res","wealth1-red0.res","wealth1-red1.res","wealth20-red1.res"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content="../.."/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="../../site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="../../site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+d-byline .byline {
+  grid-template-columns: 2fr 2fr;
+}
+
+d-byline .byline h3 {
+  margin-block-start: 1.5em;
+}
+
+d-byline .byline .authors-affiliations h3 {
+  margin-block-start: 0.5em;
+}
+
+.authors-affiliations .orcid-id {
+  width: 16px;
+  height:16px;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  padding-bottom: 2px;
+}
+
+d-title .dt-tags {
+  margin-top: 1em;
+  grid-column: text;
+}
+
+.dt-tags .dt-tag {
+  text-decoration: none;
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0em 0.4em;
+  margin-right: 0.5em;
+  margin-bottom: 0.4em;
+  font-size: 70%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+d-article table.gt_table td,
+d-article table.gt_table th {
+  border-bottom: none;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-top: 2.5rem;
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article h2 {
+  margin: 1rem 0 1.5rem 0;
+}
+
+d-article h3 {
+  margin-top: 1.5rem;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+/* Tweak code blocks */
+
+d-article div.sourceCode code,
+d-article pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: auto;
+}
+
+d-article div.sourceCode {
+  background-color: white;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+d-article pre {
+  font-size: 12px;
+  color: black;
+  background: none;
+  margin-top: 0;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+d-article pre a {
+  border-bottom: none;
+}
+
+d-article pre a:hover {
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+d-article details {
+  grid-column: text;
+  margin-bottom: 0.8em;
+}
+
+@media(min-width: 768px) {
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: visible !important;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+d-article pre {
+  font-size: 14px;
+}
+
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for d-contents */
+
+.d-contents {
+  grid-column: text;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.9em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 0.25em;
+  justify-self: start;
+}
+
+@media(min-width: 1000px) {
+  .d-contents.d-contents-float {
+    height: 0;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: center;
+    padding-right: 3em;
+    padding-left: 2em;
+  }
+}
+
+.d-contents nav h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.d-contents li {
+  list-style-type: none
+}
+
+.d-contents nav > ul {
+  padding-left: 0;
+}
+
+.d-contents ul {
+  padding-left: 1em
+}
+
+.d-contents nav ul li {
+  margin-top: 0.6em;
+  margin-bottom: 0.2em;
+}
+
+.d-contents nav a {
+  font-size: 13px;
+  border-bottom: none;
+  text-decoration: none
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.d-contents nav a:hover {
+  text-decoration: underline solid rgba(0, 0, 0, 0.6)
+}
+
+.d-contents nav > ul > li > a {
+  font-weight: 600;
+}
+
+.d-contents nav > ul > li > ul {
+  font-weight: inherit;
+}
+
+.d-contents nav > ul > li > ul > li {
+  margin-top: 0.2em;
+}
+
+
+.d-contents nav ul {
+  margin-top: 0;
+  margin-bottom: 0.25em;
+}
+
+.d-article-with-toc h2:nth-child(2) {
+  margin-top: 0;
+}
+
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+/* Citations */
+
+d-article .citation {
+  color: inherit;
+  cursor: inherit;
+}
+
+div.hanging-indent{
+  margin-left: 1em; text-indent: -1em;
+}
+
+/* Citation hover box */
+
+.tippy-box[data-theme~=light-border] {
+  background-color: rgba(250, 250, 250, 0.95);
+}
+
+.tippy-content > p {
+  margin-bottom: 0;
+  padding: 2px;
+}
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Include appendix styles here so they can be overridden */
+
+d-appendix {
+  contain: layout style;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-top: 60px;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0,0,0,0.5);
+  padding-top: 60px;
+  padding-bottom: 48px;
+}
+
+d-appendix h3 {
+  grid-column: page-start / text-start;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 1em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.65);
+}
+
+d-appendix h3 + * {
+  margin-top: 1em;
+}
+
+d-appendix ol {
+  padding: 0 0 0 15px;
+}
+
+@media (min-width: 768px) {
+  d-appendix ol {
+    padding: 0 0 0 30px;
+    margin-left: -30px;
+  }
+}
+
+d-appendix li {
+  margin-bottom: 1em;
+}
+
+d-appendix a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+d-appendix > * {
+  grid-column: text;
+}
+
+d-appendix > d-footnote-list,
+d-appendix > d-citation-list,
+d-appendix > distill-appendix {
+  grid-column: screen;
+}
+
+/* Include footnote styles here so they can be overridden */
+
+d-footnote-list {
+  contain: layout style;
+}
+
+d-footnote-list > * {
+  grid-column: text;
+}
+
+d-footnote-list a.footnote-backlink {
+  color: rgba(0,0,0,0.3);
+  padding-left: 0.5em;
+}
+
+
+
+/* Anchor.js */
+
+.anchorjs-link {
+  /*transition: all .25s linear; */
+  text-decoration: none;
+  border-bottom: none;
+}
+*:hover > .anchorjs-link {
+  margin-left: -1.125em !important;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+.sidebar-section.custom {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.custom p {
+  margin-bottom: 0.5em;
+}
+
+/* Styles for listing layout (hide title) */
+.layout-listing d-title, .layout-listing .d-title {
+  display: none;
+}
+
+/* Styles for posts lists (not auto-injected) */
+
+
+.posts-with-sidebar {
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.posts-list .description h2,
+.posts-list .description p {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+.posts-list .description h2 {
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.posts-list h2.post-tag {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 12px;
+}
+.posts-list {
+  margin-top: 60px;
+  margin-bottom: 24px;
+}
+
+.posts-list .post-preview {
+  text-decoration: none;
+  overflow: hidden;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+.post-preview-last {
+  border-bottom: none !important;
+}
+
+.posts-list .posts-list-caption {
+  grid-column: screen;
+  font-weight: 400;
+}
+
+.posts-list .post-preview h2 {
+  margin: 0 0 6px 0;
+  line-height: 1.2em;
+  font-style: normal;
+  font-size: 24px;
+}
+
+.posts-list .post-preview p {
+  margin: 0 0 12px 0;
+  line-height: 1.4em;
+  font-size: 16px;
+}
+
+.posts-list .post-preview .thumbnail {
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  position: relative;
+  max-width: 500px;
+}
+.posts-list .post-preview img {
+  width: 100%;
+  display: block;
+}
+
+.posts-list .metadata {
+  font-size: 12px;
+  line-height: 1.4em;
+  margin-bottom: 18px;
+}
+
+.posts-list .metadata > * {
+  display: inline-block;
+}
+
+.posts-list .metadata .publishedDate {
+  margin-right: 2em;
+}
+
+.posts-list .metadata .dt-authors {
+  display: block;
+  margin-top: 0.3em;
+  margin-right: 2em;
+}
+
+.posts-list .dt-tags {
+  display: block;
+  line-height: 1em;
+}
+
+.posts-list .dt-tags .dt-tag {
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0.3em 0.4em;
+  margin-right: 0.2em;
+  margin-bottom: 0.4em;
+  font-size: 60%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.posts-list img {
+  opacity: 1;
+}
+
+.posts-list img[data-src] {
+  opacity: 0;
+}
+
+.posts-more {
+  clear: both;
+}
+
+
+.posts-sidebar {
+  font-size: 16px;
+}
+
+.posts-sidebar h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.categories ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.categories li {
+  color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+
+.categories li>a {
+  border-bottom: none;
+}
+
+.categories li>a:hover {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.categories .active {
+  font-weight: 600;
+}
+
+.categories .category-count {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+
+@media(min-width: 768px) {
+  .posts-list .post-preview h2 {
+    font-size: 26px;
+  }
+  .posts-list .post-preview .thumbnail {
+    float: right;
+    width: 30%;
+    margin-bottom: 0;
+  }
+  .posts-list .post-preview .description {
+    float: left;
+    width: 45%;
+  }
+  .posts-list .post-preview .metadata {
+    float: left;
+    width: 20%;
+    margin-top: 8px;
+  }
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.5em;
+    font-size: 16px;
+  }
+  .posts-with-sidebar .posts-list {
+    float: left;
+    width: 75%;
+  }
+  .posts-with-sidebar .posts-sidebar {
+    float: right;
+    width: 20%;
+    margin-top: 60px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.downlevel .posts-list .post-preview {
+  color: inherit;
+}
+
+
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // add anchors
+  if (window.anchors) {
+    window.anchors.options.placement = 'left';
+    window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+  }
+
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  // move refs into #references-listing
+  $('#references-listing').replaceWith($('#refs'));
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-contents a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('details, div.sourceCode, pre, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // remove code block used to force  highlighting css
+  $('.distill-force-highlighting-css').parent().remove();
+
+  // remove empty line numbers inserted by pandoc when using a
+  // custom syntax highlighting theme
+  $('code.sourceCode a:empty').remove();
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // article with toc class
+    $('.d-contents').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // add orcid ids
+    $('.authors-affiliations').find('.author').each(function(i, el) {
+      var orcid_id = front_matter.authors[i].orcidID;
+      if (orcid_id) {
+        var a = $('<a></a>');
+        a.attr('href', 'https://orcid.org/' + orcid_id);
+        var img = $('<img></img>');
+        img.addClass('orcid-id');
+        img.attr('alt', 'ORCID ID');
+        img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+        a.append(img);
+        $(this).append(a);
+      }
+    });
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // remove d-appendix and d-footnote-list local styles
+    $('d-appendix > style:first-child').remove();
+    $('d-footnote-list > style:first-child').remove();
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // hoverable references
+    $('span.citation[data-cites]').each(function() {
+      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      window.tippy(this, {
+        allowHTML: true,
+        content: refHtml,
+        maxWidth: 500,
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start'
+      });
+    });
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-contents').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.7/header-attrs.js"></script>
+  <script src="../../site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+  <script src="../../site_libs/plotly-binding-4.9.2.2/plotly.js"></script>
+  <script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <link href="../../site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+  <script src="../../site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+  <link href="../../site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+  <script src="../../site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+  <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
+  <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="../../site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Modelo - Distribuição de Riqueza","description":"Esse texto descreve e analisa o modelo baseado em agentes \"Money Model\". Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo.","authors":[{"author":"Rafael Peixoto","authorURL":{},"affiliation":"Universidade Estadual de Campinas","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-04-21T00:00:00.000-03:00","citationText":"Peixoto, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">Macroeconomia Baseada em Agentes</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Posts</a>
+<a href="../../about.html">Sobre</a>
+<a href="../../gallery.html">Galeria</a>
+<a href="../../index.xml">
+<i class="fa fa-rss" aria-hidden="true"></i>
+</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Modelo - Distribuição de Riqueza</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+  <a href="../../index.html#category:Modelos" class="dt-tag">Modelos</a>
+  <a href="../../index.html#category:LSD" class="dt-tag">LSD</a>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>Esse texto descreve e analisa o modelo baseado em agentes “Money Model”. Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o <strong>Mesa</strong>, em <a href="https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html" class="uri">https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html</a>. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo.</p></p>
+</div>
+
+<div class="d-byline">
+  Rafael Peixoto true (Universidade Estadual de Campinas)
+  
+<br/>04-21-2021
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#modelo">Modelo</a>
+<ul>
+<li><a href="#estrutura-do-modelo">Estrutura do modelo</a></li>
+</ul></li>
+<li><a href="#equações">Equações</a></li>
+<li><a href="#análise-de-sensibilidade">Análise de Sensibilidade</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
+</ul>
+</nav>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<style type="text/css">
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
+</style>
+</div>
+<h2 id="introdução">Introdução</h2>
+<p>Esse modelo se baseia no artigo de <span class="citation" data-cites="drǎgulescu2003statistical"><a href="#ref-drǎgulescu2003statistical" role="doc-biblioref">Drǎgulescu e Yakovenko</a> (<a href="#ref-drǎgulescu2003statistical" role="doc-biblioref">2003</a>)</span> em que os autores comparam o equilíbrio da mecânica estatística com o ‘equilíbrio’ das transações monetárias entre os agentes. Em toda transação, o dinheiro é transferido de um agente para o outro, porém a quantidade total de dinheiro é conservada. No modelo aqui analisado, porém, ao invés dos agentes transacionarem dinheiro entre si, eles pagam um imposto ao governo e esse, por sua vez, distribui todo o dinheiro arrecadado entre os agentes (escolhendo-os de forma aleatória). Mantém-se a condição de que a quantidade inicial de dinheiro é igual para todos os agentes, e a de que os agentes só transferem dinheiro caso possuam no mínimo 1 unidade deste. O objetivo do modelo é observar a distribuição do dinheiro entre os agentes e a forma como essa muda ao longo do tempo. Para calcular essa distribuição, utiliza-se o índice de Gini, que mede o grau de concentração de renda.</p>
+<h2 id="modelo">Modelo</h2>
+<p>O modelo é composto por um número <code>N</code> de agentes que, em cada período, transferem uma unidade de dinheiro (caso tenham), <code>wealth</code>, para o governo, ou seja, pagam uma <code>Tax</code>. O governo, por sua vez, distribui todo o dinheiro assim arrecado entre os agentes, ou seja, pagam uma assistência, <code>Assist</code> para esses (escolhidos de forma aleatória). Adicionalmente, o modelo computada, em cada período, o Índice de Gini, <code>gini</code>, a partir da seguinte fórmula:</p>
+<p><span class="math display" id="eq:gini">\[\begin{equation}
+gini = \frac{2}{n^2\bar{x}}\sum_{i=1}^ni(x_i-\bar{x}) \tag{1}
+\end{equation}\]</span></p>
+<p>onde <span class="math inline">\(x_i\)</span> é a <code>wealth</code> de cada agente <span class="math inline">\(i\)</span>, <span class="math inline">\(\bar{x}\)</span> é a média, e essas riquezas estão enumeradas de forma ascendente.</p>
+<h3 id="estrutura-do-modelo">Estrutura do modelo</h3>
+<p>O modelo, no LSD, possui a seguinte estrutura (de objetos, ou agentes):</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-2-1.png" width="40%" style="display: block; margin: auto;" /></p>
+</div>
+<p>O Mundo é o objeto <em>origem</em>, do qual descendem os objetos Agente e Governo.<br />
+Cada um dos objetos contêm um conjunto de variáveis e parâmetros (cujos valores podem variar para cada <em>cópia</em> do objeto):</p>
+<div style="display: flex; justify-content: center; line-height: 20px;">
+<table style="width:71%;">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Variável</th>
+<th style="text-align: center;">Parâmetro</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mundo</strong></td>
+<td style="text-align: center;"><code>Init</code><br />
+<code>Gini</code><br />
+<code>Avg</code><br />
+<code>InitAssist</code><br />
+<code>InitTax</code><br />
+<code>TotalWealth</code><br />
+</td>
+<td style="text-align: center;"><code>N</code><br />
+<code>InitWealth</code><br />
+<code>Redistrib</code><br />
+<code>InitFiscal</code><br />
+</td>
+</tr>
+<tr class="even">
+<td><strong>Agente</strong></td>
+<td style="text-align: center;"><code>Wealth</code><br />
+<code>Prob</code><br />
+<code>Tax</code><br />
+</td>
+<td style="text-align: center;"><code>IdAgente</code><br />
+<code>Income</code><br />
+</td>
+</tr>
+<tr class="odd">
+<td><strong>Governo</strong></td>
+<td style="text-align: center;"><code>Fiscal</code><br />
+<code>Assist</code><br />
+</td>
+<td style="text-align: center;"><code>GovIncome</code><br />
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Vejamos como é implementada cada Equação para essas variáveis, juntamente com os parâmetros necessários.</p>
+<h2 id="equações">Equações</h2>
+<p>O modelo inteiro é constituído por 11 equações (11 variáveis). Dessas, as equações de <code>Init</code>, <code>InitAssist</code>, <code>InitTax</code>, <code>Tax</code> e <code>Assist</code> retornam sempre o valor 1, sendo sua finalidade configurar alguns parâmetros e variáveis. A variável <code>Gini</code> é a de maior interesse do modelo, pois indica a concentração de renda entre os agentes. As variáveis <code>Avg</code> e <code>TotalWealth</code> servem para indicar que o modelo está se comportando como planejado, ou seja, mantendo inalterado a riqueza total e a “per capita”. A variável <code>Wealth</code> computa qual a riqueza de cada agente, sendo que em cada período essa riqueza pode aumentar ou diminuir, a depender se o agente doa ou recebe (e quanto) riqueza. A variável <code>Prob</code> computa a probabilidade de cada agente em ser escolhido para receber uma doação de riqueza, sendo que essa probabilidade é inversamente proporcional à sua riqueza — no caso em que o parâmetro <code>Redistrib</code> for ajustado para 1 (caso seja zero, todas as <code>Prob</code> são iguais). A variável <code>Fiscal</code> computa a riqueza do Governo, após receber os impostos e pagar a assistência.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb1" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//#define EIGENLIB          // uncomment to use Eigen linear algebra library</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//#define NO_POINTER_INIT   // uncomment to disable pointer checking</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fun_head_fast.h&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>MODELBEGIN</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">// insert your equations here, between the MODELBEGIN and MODELEND words</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">Model initialization</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;N&quot;</span>);</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = COUNT(<span class="st">&quot;Agente&quot;</span>);</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i = v[<span class="dv">1</span>]; i &lt; v[<span class="dv">0</span>]; ++i)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    ADDOBJL(<span class="st">&quot;Agente&quot;</span>, <span class="dv">0</span>);             <span class="co">// add missing objects</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = V(<span class="st">&quot;InitWealth&quot;</span>);</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>]++;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Wealth&quot;</span>, v[<span class="dv">3</span>], <span class="dv">0</span>);</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;IdAgente&quot;</span>, v[<span class="dv">2</span>], <span class="dv">0</span>);</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Prob&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>);</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>);</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = V(<span class="st">&quot;InitFiscal&quot;</span>);</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>cur1 = SEARCH(<span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>WRITELS(cur1, <span class="st">&quot;Fiscal&quot;</span>, v[<span class="dv">4</span>], <span class="dv">0</span>);</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>WRITELS(cur1, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>);</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>PARAMETER;</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Prob&quot;</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">Compute Agent&#39;s probability of being chosen to receive wealth</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Wealth&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Redistrib&quot;</span>);</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">1</span>;</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (v[<span class="dv">0</span>] == <span class="dv">0</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">2</span>] = <span class="dv">1</span>;</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">2</span>] = <span class="dv">1</span> / v[<span class="dv">0</span>];</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitAssist&quot;</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co">Comment</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTax&quot;</span>)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co">Comment</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>WRITES(cur, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Tax&quot;</span>)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co">Tax payment by agents</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTax&quot;</span>);</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitAssist&quot;</span>);</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Wealth&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (v[<span class="dv">0</span>] &gt; <span class="dv">0</span>)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    cur = SEARCHS(PARENT, <span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    INCR(<span class="st">&quot;Income&quot;</span>, -<span class="dv">1</span>);</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Assist&quot;</span>)</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="co">Assist payment to agents, by governmnet</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Fiscal&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (v[<span class="dv">0</span>] &gt; <span class="dv">0</span>)</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    cur = RNDDRAWS(PARENT, <span class="st">&quot;Agente&quot;</span>, <span class="st">&quot;Prob&quot;</span>);</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    INCR(<span class="st">&quot;GovIncome&quot;</span>, -<span class="dv">1</span>);</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>]--;</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Fiscal&quot;</span>)</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="co">Compute Government Fiscal balance</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;Assist&quot;</span>);</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>CYCLES(PARENT, cur1, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    VS(cur1, <span class="st">&quot;Tax&quot;</span>);</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = CURRENT;</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;GovIncome&quot;</span>);</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Wealth&quot;</span>)</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="co">Compute each agent&#39;s wealth</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>CYCLES(PARENT, cur1, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    VS(cur1, <span class="st">&quot;Tax&quot;</span>);</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>VS(PARENT, <span class="st">&quot;Assist&quot;</span>);</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = CURRENT;</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Income&quot;</span>);</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Gini&quot;</span>)</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="co">Comment</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>SORT(<span class="st">&quot;Agente&quot;</span>, <span class="st">&quot;Wealth&quot;</span>, <span class="st">&quot;UP&quot;</span>);</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = <span class="dv">0</span>;</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = AVE(<span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (T == <span class="dv">1</span>)</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">6</span>] = <span class="fl">0.01</span>;</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a> CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a> {</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>]++;</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = VS(cur, <span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">4</span>] = v[<span class="dv">2</span>] * (v[<span class="dv">3</span>] - v[<span class="dv">1</span>]);</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = v[<span class="dv">0</span>] + v[<span class="dv">4</span>];</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">5</span>] = V(<span class="st">&quot;N&quot;</span>);</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">6</span>] = v[<span class="dv">0</span>] * (<span class="dv">2</span> / (v[<span class="dv">1</span>] * v[<span class="dv">5</span>] * v[<span class="dv">5</span>]));</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">6</span>])</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Avg&quot;</span>)</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="co">Average Wealth</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = SUM(<span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;N&quot;</span>);</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] / v[<span class="dv">1</span>];</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;TotalWealth&quot;</span>)</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="co">World&#39;s total wealth</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = SUM(<span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Fiscal&quot;</span>);</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>MODELEND</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a><span class="co">// do not add Equations in this area</span></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> close_sim( <span class="dt">void</span> )</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>    <span class="co">// close simulation special commands go here</span></span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis (ou funções) que fazem parte do modelo. Em todos os casos abaixo, o parâmetro <code>N</code> está ajustado para 100, a menos que indicado de outra forma.</p>
+<h5 id="equationinit">EQUATION(“Init”)</h5>
+<p>Essa equação tem como finalidade inicializar o modelo. Mais especificamente, ela cria uma quantidade de cópias do objeto “Agente” igual ao número estabelecido pelo parâmetro <code>N</code> — a macro <code>ADDOBJL("Agente", 0)</code> estabelece o período 0 para a criação desses agentes. Para cada uma dessas cópias, inicializa as variáveis <code>Wealth</code> — para o valor do parâmetro <code>InitWealth</code> — e <code>Prob</code> — para 1 —, além dos parâmetros <code>IdAgente</code> e <code>Income</code>. Além disso, inicializa, para o agente Governo, a variável <code>Fiscal</code> e o parâmetro <code>GovIncome</code>. No final, a equação transforma a variável <code>Init</code> em um parâmetro.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb2" style="max-height: 600px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Init&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">Model initialization</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = V(<span class="st">&quot;N&quot;</span>);</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = COUNT(<span class="st">&quot;Agente&quot;</span>);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i = v[<span class="dv">1</span>]; i &lt; v[<span class="dv">0</span>]; ++i)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    ADDOBJL(<span class="st">&quot;Agente&quot;</span>, <span class="dv">0</span>); </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">3</span>] = V(<span class="st">&quot;InitWealth&quot;</span>);</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>]++;</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Wealth&quot;</span>, v[<span class="dv">3</span>], <span class="dv">0</span>);</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;IdAgente&quot;</span>, v[<span class="dv">2</span>], <span class="dv">0</span>);</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Prob&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>);</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    WRITELS(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>);</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">4</span>] = V(<span class="st">&quot;InitFiscal&quot;</span>);</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>cur1 = SEARCH(<span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>WRITELS(cur1, <span class="st">&quot;Fiscal&quot;</span>, v[<span class="dv">4</span>], <span class="dv">0</span>);</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>WRITELS(cur1, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>);</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>PARAMETER;</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<h5 id="equationprob">EQUATION(“Prob”)</h5>
+<p>Essa equação tem como finalidade computar uma variável que servirá de proporção para a probabilidade de um agente ser escolhido pelo governo para receber uma unidade de riqueza. Caso o parâmetro <code>Redistrib</code> seja ajustado para 0, todos os agentes possuem a mesma probabilidade de serem escolhidos, uma vez a variável <code>Prob</code> será igual a 1 para todos. Caso <code>Redistrib</code> seja diferente de 0: <span class="math inline">\(\small Prob = \frac{1}{Wealth}\)</span>, a menos que <code>Wealth</code> seja zero, caso em que <span class="math inline">\(\small Prob = 1\)</span>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb3" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Prob&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">Compute Agent&#39;s probability of being chosen to receive wealth</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Wealth&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Redistrib&quot;</span>);</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (v[<span class="dv">1</span>] == <span class="dv">0</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>] = <span class="dv">1</span>;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (v[<span class="dv">0</span>] == <span class="dv">0</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">2</span>] = <span class="dv">1</span>;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">2</span>] = <span class="dv">1</span> / v[<span class="dv">0</span>];</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
+</div>
+<p>Vejamos alguns exemplos do comportamento dessa variável (lembrando que <span class="math inline">\(\small N=100\)</span>). Vale ressaltar aqui que essa variável não indica a probabilidade estatística de o agente ser escolhido, ela é um valor de referência para o cálculo das probabilidades.</p>
+<p><span class="math display">\[
+\small
+P(Agente) = \frac{Prob_{Agente}}{\sum Prob}
+\]</span></p>
+<p><strong>Caso 1</strong>: começamos com o exemplo clássico em que cada agente começa com 1 riqueza e não há diferença nas probabilidades de ser escolhido, ou seja:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 0
+\end{cases}\\
+\end{aligned}
+\]</span></p>
+<p>Nesse caso, a <code>Prob</code> de todos os agentes é simplesmente uma reta com valor 1.</p>
+<p><strong>Caso 2</strong>: Vejamos agora o mesmo caso porém com redistribuição:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+\]</span> Para facilitar a visualização, será colocado no gráfico apenas a <code>Prob</code> de 5 agentes.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<p>Observa-se que é muito recorrente que o agentes possuam <code>Prob</code> igual a 1, uma vez que é recorrente que tenham apenas 0 ou 1 de riqueza (como ficará mais claro no gráfico de riqueza mostrada mais adiante).</p>
+<p><strong>Caso 3</strong>: Vejamos agora o caso com redistribuição, mas riqueza inicial igual a 20:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 20 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+\]</span></p>
+<p>Novamente, para facilitar a visualização, será colocado no gráfico apenas a <code>Prob</code> de 5 agentes.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<p>Nesse caso em que os agentes começam com 20 de riqueza, se torna muito mais raro que cheguem a ter pouco dinheiro, então as <code>Prob</code> de cada agente ficam mais próximas uma da outra.</p>
+<h5 id="equationinitassist">EQUATION(“InitAssist”)</h5>
+<p>Essa equação tem como finalidade inicializar a distribuição de assistência, <code>Assist</code>, pelo governo, em cada período. Para isso, ela ajusta para 0 a renda, <code>Income</code>, de cada agente, para que essa não se some à renda do período anterior. A equação sempre retorna o valor 1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb4" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitAssist&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize government&#39;s assistence</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    WRITES(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<h5 id="equationinittax">EQUATION(“InitTax”)</h5>
+<p>Essa equação tem como finalidade inicializar o pagamento de impostos, <code>Tax</code>, pelos agentes, em cada período. Para isso, ela ajusta para 0 a renda do governo, <code>GovIncome</code>, para que essa não se some à do período anterior. A equação sempre retorna o valor 1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb5" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;InitTax&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">Initialize agent&#39;s tax</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>cur = SEARCH(<span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>WRITES(cur, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">0</span>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<h5 id="equationtax">EQUATION(“Tax”)</h5>
+<p>Essa equação tem como finalidade realizar o pagamento de impostos de cada agente. Para tanto, primeiramente ela reseta os valores das rendas dos agentes e do governo — essa é a primeira coisa que acontece em cada período. Após isso, ela busca o valor da riqueza do agente, para verificar se essa é maior que 0. Caso o agente possua riqueza, <span class="math inline">\(\small Wealth &gt; 0\)</span>, ele paga 1 de imposto para o governo, descontando da sua renda. A equação sempre retorna o valor 1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb6" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Tax&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">Tax payment by agents</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitTax&quot;</span>);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;InitAssist&quot;</span>);</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Wealth&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (v[<span class="dv">0</span>] &gt; <span class="dv">0</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    cur = SEARCHS(PARENT, <span class="st">&quot;Governo&quot;</span>);</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;GovIncome&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    INCR(<span class="st">&quot;Income&quot;</span>, -<span class="dv">1</span>);</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<h5 id="equationassist">EQUATION(“Assist”)</h5>
+<p>Essa equação tem como finalidade realizar a distribuição de assistência pelo governo. Para tanto, ela busca a riqueza do governo, <code>Fiscal</code>, no período anterior e a distribui inteira para os agentes. A distribuição é feita de forma aleatória, com base nas probabilidades de <code>Prob</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb7" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Assist&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assist payment to agents, by governmnet</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = VL(<span class="st">&quot;Fiscal&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (v[<span class="dv">0</span>] &gt; <span class="dv">0</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    cur = RNDDRAWS(PARENT, <span class="st">&quot;Agente&quot;</span>, <span class="st">&quot;Prob&quot;</span>);</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    INCRS(cur, <span class="st">&quot;Income&quot;</span>, <span class="dv">1</span>);</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    INCR(<span class="st">&quot;GovIncome&quot;</span>, -<span class="dv">1</span>);</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>]--;</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>RESULT(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<h5 id="equationfiscal">EQUATION(“Fiscal”)</h5>
+<p>Essa equação tem como finalidade computar a riqueza do governo, <code>Fiscal</code>. Para tanto, ela verifica se o governo já distribuiu a assistência e se os agentes já pagaram impostos. Feito isso, a equação busca o valor da riqueza do governo no período anterior, assim como sua renda no período corrente. O resultado retornado é simplesmente a soma desses dois valores.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb8" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Fiscal&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">Compute Government Fiscal balance</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>V(<span class="st">&quot;Assist&quot;</span>);</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>CYCLES(PARENT, cur1, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    VS(cur1, <span class="st">&quot;Tax&quot;</span>);</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = CURRENT;</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;GovIncome&quot;</span>);</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
+</div>
+<p>Vejamos alguns exemplos do comportamento dessa variável (com <span class="math inline">\(\small N=100\)</span> e <span class="math inline">\(\small InitFiscal=100\)</span>).</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<p>O gráfico deixa claro que, conforme aumenta riqueza inicial dos agentes, mais perto fica da estabilidade a riqueza do governo. Isso é devido ao fato de que o governo não recebe impostos de agentes com riqueza igual a zero, porém é obrigado mesmo assim a distribuir toda a riqueza que possuía no período anterior. Portanto, quanto maior a <code>IniWealth</code>, menos agentes chegam a ter 0 de riqueza e portanto menos o governo precisa incorrer em deficits.</p>
+<h5 id="equationwealth">EQUATION(“Wealth”)</h5>
+<p>Essa equação tem como finalidade computar a riqueza, <code>Wealth</code>, de cada agente. Para tanto, primeiramente ela verifica se todos os agentes já pagaram impostos e se o governo ja distribuiu a assistência. Feito isso, a equação busca o valor da riqueza do agente em questão no período anterior, assim como sua renda no período corrente. O resultado retornado é simplesmente a soma desses dois valores.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb9" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Wealth&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">Compute each agent&#39;s wealth</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>CYCLES(PARENT, cur1, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    VS(cur1, <span class="st">&quot;Tax&quot;</span>);</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>VS(PARENT, <span class="st">&quot;Assist&quot;</span>);</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = CURRENT;</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = V(<span class="st">&quot;Income&quot;</span>);</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = v[<span class="dv">0</span>] + v[<span class="dv">1</span>];</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">2</span>])</span></code></pre></div>
+</div>
+<p>Vejamos alguns exemplos do comportamento dessa variável (lembrando que <span class="math inline">\(\small N=100\)</span>, e que para facilitar a visualização serão mostrados nos gráficos apenas o comportamento de 5 agentes).</p>
+<p><strong>Caso 1</strong>:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 0
+\end{cases}\\
+\end{aligned}
+\]</span></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+</div>
+<p>Como cada agente começa com apenas 1 de riqueza, é muito comum em cada período haver diversos agentes com 0 de riqueza (situação em que não pagam impostos, apenas esperam ser escolhidos para receber assistência).</p>
+<p><strong>Caso 2</strong>:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+\]</span></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
+</div>
+<p>A existência de diferentes probabilidades dos agentes serem escolhidos não altera muito a visualização do comportamento da riqueza de 5 agentes ao longo do tempo (altera mais as variáveis globais, que veremos a seguir).</p>
+<p><strong>Caso 3</strong>:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 20 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+\]</span></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-17-1.png" width="624" /></p>
+</div>
+<p>Como cada gente começa com 20 de riqueza, há bastante riqueza a ser distribuida e trocada, então se torna muito mais difícil (no gráfico, nenhum caso) que algum agente chegue a zero de riqueza.</p>
+<h5 id="equationgini">EQUATION(“Gini”)</h5>
+<p>Essa equação tem como finalidade computar o índice de Gini, <code>Gini</code>. Para tanto ela computa a fórmula <a href="#eq:gini">(1)</a>, indicada no início do texto. Inicialmente, a equação coloca em ordem crescente as <code>Wealth</code> de cada agente e computa a média dessa variável. Depois, a equação vai de agente em agente calculando a diferença entre a riqueza desse agente e a média, somando essas diferenças (<code>v[0]</code>), além de atribuir um índice crescente (de 0 a <code>N</code>) a cada agente de forma consecutiva, <code>v[2]</code>, o que faz parte da fórmula. Há um condição especial nessa equação, porém, que indica que no período 1, <code>T == 1</code> , o resultado a ser retornado será igual a 0.01. Isso é feito apenas para contornar o caso em que a média de riqueza dos agentes, no momento da computação dessa equação, é igual a zero (caso que ocorre quando <span class="math inline">\(\small InitWealth=1\)</span>). De toda forma, como no período 1 todos os agentes possuem riqueza igual, faz sentido associar um índice de gini baixo nesse período.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb10" style="max-height: 500px;"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>EQUATION(<span class="st">&quot;Gini&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">Compute the Gini Index</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>SORT(<span class="st">&quot;Agente&quot;</span>, <span class="st">&quot;Wealth&quot;</span>, <span class="st">&quot;UP&quot;</span>);</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">0</span>] = <span class="dv">0</span>;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>] = AVE(<span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">2</span>] = <span class="dv">0</span>;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (T == <span class="dv">1</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">6</span>] = <span class="fl">0.01</span>;</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a> CYCLE(cur, <span class="st">&quot;Agente&quot;</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a> {</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">2</span>]++;</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">3</span>] = VS(cur, <span class="st">&quot;Wealth&quot;</span>);</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">4</span>] = v[<span class="dv">2</span>] * (v[<span class="dv">3</span>] - v[<span class="dv">1</span>]);</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    v[<span class="dv">0</span>] = v[<span class="dv">0</span>] + v[<span class="dv">4</span>];</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">5</span>] = V(<span class="st">&quot;N&quot;</span>);</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        v[<span class="dv">6</span>] = v[<span class="dv">0</span>] * (<span class="dv">2</span> / (v[<span class="dv">1</span>] * v[<span class="dv">5</span>] * v[<span class="dv">5</span>]));</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>RESULT(v[<span class="dv">6</span>])</span></code></pre></div>
+</div>
+<p>Vejamos alguns exemplos do comportamento dessa variável.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-19-1.png" width="624" data-distill-preview=1 /></p>
+</div>
+<p>Como o gráfico mostra, tanto a riqueza inicial (<code>InitWealth</code>) quando a diferenciação das probabilidades de receber assistência do governo (<code>Redistrib</code>) possuem grande influência sobre o índice de Gini.</p>
+<h5 id="equationavg-e-equationtotalwealth">EQUATION(“Avg”) e EQUATION(“TotalWealth”)</h5>
+<p>Essas duas equações servem apenas para verificar se o modelo está sendo implementado da forma como se espera (um dos pressupostos do modelo é que a riqueza total do modelo se mantém constante).</p>
+<h2 id="análise-de-sensibilidade">Análise de Sensibilidade</h2>
+<p>A análise de sensibilidade (<em>SA</em>) busca avaliar como a incerteza nos resultados das simulações pode ser atribuída a diferentes fontes de incerteza nas equações e configurações do modelo. Para o modelo analisado nesse post, será feita uma análise de sensibilidade para a variável <code>Gini</code>, aplicando-se o método SVD (<em>Sobol Variance Decomposition</em>). Mais especificamente, o SVD será aplicado sobre um meta modelo ajustado pelo método de <em>Kriging</em>, usando a estratégia de amostragem NOLH (<em>Near Orthogonal Latin Hypercube</em>). O objetivo é entender qual dos parâmetros (<code>N</code>, <code>InitWealth</code> e <code>Redistrib</code>, <code>InitFiscal</code>) possui maior impacto sobre o resultado do modelo.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="distriq_files/figure-html5/unnamed-chunk-20-1.png" width="624" /></p>
+</div>
+<p>Como é possível observar no gráfico, a redistribuição da riqueza, <code>Redistrib</code> — que altera as probabilidades de os agentes serem escolhidos para receber assistência, colocando maior peso nos agentes com menor riqueza —, é o parâmetro que mais afeta o comportamento do índice de Gini, <code>Gini</code>, no modelo. Em segundo lugar está a riqueza inicial dos agentes, <code>InitWealth</code>. Em terceiro, a riqueza inicial do governo, <code>InitFiscal</code>, com efeitos de interação apenas. E em último lugar está o número de agentes, <code>N</code>, que praticamente não possui influência sobre o índice de Gini, nesse modelo.</p>
+<p>A partir do meta modelo é possível, também, criar um gráfico que infira o resultado da variável de interesse, <code>Gini</code>, a partir de combinações de parâmetros (no caso, os dois que mais influenciam nesse resultado, <code>Redistrib</code> e <code>InitWealth</code>).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-0516844ea0f5198e90ad" style="width:624px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0516844ea0f5198e90ad">{"x":{"visdat":{"47cc6a8054dc":["function () ","plotlyVisDat"]},"cur_data":"47cc6a8054dc","attrs":{"47cc6a8054dc":{"x":[2,6.08333333333333,10.1666666666667,14.25,18.3333333333333,22.4166666666667,26.5,30.5833333333333,34.6666666666667,38.75,42.8333333333333,46.9166666666667,51,55.0833333333333,59.1666666666667,63.25,67.3333333333333,71.4166666666667,75.5,79.5833333333333,83.6666666666667,87.75,91.8333333333333,95.9166666666667,100],"y":[0,0.0416666666666667,0.0833333333333333,0.125,0.166666666666667,0.208333333333333,0.25,0.291666666666667,0.333333333333333,0.375,0.416666666666667,0.458333333333333,0.5,0.541666666666667,0.583333333333333,0.625,0.666666666666667,0.708333333333333,0.75,0.791666666666667,0.833333333333333,0.875,0.916666666666667,0.958333333333333,1],"z":[[0.388262322816563,0.376316887303776,0.353156156004885,0.322237148486835,0.287358157061879,0.251810521700873,0.218621665708493,0.190108279623754,0.166408685223166,0.147291113409194,0.133128870094527,0.124198465051999,0.119817937453002,0.118932384211412,0.12043135678734,0.123482491774631,0.127476292968063,0.131972781823104,0.136660148394827,0.141322808297304,0.145816816922902,0.150051025376197,0.153972706139481,0.15755664864865,0.160796940303524],[0.35322082066132,0.343315907882724,0.324111510980069,0.298474119741685,0.269553196741471,0.240077850038538,0.212558353535479,0.188915657441117,0.169264455483964,0.153412569519333,0.141669536984761,0.134264634552578,0.13063239536739,0.129898115904394,0.131141035345244,0.133670975283751,0.136982554164927,0.140710950953946,0.144597619353392,0.148463801297473,0.152190140933435,0.155701059513538,0.158952836495678,0.16192456782163,0.164611350901767],[0.298543587694381,0.291822613100984,0.278791503616829,0.261395313148445,0.241771098388973,0.221770684829425,0.203097408559878,0.1870547237089,0.173720455926999,0.162964203012795,0.15499600089945,0.149971426039785,0.147506783912128,0.147008546406744,0.147851932960481,0.149568624298223,0.151815694723895,0.154345595633355,0.15698289095521,0.159606284777927,0.162134788452271,0.164517118201559,0.166723607573487,0.168740072195937,0.170563185460621],[0.254448205755727,0.250294947660128,0.242242367141481,0.231492416137025,0.219365678209397,0.207006477337741,0.195467378672112,0.185553845542703,0.177313971240107,0.170667173529774,0.165743243912093,0.16263832339778,0.16111531199395,0.160807439589077,0.161328622849318,0.162389463772683,0.163778051387687,0.165341413043914,0.166971138061883,0.168592271693594,0.170154767075037,0.171626933473409,0.172990438582497,0.174236517245658,0.175363113857667],[0.224866387107936,0.222435652285015,0.217722914577073,0.211431621223926,0.204334614042592,0.197101578008561,0.190348497194803,0.184546751568884,0.179724489350429,0.175834549870329,0.172952892407269,0.17113578813091,0.170244483978301,0.170064331136236,0.170369376265399,0.170990250700139,0.171802934735833,0.172717902064154,0.17367170606779,0.174620480053491,0.175534934541096,0.176396522877048,0.177194516349013,0.177923785357807,0.178583127021361],[0.206699421748316,0.205326419918855,0.202664658242152,0.199111465331822,0.195103294799955,0.191018333686208,0.187204439798639,0.183927820977541,0.181204379098581,0.179007477199491,0.17738001591694,0.176353787573251,0.175850441836524,0.175748748371055,0.17592108888631,0.176271804212494,0.176730848372023,0.177247657312558,0.177786396814936,0.178322291402965,0.178838798797571,0.179325444245848,0.179776168540173,0.180188074821252,0.18056048400791],[0.196108806133356,0.195352189458813,0.193885844126205,0.191928696945575,0.189721088961507,0.187471255676749,0.185370726702225,0.183566096950459,0.182066134143629,0.180856163078197,0.179959814818238,0.179394624244134,0.179117464237996,0.179061557243617,0.179156600294753,0.179349896490611,0.179602859109174,0.17988763388215,0.180184481065199,0.180479753037441,0.180764337714828,0.181032465490721,0.181280799169471,0.181507743590513,0.181712925274894],[0.190143431750378,0.189733541261098,0.188940093347863,0.187881633442623,0.186688014796013,0.185471704318722,0.184336133804456,0.183360512198925,0.182549598789288,0.181895450547326,0.181410849190638,0.181105324479732,0.180955611280741,0.180925590632483,0.180977223260788,0.181081996667211,0.181219033564063,0.18137326405914,0.181534009005713,0.181693885623151,0.181847965191306,0.181993127465367,0.182127568229552,0.182250425733274,0.182361499131796],[0.186863977921988,0.186643770664875,0.186219358839608,0.185654317097664,0.185017711281491,0.184369279752132,0.18376393707187,0.183243823676203,0.182811515235562,0.182462758690839,0.182204380585234,0.182041561152513,0.181961997916719,0.181946400428009,0.181974425763858,0.182030826896691,0.182104441062471,0.182187211853447,0.182273431312459,0.182359154460872,0.182441748697934,0.182519548452535,0.182591591767636,0.182657420487659,0.182716929667442],[0.185092907885352,0.18497329567433,0.184746419445794,0.184446590980429,0.184109954699714,0.183767614247866,0.183448112528439,0.183173525080991,0.182945288031668,0.182761119195681,0.182624647349051,0.182538805520653,0.182497298087036,0.18248987124871,0.182505658517014,0.182536517623679,0.182576490050312,0.182621277843138,0.18266783817375,0.182714070180859,0.182758573985485,0.182800466024926,0.182839238223466,0.182874651189319,0.182906653741064],[0.184148332875018,0.184078736602648,0.183953737869806,0.183792877816299,0.183614558988724,0.18343430028243,0.183266244607869,0.18312167540198,0.183001499350474,0.182904442233336,0.182832463480263,0.182787498258071,0.182766625110591,0.182764308074693,0.182774576075788,0.182792959211317,0.182816191586171,0.182841922224967,0.182868491131049,0.182894756390482,0.182919961187915,0.18294363195757,0.182965500760946,0.182985446462602,0.183003450446008],[0.183647189038725,0.183597016409952,0.183519268904184,0.183427287411293,0.18332970209778,0.183233151290054,0.183143482436837,0.183066075616788,0.183001709861902,0.182949561254474,0.182910774260079,0.182887147230221,0.18287788247035,0.182879748011869,0.182889059511225,0.182903066794496,0.182919770162869,0.18293773902669,0.182955971570229,0.182973786542517,0.182990740147689,0.18300656249838,0.183021109276824,0.183034325183372,0.183046216491509],[0.183377865868223,0.183324390781356,0.183258899505558,0.183194562181333,0.183134062695962,0.183078084245299,0.18302674962012,0.182981923183086,0.182944611426235,0.182914069228936,0.182891139687876,0.182878306136816,0.182876556744458,0.18288351317751,0.182896120074242,0.182912109729622,0.182929849211563,0.182948185049653,0.182966323317534,0.18298373739057,0.183000097293895,0.183015215851094,0.183029007869618,0.18304145941057,0.183052604831653],[0.183222952463478,0.183141800999075,0.18305871506054,0.18299269698286,0.182941707688655,0.182900786643571,0.182864387948419,0.182831710025483,0.182804445585442,0.182781588679109,0.182764065317354,0.182756175718555,0.182761144321495,0.182776362384994,0.182798010896703,0.182823271001594,0.182850132244628,0.182877192523365,0.182903503929556,0.182928454429638,0.182951677467357,0.182972983262325,0.182992306916487,0.183009669498352,0.183025149110068],[0.183113459586417,0.182968294229779,0.182830273042497,0.182732747567972,0.182668094036012,0.182623537338383,0.182585427705436,0.182549969178708,0.182520297251424,0.182494693660005,0.182474584940592,0.18246800925854,0.182481856660487,0.182512111470439,0.182552474105731,0.182598307124639,0.182646318393557,0.182694226428174,0.182740502732555,0.182784174240165,0.182824672552244,0.182861719514202,0.182895240922216,0.182925301931631,0.182952059143167],[0.18300080741674,0.182728424699075,0.182475222268735,0.182303431026697,0.182196580576617,0.182128575387881,0.182071772665086,0.182017763432882,0.181972489576041,0.181932771231035,0.181901159875948,0.181892926365206,0.181921610015394,0.181980030440416,0.182056657039486,0.182143008847056,0.182233074300974,0.18232269593066,0.18240909674964,0.182490517238632,0.182565938421753,0.182634871779676,0.182697200890827,0.182753062968988,0.182802761052035],[0.182837236524187,0.182322986350546,0.18184790353302,0.181529299663141,0.181334970941556,0.181214562409861,0.181114845984537,0.181019287453276,0.180939134883013,0.180868407419919,0.180811858092917,0.180798414194596,0.180853950275087,0.180965091394411,0.181110216389422,0.181273426329655,0.181443456355827,0.181612520453274,0.181775422340412,0.181928874031911,0.182070976064973,0.182200823222752,0.182318207379098,0.182423395244781,0.182516963653326],[0.182558220775986,0.181594438855135,0.180705541513046,0.18011129896547,0.179750801878002,0.179529133330982,0.179346015790228,0.179170132210705,0.179022578155148,0.178892155932027,0.178787741360424,0.178763596760855,0.178868371425695,0.17907708949581,0.179349303863052,0.179655274033313,0.179973930401123,0.1802907124163,0.180595904780252,0.180883362296869,0.181149537264925,0.181392741726147,0.181612591463153,0.18180959016297,0.181984821253844],[0.182062499956034,0.180280186216097,0.178637087473905,0.177539578760893,0.176874746652426,0.176466792932595,0.176130017943373,0.175806344385557,0.175534791523351,0.175294657162328,0.175102339417263,0.175058208996844,0.175252310036161,0.175638499793734,0.176142016472392,0.176707889166951,0.177297175021013,0.177882962966678,0.178447298115173,0.178978824606676,0.179470987730252,0.179920670189832,0.180327164345144,0.180691403555247,0.18101539256001],[0.181188194485131,0.177952297841324,0.174969512520077,0.172977614944953,0.171771469762795,0.171031773060851,0.170421250094247,0.169834378282343,0.169342003053506,0.168906541084745,0.168557756362348,0.168477889562443,0.168830459073405,0.169531711988929,0.170445931786265,0.171473329196074,0.172543211421238,0.173606727471865,0.174631284824895,0.175596270353755,0.176489786539769,0.177306175818044,0.178044154840459,0.178705419103742,0.179293608902935],[0.179691195349551,0.17396165292339,0.168680447671662,0.165153890621941,0.163018700101918,0.16170944655497,0.160628883732405,0.159590132676224,0.15871863545646,0.15794784762683,0.157330466131601,0.157189175557662,0.157813523123584,0.15905522491669,0.160673987276459,0.162493127971455,0.164387481911297,0.16627055627262,0.168084644822213,0.169793251540922,0.171375311874015,0.17282080942757,0.174127472564504,0.175298303813576,0.176339749028968],[0.177254877590563,0.167464765992878,0.158440813799853,0.152415119371925,0.148766909745415,0.146530000948361,0.144683844930521,0.142909101888317,0.141420116451417,0.140103184261954,0.139048347193477,0.138806981476375,0.139873847302473,0.14199557590611,0.144761579859992,0.147869964071098,0.151106860384464,0.154324479631833,0.157424220042909,0.160343721544833,0.163046991654834,0.165516915762661,0.167749612630484,0.169750212914746,0.171529730825415],[0.173623810525342,0.157780875522252,0.143177822762741,0.133426762940449,0.127523110453286,0.123903315535983,0.120915853888697,0.118043942578456,0.115634447090235,0.113503364628371,0.111796405430462,0.111405840214914,0.113132323073673,0.116565840083958,0.121041956402036,0.126072129064242,0.131310265119899,0.136517204247267,0.141533383854938,0.146257889637531,0.150632476753007,0.154629449551071,0.158242527334191,0.161480012931087,0.164359730245322],[0.169121585074213,0.14577327704998,0.124252244928007,0.10988178627472,0.101181400673795,0.0958468220607754,0.0914441333759982,0.0872117291976977,0.0836607979407401,0.0805201681364179,0.0780045778906458,0.0774289994655867,0.0799733875826178,0.0850334908607242,0.0916301083937888,0.0990432573228189,0.106762888383963,0.114436542687229,0.121829067312917,0.128791741377479,0.135238727479872,0.141129209630791,0.146453931803472,0.151225130220431,0.155469072641136],[0.166236222836127,0.13807787580654,0.112123251957349,0.0947923133556846,0.0842995560394994,0.0778660045715762,0.0725563229142898,0.0674520042266058,0.0631695480927463,0.0593819184272314,0.056348091901711,0.0556539414529035,0.0587225076351543,0.0648250562056013,0.0727806591097129,0.081721008379168,0.0910309784904531,0.10028549980833,0.109200975109144,0.117598045243895,0.12537318929866,0.132477182721995,0.138898862655082,0.144652986148355,0.149771232452698]],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"surface","contours":{"z":{"show":true,"usecolormap":true,"highlightcolor":"#ff0000","project":{"z":true}}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Meta-Model Response Surface","scene":{"xaxis":{"title":"InitWealth"},"yaxis":{"title":"Redistrib","nticks":2},"zaxis":{"title":"Gini","nticks":5,"range":[0,0.4]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"x":[2,6.08333333333333,10.1666666666667,14.25,18.3333333333333,22.4166666666667,26.5,30.5833333333333,34.6666666666667,38.75,42.8333333333333,46.9166666666667,51,55.0833333333333,59.1666666666667,63.25,67.3333333333333,71.4166666666667,75.5,79.5833333333333,83.6666666666667,87.75,91.8333333333333,95.9166666666667,100],"y":[0,0.0416666666666667,0.0833333333333333,0.125,0.166666666666667,0.208333333333333,0.25,0.291666666666667,0.333333333333333,0.375,0.416666666666667,0.458333333333333,0.5,0.541666666666667,0.583333333333333,0.625,0.666666666666667,0.708333333333333,0.75,0.791666666666667,0.833333333333333,0.875,0.916666666666667,0.958333333333333,1],"z":[[0.388262322816563,0.376316887303776,0.353156156004885,0.322237148486835,0.287358157061879,0.251810521700873,0.218621665708493,0.190108279623754,0.166408685223166,0.147291113409194,0.133128870094527,0.124198465051999,0.119817937453002,0.118932384211412,0.12043135678734,0.123482491774631,0.127476292968063,0.131972781823104,0.136660148394827,0.141322808297304,0.145816816922902,0.150051025376197,0.153972706139481,0.15755664864865,0.160796940303524],[0.35322082066132,0.343315907882724,0.324111510980069,0.298474119741685,0.269553196741471,0.240077850038538,0.212558353535479,0.188915657441117,0.169264455483964,0.153412569519333,0.141669536984761,0.134264634552578,0.13063239536739,0.129898115904394,0.131141035345244,0.133670975283751,0.136982554164927,0.140710950953946,0.144597619353392,0.148463801297473,0.152190140933435,0.155701059513538,0.158952836495678,0.16192456782163,0.164611350901767],[0.298543587694381,0.291822613100984,0.278791503616829,0.261395313148445,0.241771098388973,0.221770684829425,0.203097408559878,0.1870547237089,0.173720455926999,0.162964203012795,0.15499600089945,0.149971426039785,0.147506783912128,0.147008546406744,0.147851932960481,0.149568624298223,0.151815694723895,0.154345595633355,0.15698289095521,0.159606284777927,0.162134788452271,0.164517118201559,0.166723607573487,0.168740072195937,0.170563185460621],[0.254448205755727,0.250294947660128,0.242242367141481,0.231492416137025,0.219365678209397,0.207006477337741,0.195467378672112,0.185553845542703,0.177313971240107,0.170667173529774,0.165743243912093,0.16263832339778,0.16111531199395,0.160807439589077,0.161328622849318,0.162389463772683,0.163778051387687,0.165341413043914,0.166971138061883,0.168592271693594,0.170154767075037,0.171626933473409,0.172990438582497,0.174236517245658,0.175363113857667],[0.224866387107936,0.222435652285015,0.217722914577073,0.211431621223926,0.204334614042592,0.197101578008561,0.190348497194803,0.184546751568884,0.179724489350429,0.175834549870329,0.172952892407269,0.17113578813091,0.170244483978301,0.170064331136236,0.170369376265399,0.170990250700139,0.171802934735833,0.172717902064154,0.17367170606779,0.174620480053491,0.175534934541096,0.176396522877048,0.177194516349013,0.177923785357807,0.178583127021361],[0.206699421748316,0.205326419918855,0.202664658242152,0.199111465331822,0.195103294799955,0.191018333686208,0.187204439798639,0.183927820977541,0.181204379098581,0.179007477199491,0.17738001591694,0.176353787573251,0.175850441836524,0.175748748371055,0.17592108888631,0.176271804212494,0.176730848372023,0.177247657312558,0.177786396814936,0.178322291402965,0.178838798797571,0.179325444245848,0.179776168540173,0.180188074821252,0.18056048400791],[0.196108806133356,0.195352189458813,0.193885844126205,0.191928696945575,0.189721088961507,0.187471255676749,0.185370726702225,0.183566096950459,0.182066134143629,0.180856163078197,0.179959814818238,0.179394624244134,0.179117464237996,0.179061557243617,0.179156600294753,0.179349896490611,0.179602859109174,0.17988763388215,0.180184481065199,0.180479753037441,0.180764337714828,0.181032465490721,0.181280799169471,0.181507743590513,0.181712925274894],[0.190143431750378,0.189733541261098,0.188940093347863,0.187881633442623,0.186688014796013,0.185471704318722,0.184336133804456,0.183360512198925,0.182549598789288,0.181895450547326,0.181410849190638,0.181105324479732,0.180955611280741,0.180925590632483,0.180977223260788,0.181081996667211,0.181219033564063,0.18137326405914,0.181534009005713,0.181693885623151,0.181847965191306,0.181993127465367,0.182127568229552,0.182250425733274,0.182361499131796],[0.186863977921988,0.186643770664875,0.186219358839608,0.185654317097664,0.185017711281491,0.184369279752132,0.18376393707187,0.183243823676203,0.182811515235562,0.182462758690839,0.182204380585234,0.182041561152513,0.181961997916719,0.181946400428009,0.181974425763858,0.182030826896691,0.182104441062471,0.182187211853447,0.182273431312459,0.182359154460872,0.182441748697934,0.182519548452535,0.182591591767636,0.182657420487659,0.182716929667442],[0.185092907885352,0.18497329567433,0.184746419445794,0.184446590980429,0.184109954699714,0.183767614247866,0.183448112528439,0.183173525080991,0.182945288031668,0.182761119195681,0.182624647349051,0.182538805520653,0.182497298087036,0.18248987124871,0.182505658517014,0.182536517623679,0.182576490050312,0.182621277843138,0.18266783817375,0.182714070180859,0.182758573985485,0.182800466024926,0.182839238223466,0.182874651189319,0.182906653741064],[0.184148332875018,0.184078736602648,0.183953737869806,0.183792877816299,0.183614558988724,0.18343430028243,0.183266244607869,0.18312167540198,0.183001499350474,0.182904442233336,0.182832463480263,0.182787498258071,0.182766625110591,0.182764308074693,0.182774576075788,0.182792959211317,0.182816191586171,0.182841922224967,0.182868491131049,0.182894756390482,0.182919961187915,0.18294363195757,0.182965500760946,0.182985446462602,0.183003450446008],[0.183647189038725,0.183597016409952,0.183519268904184,0.183427287411293,0.18332970209778,0.183233151290054,0.183143482436837,0.183066075616788,0.183001709861902,0.182949561254474,0.182910774260079,0.182887147230221,0.18287788247035,0.182879748011869,0.182889059511225,0.182903066794496,0.182919770162869,0.18293773902669,0.182955971570229,0.182973786542517,0.182990740147689,0.18300656249838,0.183021109276824,0.183034325183372,0.183046216491509],[0.183377865868223,0.183324390781356,0.183258899505558,0.183194562181333,0.183134062695962,0.183078084245299,0.18302674962012,0.182981923183086,0.182944611426235,0.182914069228936,0.182891139687876,0.182878306136816,0.182876556744458,0.18288351317751,0.182896120074242,0.182912109729622,0.182929849211563,0.182948185049653,0.182966323317534,0.18298373739057,0.183000097293895,0.183015215851094,0.183029007869618,0.18304145941057,0.183052604831653],[0.183222952463478,0.183141800999075,0.18305871506054,0.18299269698286,0.182941707688655,0.182900786643571,0.182864387948419,0.182831710025483,0.182804445585442,0.182781588679109,0.182764065317354,0.182756175718555,0.182761144321495,0.182776362384994,0.182798010896703,0.182823271001594,0.182850132244628,0.182877192523365,0.182903503929556,0.182928454429638,0.182951677467357,0.182972983262325,0.182992306916487,0.183009669498352,0.183025149110068],[0.183113459586417,0.182968294229779,0.182830273042497,0.182732747567972,0.182668094036012,0.182623537338383,0.182585427705436,0.182549969178708,0.182520297251424,0.182494693660005,0.182474584940592,0.18246800925854,0.182481856660487,0.182512111470439,0.182552474105731,0.182598307124639,0.182646318393557,0.182694226428174,0.182740502732555,0.182784174240165,0.182824672552244,0.182861719514202,0.182895240922216,0.182925301931631,0.182952059143167],[0.18300080741674,0.182728424699075,0.182475222268735,0.182303431026697,0.182196580576617,0.182128575387881,0.182071772665086,0.182017763432882,0.181972489576041,0.181932771231035,0.181901159875948,0.181892926365206,0.181921610015394,0.181980030440416,0.182056657039486,0.182143008847056,0.182233074300974,0.18232269593066,0.18240909674964,0.182490517238632,0.182565938421753,0.182634871779676,0.182697200890827,0.182753062968988,0.182802761052035],[0.182837236524187,0.182322986350546,0.18184790353302,0.181529299663141,0.181334970941556,0.181214562409861,0.181114845984537,0.181019287453276,0.180939134883013,0.180868407419919,0.180811858092917,0.180798414194596,0.180853950275087,0.180965091394411,0.181110216389422,0.181273426329655,0.181443456355827,0.181612520453274,0.181775422340412,0.181928874031911,0.182070976064973,0.182200823222752,0.182318207379098,0.182423395244781,0.182516963653326],[0.182558220775986,0.181594438855135,0.180705541513046,0.18011129896547,0.179750801878002,0.179529133330982,0.179346015790228,0.179170132210705,0.179022578155148,0.178892155932027,0.178787741360424,0.178763596760855,0.178868371425695,0.17907708949581,0.179349303863052,0.179655274033313,0.179973930401123,0.1802907124163,0.180595904780252,0.180883362296869,0.181149537264925,0.181392741726147,0.181612591463153,0.18180959016297,0.181984821253844],[0.182062499956034,0.180280186216097,0.178637087473905,0.177539578760893,0.176874746652426,0.176466792932595,0.176130017943373,0.175806344385557,0.175534791523351,0.175294657162328,0.175102339417263,0.175058208996844,0.175252310036161,0.175638499793734,0.176142016472392,0.176707889166951,0.177297175021013,0.177882962966678,0.178447298115173,0.178978824606676,0.179470987730252,0.179920670189832,0.180327164345144,0.180691403555247,0.18101539256001],[0.181188194485131,0.177952297841324,0.174969512520077,0.172977614944953,0.171771469762795,0.171031773060851,0.170421250094247,0.169834378282343,0.169342003053506,0.168906541084745,0.168557756362348,0.168477889562443,0.168830459073405,0.169531711988929,0.170445931786265,0.171473329196074,0.172543211421238,0.173606727471865,0.174631284824895,0.175596270353755,0.176489786539769,0.177306175818044,0.178044154840459,0.178705419103742,0.179293608902935],[0.179691195349551,0.17396165292339,0.168680447671662,0.165153890621941,0.163018700101918,0.16170944655497,0.160628883732405,0.159590132676224,0.15871863545646,0.15794784762683,0.157330466131601,0.157189175557662,0.157813523123584,0.15905522491669,0.160673987276459,0.162493127971455,0.164387481911297,0.16627055627262,0.168084644822213,0.169793251540922,0.171375311874015,0.17282080942757,0.174127472564504,0.175298303813576,0.176339749028968],[0.177254877590563,0.167464765992878,0.158440813799853,0.152415119371925,0.148766909745415,0.146530000948361,0.144683844930521,0.142909101888317,0.141420116451417,0.140103184261954,0.139048347193477,0.138806981476375,0.139873847302473,0.14199557590611,0.144761579859992,0.147869964071098,0.151106860384464,0.154324479631833,0.157424220042909,0.160343721544833,0.163046991654834,0.165516915762661,0.167749612630484,0.169750212914746,0.171529730825415],[0.173623810525342,0.157780875522252,0.143177822762741,0.133426762940449,0.127523110453286,0.123903315535983,0.120915853888697,0.118043942578456,0.115634447090235,0.113503364628371,0.111796405430462,0.111405840214914,0.113132323073673,0.116565840083958,0.121041956402036,0.126072129064242,0.131310265119899,0.136517204247267,0.141533383854938,0.146257889637531,0.150632476753007,0.154629449551071,0.158242527334191,0.161480012931087,0.164359730245322],[0.169121585074213,0.14577327704998,0.124252244928007,0.10988178627472,0.101181400673795,0.0958468220607754,0.0914441333759982,0.0872117291976977,0.0836607979407401,0.0805201681364179,0.0780045778906458,0.0774289994655867,0.0799733875826178,0.0850334908607242,0.0916301083937888,0.0990432573228189,0.106762888383963,0.114436542687229,0.121829067312917,0.128791741377479,0.135238727479872,0.141129209630791,0.146453931803472,0.151225130220431,0.155469072641136],[0.166236222836127,0.13807787580654,0.112123251957349,0.0947923133556846,0.0842995560394994,0.0778660045715762,0.0725563229142898,0.0674520042266058,0.0631695480927463,0.0593819184272314,0.056348091901711,0.0556539414529035,0.0587225076351543,0.0648250562056013,0.0727806591097129,0.081721008379168,0.0910309784904531,0.10028549980833,0.109200975109144,0.117598045243895,0.12537318929866,0.132477182721995,0.138898862655082,0.144652986148355,0.149771232452698]],"type":"surface","contours":{"z":{"show":true,"usecolormap":true,"highlightcolor":"#ff0000","project":{"z":true}}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Um aspecto interessante desse meta modelo mostrado no gráfico é que a riqueza inicial, <code>Initwealth</code>, conforme vai aumentando, vai diminuindo o índice de gini, porém apenas até certo ponto. A partir de um valor em torno de 50, essa variável causa um aumento no índice.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>Esse modelo busca analisar a distribuição de riqueza em um mundo em que os agentes pagam imposto e recebem assistência do governo, porém a quantidade total de riqueza do sistema é conservada. A intuição aponta para um resultado em que a riqueza se mantém distribuída de forma relativamente igual entre os agentes, porém não é o que ocorre, como aponta a variável <code>Gini</code>, que mede esse índice (de mesmo nome) de concentração de renda. Como foi visto, na configuração padrão do modelo (riqueza inicial de 1 e com todos os agentes com a mesma probabilidade de ser escolhido), <code>Gini</code> rapidamente sai do 0 (situação de igualdade absoluta) e salta para níveis acima de 0.6 — um valor de 1 seria a desigualdade absoluta, com um agente possuindo toda riqueza. A redistribuição de renda em favor dos agentes com menos riqueza atenua um pouco esse resultado, porém <code>Gini</code> continua a atingir valores altos. O aumento da riqueza inicial, por outro lado, possui um efeito drástico sobre o índice, principalmente quando em conjunto com a redistribuição de renda. A análise de sensibilidade corrobora, até certo ponto, esses resultados, mostrando que que o parâmetro <code>InitWealth</code> possui grande impacto sobre a variância de <code>Gini</code> e que há certa influência conjunta com o parâmetro <code>Redistrib</code> — que é apontado como o de maior influência sobre o resultado de <code>Gini</code>. A resposta de superfície do meta modelo também mostra o efeito em conjunto que esses dois parâmetros tem sobre <code>Gini</code>, fazendo esse variar de 0.08 a 0.38.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-drǎgulescu2003statistical" class="csl-entry" role="doc-biblioentry">
+DRǍGULESCU, A. A.; YAKOVENKO, V. M. <strong>Statistical mechanics of money, income, and wealth: a short survey</strong>AIP Conference Proceedings. <strong>Anais</strong>...American Institute of Physics, 2003
+</div>
+</div>
+<!--radix_placeholder_article_footer-->
+<div class="article-footer">
+  <p class="social_footer">
+    <span class="disqus-comments">
+      <i class="fas fa-comments"></i>
+      &nbsp;
+      <span class="disqus-comment-count" data-disqus-identifier="posts/2021-03-27-distriq/">Comment on this article</span>
+    </span>
+    <span class="article-sharing">
+      Share: &nbsp;
+      <a href="https://twitter.com/share?text=Modelo%20-%20Distribui%C3%A7%C3%A3o%20de%20Riqueza&amp;url=https%3A%2F%2Frpmeira.github.io%2Fabmacro%2Fposts%2F2021-03-27-distriq%2F">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Frpmeira.github.io%2Fabmacro%2Fposts%2F2021-03-27-distriq%2F&amp;title=Modelo%20-%20Distribui%C3%A7%C3%A3o%20de%20Riqueza">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=https%3A%2F%2Frpmeira.github.io%2Fabmacro%2Fposts%2F2021-03-27-distriq%2F">
+        <i class="fab fa-facebook"></i>
+      </a>
+    </span>
+  </p>
+  <script id="dsq-count-scr" src="https://abmacro.disqus.com/count.js" async></script>
+  <div id="disqus_thread" class="hidden"></div>
+  <script type="text/javascript" cookie-consent="functionality">
+var disqus_config = function () {
+  this.page.url = 'https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/';
+  this.page.identifier = 'posts/2021-03-27-distriq/';
+};
+(function() {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://abmacro.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+</div>
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+  <h3 id="references">References</h3>
+  <div id="references-listing"></div>
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">Peixoto (2021, April 21). Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza. Retrieved from https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{peixoto2021moneymodel,
+  author = {Peixoto, Rafael},
+  title = {Macroeconomia Baseada em Agentes: Modelo - Distribuição de Riqueza},
+  url = {https://rpmeira.github.io/abmacro/posts/2021-03-27-distriq/},
+  year = {2021}
+}</pre>
+</div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<div class="distill-site-nav distill-site-footer">
+  <footer>
+    <p style="text-align: center; margin-top: 0em; margin-bottom: 0em;"><a href="https://www.linkedin.com/in/rafael-peixoto-75361b162/">Rafael Peixoto</a> | <a href="https://brmacro.netlify.app/">Graficos Macro</a></p>
+    <p style="text-align: center; margin-top: 0em; margin-bottom: 0em;">
+      <span style="color: #808080;">
+        <em>peixoto.rafael@outlook.com</em>
+      </span>
+    </p>
+  </footer>
+</div>
+<!--/radix_placeholder_navigation_after_body-->
+
+
+</body>
+
+</html>

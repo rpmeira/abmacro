@@ -1,0 +1,829 @@
+---
+title: "Modelo - Distribuição de Riqueza"
+description: |
+  Esse texto descreve e analisa o modelo baseado em agentes "Money Model". Esse modelo é proposto como um tutorial ao módulo de Python para ABMs, o **Mesa**, em https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html. Aqui porém, o modelo é implementado em LSD, e são acrescentadas modificações importantes, como a inclusão de um agente representando o governo.
+author:
+  - name: Rafael Peixoto
+    affiliation: Universidade Estadual de Campinas
+    url: {}
+slug: peixoto2021moneymodel
+date: 04-21-2021
+bibliography: moneymodel.bib
+nocite: | 
+  @drǎgulescu2003statistical
+csl: associacao-brasileira-de-normas-tecnicas-ipea.csl
+categories:
+  - Modelos
+  - LSD
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(LSDinterface)
+library(tidyverse)
+library(forecast)
+library(ggthemes)
+library(readr)
+library(ggfortify)
+library(ggrepel)
+library(kableExtra)
+library(plotly)
+```
+
+```{css, echo = FALSE}
+d-article p {
+  text-align: justify;
+  font-size: 16px;
+}
+
+d-article p code {
+  background: rgba(236, 236, 236, 0.8);
+}
+
+d-article div.sourceCode {
+  overflow: auto !important;
+}
+```
+
+
+## Introdução
+
+Esse modelo se baseia no artigo de @drǎgulescu2003statistical em que os autores comparam o equilíbrio da mecânica estatística com o 'equilíbrio' das transações monetárias entre os agentes. Em toda transação, o dinheiro é transferido de um agente para o outro, porém a quantidade total de dinheiro é conservada. No modelo aqui analisado, porém, ao invés dos agentes transacionarem dinheiro entre si, eles pagam um imposto ao governo e esse, por sua vez, distribui todo o dinheiro arrecadado entre os agentes (escolhendo-os de forma aleatória). Mantém-se a condição de que a quantidade inicial de dinheiro é igual para todos os agentes, e a de que os agentes só transferem dinheiro caso possuam no mínimo 1 unidade deste. O objetivo do modelo é observar a distribuição do dinheiro entre os agentes e a forma como essa muda ao longo do tempo. Para calcular essa distribuição, utiliza-se o índice de Gini, que mede o grau de concentração de renda.
+
+## Modelo
+
+O modelo é composto por um número `N` de agentes que, em cada período, transferem uma unidade de dinheiro (caso tenham), `wealth`, para o governo, ou seja, pagam uma `Tax`. O governo, por sua vez, distribui todo o dinheiro assim arrecado entre os agentes, ou seja, pagam uma assistência, `Assist` para esses (escolhidos de forma aleatória). Adicionalmente, o modelo computada, em cada período, o Índice de Gini, `gini`, a partir da seguinte fórmula:
+
+
+\begin{equation}
+gini = \frac{2}{n^2\bar{x}}\sum_{i=1}^ni(x_i-\bar{x}) (\#eq:gini)
+\end{equation}
+
+
+onde $x_i$ é a `wealth` de cada agente $i$, $\bar{x}$ é a média, e essas riquezas estão enumeradas de forma ascendente.
+
+### Estrutura do modelo
+
+O modelo, no LSD, possui a seguinte estrutura (de objetos, ou agentes):
+
+```{tikz, out.width = "40%", fig.align='center'}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width = 2.5cm, 
+                         minimum height = 1cm, text centered, draw = black, 
+                         fill = lightgray!30]
+\tikzstyle{arrow} = [thick, ->, >= stealth]
+
+\begin{tikzpicture}[node distance = 3cm]
+  \node (mundo) [startstop] {Mundo};
+  \node (agente) [startstop, below left of = mundo] {Agente};
+  \node (governo) [startstop, below right of = mundo] {Governo};
+
+  \draw [arrow] (mundo) -- (agente);
+  \draw [arrow] (mundo) -- (governo);
+\end{tikzpicture}
+```
+
+
+O Mundo é o objeto *origem*, do qual descendem os objetos Agente e Governo.  
+Cada um dos objetos contêm um conjunto de variáveis e parâmetros (cujos valores podem variar para cada *cópia* do objeto):
+
+::: {style="display: flex; justify-content: center; line-height: 20px;"}
++--------------+-----------------+---------------+
+|              | Variável        | Parâmetro     |
++==============+:===============:+:=============:+
+| **Mundo**    | `Init`\         | `N`\          |
+|              | `Gini`\         | `InitWealth`\ |
+|              | `Avg`\          | `Redistrib`\  |
+|              | `InitAssist`\   | `InitFiscal`\ |
+|              | `InitTax`\      |               |
+|              | `TotalWealth`\  |               |
++--------------+-----------------+---------------+
+| **Agente**   | `Wealth`\       | `IdAgente`\   |
+|              | `Prob`\         | `Income`\     |
+|              | `Tax`\          |               |
++--------------+-----------------+---------------+
+| **Governo**  | `Fiscal`\       | `GovIncome`\  |
+|              | `Assist`\       |               |
++--------------+-----------------+---------------+
+:::
+
+Vejamos como é implementada cada Equação para essas variáveis, juntamente com os parâmetros necessários.
+
+## Equações
+
+O modelo inteiro é constituído por 11 equações (11 variáveis). Dessas, as equações de `Init`, `InitAssist`, `InitTax`, `Tax` e `Assist` retornam sempre o valor 1, sendo sua finalidade configurar alguns parâmetros e variáveis. A variável `Gini` é a de maior interesse do modelo, pois indica a concentração de renda entre os agentes. As variáveis `Avg` e `TotalWealth` servem para indicar que o modelo está se comportando como planejado, ou seja, mantendo inalterado a riqueza total e a "per capita". A variável `Wealth` computa qual a riqueza de cada agente, sendo que em cada período essa riqueza pode aumentar ou diminuir, a depender se o agente doa ou recebe (e quanto) riqueza. A variável `Prob` computa a probabilidade de cada agente em ser escolhido para receber uma doação de riqueza, sendo que essa probabilidade é inversamente proporcional à sua riqueza --- no caso em que o parâmetro `Redistrib` for ajustado para 1 (caso seja zero, todas as `Prob` são iguais). A variável `Fiscal` computa a riqueza do Governo, após receber os impostos e pagar a assistência.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+//#define EIGENLIB			// uncomment to use Eigen linear algebra library
+//#define NO_POINTER_INIT	// uncomment to disable pointer checking
+#include "fun_head_fast.h"
+// do not add Equations in this area
+MODELBEGIN
+// insert your equations here, between the MODELBEGIN and MODELEND words
+
+EQUATION("Init")
+/*
+Model initialization
+*/
+v[0] = V("N");
+v[1] = COUNT("Agente");
+for (i = v[1]; i < v[0]; ++i)
+    ADDOBJL("Agente", 0);             // add missing objects
+v[2] = 0;
+v[3] = V("InitWealth");
+CYCLE(cur, "Agente")
+{
+	v[2]++;
+	WRITELS(cur, "Wealth", v[3], 0);
+	WRITELS(cur, "IdAgente", v[2], 0);
+	WRITELS(cur, "Prob", 1, 0);
+	WRITELS(cur, "Income", 0, 0);
+}
+v[4] = V("InitFiscal");
+cur1 = SEARCH("Governo");
+WRITELS(cur1, "Fiscal", v[4], 0);
+WRITELS(cur1, "GovIncome", 0, 0);
+PARAMETER;
+RESULT(1)
+
+
+EQUATION("Prob")
+/*
+Compute Agent's probability of being chosen to receive wealth
+*/
+v[0] = VL("Wealth", 1);
+v[1] = V("Redistrib");
+if (v[1] == 0)
+	v[2] = 1;
+else
+{
+	if (v[0] == 0)
+		v[2] = 1;
+	else
+		v[2] = 1 / v[0];
+}
+RESULT(v[2])
+
+
+EQUATION("InitAssist")
+/*
+Comment
+*/
+CYCLE(cur, "Agente")
+	WRITES(cur, "Income", 0);
+RESULT(1)
+
+
+EQUATION("InitTax")
+/*
+Comment
+*/
+cur = SEARCH("Governo");
+WRITES(cur, "GovIncome", 0);
+RESULT(1)
+
+
+EQUATION("Tax")
+/*
+Tax payment by agents
+*/
+V("InitTax");
+V("InitAssist");
+v[0] = VL("Wealth", 1);
+if (v[0] > 0)
+{
+	cur = SEARCHS(PARENT, "Governo");
+	INCRS(cur, "GovIncome", 1);
+	INCR("Income", -1);
+}
+RESULT(1)
+
+
+EQUATION("Assist")
+/*
+Assist payment to agents, by governmnet
+*/
+v[0] = VL("Fiscal", 1);
+while (v[0] > 0)
+{
+	cur = RNDDRAWS(PARENT, "Agente", "Prob");
+	INCRS(cur, "Income", 1);
+	INCR("GovIncome", -1);
+	v[0]--;
+}
+RESULT(1)
+
+
+EQUATION("Fiscal")
+/*
+Compute Government Fiscal balance
+*/
+V("Assist");
+CYCLES(PARENT, cur1, "Agente")
+{
+	VS(cur1, "Tax");
+}
+v[0] = CURRENT;
+v[1] = V("GovIncome");
+v[2] = v[0] + v[1];
+RESULT(v[2])
+
+
+EQUATION("Wealth")
+/*
+Compute each agent's wealth
+*/
+CYCLES(PARENT, cur1, "Agente")
+{
+	VS(cur1, "Tax");
+}
+VS(PARENT, "Assist");
+v[0] = CURRENT;
+v[1] = V("Income");
+v[2] = v[0] + v[1];
+RESULT(v[2])
+
+
+EQUATION("Gini")
+/*
+Comment
+*/
+SORT("Agente", "Wealth", "UP");
+v[0] = 0;
+v[1] = AVE("Wealth");
+v[2] = 0;
+if (T == 1)
+{
+	v[6] = 0.01;
+}
+else
+{
+ CYCLE(cur, "Agente")
+ {
+  	v[2]++;
+  	v[3] = VS(cur, "Wealth");
+  	v[4] = v[2] * (v[3] - v[1]);
+  	v[0] = v[0] + v[4];
+ }
+		v[5] = V("N");
+		v[6] = v[0] * (2 / (v[1] * v[5] * v[5]));
+}
+RESULT(v[6])
+
+
+EQUATION("Avg")
+/*
+Average Wealth
+*/
+v[0] = SUM("Wealth");
+v[1] = V("N");
+v[2] = v[0] / v[1];
+RESULT(v[2])
+
+
+EQUATION("TotalWealth")
+/*
+World's total wealth
+*/
+v[0] = SUM("Wealth");
+v[1] = V("Fiscal");
+v[2] = v[0] + v[1];
+RESULT(v[2])
+
+
+MODELEND
+// do not add Equations in this area
+void close_sim( void )
+{
+	// close simulation special commands go here
+}
+```
+
+Vamos analisar cada um dessas equações com mais detalhes. Lembrando que os modelos escritos no LSD são compostos por um conjunto de Equações que são atualizadas em cada período de uma simulação. Essas equações descrevem o comportamento das variáveis (ou funções) que fazem parte do modelo. Em todos os casos abaixo, o parâmetro `N` está ajustado para 100, a menos que indicado de outra forma.
+
+##### EQUATION("Init")
+
+Essa equação tem como finalidade inicializar o modelo. Mais especificamente, ela cria uma quantidade de cópias do objeto "Agente" igual ao número estabelecido pelo parâmetro `N` --- a macro `ADDOBJL("Agente", 0)` estabelece o período 0 para a criação desses agentes. Para cada uma dessas cópias, inicializa as variáveis `Wealth` --- para o valor do parâmetro `InitWealth` --- e `Prob` --- para 1 ---, além dos parâmetros `IdAgente` e `Income`. Além disso, inicializa, para o agente Governo, a variável `Fiscal` e o parâmetro `GovIncome`. No final, a equação transforma a variável `Init` em um parâmetro.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 600px;"'}
+EQUATION("Init")
+/*
+Model initialization
+*/
+v[0] = V("N");
+v[1] = COUNT("Agente");
+for (i = v[1]; i < v[0]; ++i)
+    ADDOBJL("Agente", 0); 
+v[2] = 0;
+v[3] = V("InitWealth");
+CYCLE(cur, "Agente")
+{
+	v[2]++;
+	WRITELS(cur, "Wealth", v[3], 0);
+	WRITELS(cur, "IdAgente", v[2], 0);
+	WRITELS(cur, "Prob", 1, 0);
+	WRITELS(cur, "Income", 0, 0);
+}
+v[4] = V("InitFiscal");
+cur1 = SEARCH("Governo");
+WRITELS(cur1, "Fiscal", v[4], 0);
+WRITELS(cur1, "GovIncome", 0, 0);
+PARAMETER;
+RESULT(1)
+```
+
+
+##### EQUATION("Prob")
+
+Essa equação tem como finalidade computar uma variável que servirá de proporção para a probabilidade de um agente ser escolhido pelo governo para receber uma unidade de riqueza. Caso o parâmetro `Redistrib` seja ajustado para 0, todos os agentes possuem a mesma probabilidade de serem escolhidos, uma vez a variável `Prob` será igual a 1 para todos. Caso `Redistrib` seja diferente de 0: $\small Prob = \frac{1}{Wealth}$, a menos que `Wealth` seja zero, caso em que $\small Prob = 1$.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Prob")
+/*
+Compute Agent's probability of being chosen to receive wealth
+*/
+v[0] = VL("Wealth", 1);
+v[1] = V("Redistrib");
+if (v[1] == 0)
+	v[2] = 1;
+else
+{
+	if (v[0] == 0)
+		v[2] = 1;
+	else
+		v[2] = 1 / v[0];
+}
+RESULT(v[2])
+```
+
+Vejamos alguns exemplos do comportamento dessa variável (lembrando que $\small N=100$). Vale ressaltar aqui que essa variável não indica a probabilidade estatística de o agente ser escolhido, ela é um valor de referência para o cálculo das probabilidades. 
+
+$$
+\small
+P(Agente) = \frac{Prob_{Agente}}{\sum Prob}
+$$
+
+**Caso 1**: começamos com o exemplo clássico em que cada agente começa com 1 riqueza e não há diferença nas probabilidades de ser escolhido, ou seja:
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 0
+\end{cases}\\
+\end{aligned}
+$$
+
+
+Nesse caso, a `Prob` de todos os agentes é simplesmente uma reta com valor 1. 
+
+**Caso 2**: Vejamos agora o mesmo caso porém com redistribuição: 
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+$$
+Para facilitar a visualização, será colocado no gráfico apenas a `Prob` de 5 agentes.
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+prob_wealth1 <- read.raw.lsd("prob-wealth1.res.gz") %>%
+  as.ts()
+
+colnames(prob_wealth1) <- c(paste0(rep("Agente "), 1:5))
+
+# Visualizar Gráfico
+autoplot(prob_wealth1) +
+  ggtitle("Chance de ser escolhido") +
+  xlab("t") +
+  ylab("Prob") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1), limits = c(0, 1))
+```
+
+Observa-se que é muito recorrente que o agentes possuam `Prob` igual a 1, uma vez que é recorrente que tenham apenas 0 ou 1 de riqueza (como ficará mais claro no gráfico de riqueza mostrada mais adiante).
+
+**Caso 3**: Vejamos agora o caso com redistribuição, mas riqueza inicial igual a 20:
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 20 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+$$
+
+Novamente, para facilitar a visualização, será colocado no gráfico apenas a `Prob` de 5 agentes.
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+prob_wealth20 <- read.raw.lsd("prob-wealth20.res") %>%
+  as.ts()
+
+colnames(prob_wealth20) <- c(paste0(rep("Agente "), 1:5))
+
+# Visualizar Gráfico
+autoplot(prob_wealth20) +
+  ggtitle("Chance de ser escolhido") +
+  xlab("t") +
+  ylab("Prob") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.01), limits = c(0, 0.10))
+```
+
+Nesse caso em que os agentes começam com 20 de riqueza, se torna muito mais raro que cheguem a ter pouco dinheiro, então as `Prob` de cada agente ficam mais próximas uma da outra. 
+
+##### EQUATION("InitAssist")
+
+Essa equação tem como finalidade inicializar a distribuição de assistência, `Assist`, pelo governo, em cada período. Para isso, ela ajusta para 0 a renda, `Income`, de cada agente, para que essa não se some à renda do período anterior. A equação sempre retorna o valor 1.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("InitAssist")
+/*
+Initialize government's assistence
+*/
+CYCLE(cur, "Agente")
+	WRITES(cur, "Income", 0);
+RESULT(1)
+```
+
+##### EQUATION("InitTax")
+
+Essa equação tem como finalidade inicializar o pagamento de impostos, `Tax`, pelos agentes, em cada período. Para isso, ela ajusta para 0 a renda do governo, `GovIncome`, para que essa não se some à do período anterior. A equação sempre retorna o valor 1.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("InitTax")
+/*
+Initialize agent's tax
+*/
+cur = SEARCH("Governo");
+WRITES(cur, "GovIncome", 0);
+RESULT(1)
+```
+
+##### EQUATION("Tax")
+
+Essa equação tem como finalidade realizar o pagamento de impostos de cada agente. Para tanto, primeiramente ela reseta os valores das rendas dos agentes e do governo --- essa é a primeira coisa que acontece em cada período. Após isso, ela busca o valor da riqueza do agente, para verificar se essa é maior que 0. Caso o agente possua riqueza, $\small Wealth > 0$, ele paga 1 de imposto para o governo, descontando da sua renda. A equação sempre retorna o valor 1.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Tax")
+/*
+Tax payment by agents
+*/
+V("InitTax");
+V("InitAssist");
+v[0] = VL("Wealth", 1);
+if (v[0] > 0)
+{
+	cur = SEARCHS(PARENT, "Governo");
+	INCRS(cur, "GovIncome", 1);
+	INCR("Income", -1);
+}
+RESULT(1)
+```
+
+##### EQUATION("Assist")
+
+Essa equação tem como finalidade realizar a distribuição de assistência pelo governo. Para tanto, ela busca a riqueza do governo, `Fiscal`, no período anterior e a distribui inteira para os agentes. A distribuição é feita de forma aleatória, com base nas probabilidades de `Prob`.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Assist")
+/*
+Assist payment to agents, by governmnet
+*/
+v[0] = VL("Fiscal", 1);
+while (v[0] > 0)
+{
+	cur = RNDDRAWS(PARENT, "Agente", "Prob");
+	INCRS(cur, "Income", 1);
+	INCR("GovIncome", -1);
+	v[0]--;
+}
+RESULT(1)
+```
+
+##### EQUATION("Fiscal")
+
+Essa equação tem como finalidade computar a riqueza do governo, `Fiscal`. Para tanto, ela verifica se o governo já distribuiu a assistência e se os agentes já pagaram impostos. Feito isso, a equação busca o valor da riqueza do governo no período anterior, assim como sua renda no período corrente. O resultado retornado é simplesmente a soma desses dois valores.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Fiscal")
+/*
+Compute Government Fiscal balance
+*/
+V("Assist");
+CYCLES(PARENT, cur1, "Agente")
+{
+	VS(cur1, "Tax");
+}
+v[0] = CURRENT;
+v[1] = V("GovIncome");
+v[2] = v[0] + v[1];
+RESULT(v[2])
+```
+
+Vejamos alguns exemplos do comportamento dessa variável (com $\small N=100$ e $\small InitFiscal=100$).
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+fiscal1 <- read.raw.lsd("fiscal1.res.gz") %>%
+  as.ts()
+fiscal10 <- read.raw.lsd("fiscal10.res") %>%
+  as.ts()
+fiscal20 <- read.raw.lsd("fiscal20.res") %>%
+  as.ts()
+
+
+fiscal <- cbind(fiscal1, fiscal10, fiscal20)
+colnames(fiscal) <- c(paste0(rep("IW-"), c(1, 10, 20)))
+
+# Visualizar Gráfico
+autoplot(fiscal) +
+  ggtitle("Riqueza do Governo", subtitle = "IW: InitWealth") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "top") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 100, by = 10))
+```
+
+O gráfico deixa claro que, conforme aumenta riqueza inicial dos agentes, mais perto fica da estabilidade a riqueza do governo. Isso é devido ao fato de que o governo não recebe impostos de agentes com riqueza igual a zero, porém é obrigado mesmo assim a distribuir toda a riqueza que possuía no período anterior. Portanto, quanto maior a `IniWealth`, menos agentes chegam a ter 0 de riqueza e portanto menos o governo precisa incorrer em deficits.
+
+##### EQUATION("Wealth")
+
+Essa equação tem como finalidade computar a riqueza, `Wealth`, de cada agente. Para tanto, primeiramente ela verifica se todos os agentes já pagaram impostos e se o governo ja distribuiu a assistência. Feito isso, a equação busca o valor da riqueza do agente em questão no período anterior, assim como sua renda no período corrente. O resultado retornado é simplesmente a soma desses dois valores.
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Wealth")
+/*
+Compute each agent's wealth
+*/
+CYCLES(PARENT, cur1, "Agente")
+{
+	VS(cur1, "Tax");
+}
+VS(PARENT, "Assist");
+v[0] = CURRENT;
+v[1] = V("Income");
+v[2] = v[0] + v[1];
+RESULT(v[2])
+```
+
+Vejamos alguns exemplos do comportamento dessa variável (lembrando que $\small N=100$, e que para facilitar a visualização serão mostrados nos gráficos apenas o comportamento de 5 agentes).
+
+**Caso 1**: 
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 0
+\end{cases}\\
+\end{aligned}
+$$
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+wealth1_red0 <- read.raw.lsd("wealth1-red0.res") %>%
+  as.ts()
+
+colnames(wealth1_red0) <- c(paste0(rep("Agente "), 1:5))
+
+# Visualizar Gráfico
+autoplot(wealth1_red0) +
+  ggtitle("Riqueza dos Agentes") +
+  xlab("t") +
+  ylab("Wealth") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 6, by = 1))
+```
+
+Como cada agente começa com apenas 1 de riqueza, é muito comum em cada período haver diversos agentes com 0 de riqueza (situação em que não pagam impostos, apenas esperam ser escolhidos para receber assistência).
+
+**Caso 2**:
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 1 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+$$
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+wealth1_red1 <- read.raw.lsd("wealth1-red1.res") %>%
+  as.ts()
+
+colnames(wealth1_red1) <- c(paste0(rep("Agente "), 1:5))
+
+# Visualizar Gráfico
+autoplot(wealth1_red1) +
+  ggtitle("Riqueza dos Agentes") +
+  xlab("t") +
+  ylab("Wealth") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 6, by = 1))
+```
+
+A existência de diferentes probabilidades dos agentes serem escolhidos não altera muito a visualização do comportamento da riqueza de 5 agentes ao longo do tempo (altera mais as variáveis globais, que veremos a seguir).
+
+**Caso 3**: 
+
+$$
+\small
+\begin{aligned}
+\begin{cases}
+InitWealth = 20 \\
+Redistrib = 1
+\end{cases}\\
+\end{aligned}
+$$
+
+```{r}
+# Acessar resultados do LSD. E transformar em TS
+wealth20_red1 <- read.raw.lsd("wealth20-red1.res") %>%
+  as.ts()
+
+colnames(wealth20_red1) <- c(paste0(rep("Agente "), 1:5))
+
+# Visualizar Gráfico
+autoplot(wealth20_red1) +
+  ggtitle("Riqueza dos Agentes") +
+  xlab("t") +
+  ylab("Wealth") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "right") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 30, by = 2), limits = c(8, 28))
+```
+
+Como cada gente começa com 20 de riqueza, há bastante riqueza a ser distribuida e trocada, então se torna muito mais difícil (no gráfico, nenhum caso) que algum agente chegue a zero de riqueza.
+
+##### EQUATION("Gini")
+
+Essa equação tem como finalidade computar o índice de Gini, `Gini`. Para tanto ela computa a fórmula \@ref(eq:gini), indicada no início do texto. Inicialmente, a equação coloca em ordem crescente as `Wealth` de cada agente e computa a média dessa variável. Depois, a equação vai de agente em agente calculando a diferença entre a riqueza desse agente e a média, somando essas diferenças (`v[0]`), além de atribuir um índice crescente (de 0 a `N`) a cada agente de forma consecutiva, `v[2]`, o que faz parte da fórmula. Há um condição especial nessa equação, porém, que indica que no período 1, `T == 1` , o resultado a ser retornado será igual a 0.01. Isso é feito apenas para contornar o caso em que a média de riqueza dos agentes, no momento da computação dessa equação, é igual a zero (caso que ocorre quando $\small InitWealth=1$). De toda forma, como no período 1 todos os agentes possuem riqueza igual, faz sentido associar um índice de gini baixo nesse período.
+
+
+```{cpp, eval=FALSE, echo=TRUE, attr.source='style="max-height: 500px;"'}
+EQUATION("Gini")
+/*
+Compute the Gini Index
+*/
+SORT("Agente", "Wealth", "UP");
+v[0] = 0;
+v[1] = AVE("Wealth");
+v[2] = 0;
+if (T == 1)
+{
+	v[6] = 0.01;
+}
+else
+{
+ CYCLE(cur, "Agente")
+ {
+  	v[2]++;
+  	v[3] = VS(cur, "Wealth");
+  	v[4] = v[2] * (v[3] - v[1]);
+  	v[0] = v[0] + v[4];
+ }
+		v[5] = V("N");
+		v[6] = v[0] * (2 / (v[1] * v[5] * v[5]));
+}
+RESULT(v[6])
+```
+
+Vejamos alguns exemplos do comportamento dessa variável.
+
+```{r, preview=TRUE}
+# Acessar resultados do LSD. E transformar em TS
+gini_1_0 <- read.raw.lsd("gini-1-0.res.gz") %>%
+  as.ts()
+gini_1_1 <- read.raw.lsd("gini-1-1.res") %>%
+  as.ts()
+gini_20_0 <- read.raw.lsd("gini-20-0.res") %>%
+  as.ts()
+gini_20_1 <- read.raw.lsd("gini-20-1.res") %>%
+  as.ts()
+
+gini <- cbind(gini_1_0, gini_1_1, gini_20_0, gini_20_1)
+colnames(gini) <- c(paste0(rep("IW-"), c(1, 1, 20, 20), rep(" "), rep("RD-"), c(0, 1, 0, 1)))
+
+# Visualizar Gráfico
+autoplot(gini) +
+  ggtitle("Índice de Gini", subtitle = "IW: InitWealth \t \t RD: Redistrib") +
+  xlab("t") +
+  ylab("") +
+  theme_hc() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "top") +
+  scale_colour_discrete("") +
+  scale_x_continuous(breaks = seq(from = 0,to = 100, by = 20)) +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1))
+```
+
+Como o gráfico mostra, tanto a riqueza inicial (`InitWealth`) quando a diferenciação das probabilidades de receber assistência do governo (`Redistrib`) possuem grande influência sobre o índice de Gini.
+
+##### EQUATION("Avg") e EQUATION("TotalWealth")
+
+Essas duas equações servem apenas para verificar se o modelo está sendo implementado da forma como se espera (um dos pressupostos do modelo é que a riqueza total do modelo se mantém constante).
+
+## Análise de Sensibilidade
+
+A análise de sensibilidade (*SA*) busca avaliar como a incerteza nos resultados das simulações pode ser atribuída a diferentes fontes de incerteza nas equações e configurações do modelo. Para o modelo analisado nesse post, será feita uma análise de sensibilidade para a variável `Gini`, aplicando-se o método SVD (*Sobol Variance Decomposition*). Mais especificamente, o SVD será aplicado sobre um meta modelo ajustado pelo método de *Kriging*, usando a estratégia de amostragem NOLH (*Near Orthogonal Latin Hypercube*). O objetivo é entender qual dos parâmetros (`N`, `InitWealth` e `Redistrib`, `InitFiscal`) possui maior impacto sobre o resultado do modelo.
+
+```{r}
+# Lê arquivo salvo com objeto R (".rds")
+sSaDf <- readRDS(file = "SVD.rds")
+
+ggplot(sSaDf) +
+  aes(x = reorder(param, value), y =  value, group = key, fill = key) + 
+  geom_col(width = 0.5, position = position_stack(reverse = TRUE)) +
+  coord_flip() +
+  theme_hc() +
+  labs(title = "Gini - Sobol Variance Decomposition") +
+  ylab("Sobol Index") +
+  xlab("") +
+  theme(plot.title = element_text(size = 15, hjust = 0.5, colour = "black"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, colour = "black"),
+        legend.position = "top",
+        panel.grid.major.x = element_line(colour = "gray", size = 0.1),
+        panel.grid.major.y = element_blank()) +
+  scale_fill_brewer("", palette = "Paired") +
+  scale_y_continuous(breaks = seq(from = 0,to = 1, by = 0.1), limits = c(0, 1))
+
+```
+
+Como é possível observar no gráfico, a redistribuição da riqueza, `Redistrib` --- que altera as probabilidades de os agentes serem escolhidos para receber assistência, colocando maior peso nos agentes com menor riqueza ---, é o parâmetro que mais afeta o comportamento do índice de Gini, `Gini`, no modelo. Em segundo lugar está a riqueza inicial dos agentes, `InitWealth`. Em terceiro, a riqueza inicial do governo, `InitFiscal`, com efeitos de interação apenas. E em último lugar está o número de agentes, `N`, que praticamente não possui influência sobre o índice de Gini, nesse modelo.
+
+A partir do meta modelo é possível, também, criar um gráfico que infira o resultado da variável de interesse, `Gini`, a partir de combinações de parâmetros (no caso, os dois que mais influenciam nesse resultado, `Redistrib` e `InitWealth`).
+
+```{r}
+# Lê arquivo salvo com objeto R (".rds")
+mm_surface <- readRDS(file = "mm-surface.rds")
+
+plot_ly(x = mm_surface$InitWealth, y = mm_surface$Redistrib, z = mm_surface$Gini) %>%
+  add_surface(contours = list(z = list(show = TRUE,
+                                       usecolormap = TRUE,
+                                       highlightcolor = "#ff0000",
+                                       project = list(z = TRUE)))) %>%
+  layout(
+    title = "Meta-Model Response Surface",
+    scene = list(
+      xaxis = list(title = "InitWealth"),
+      yaxis = list(title = "Redistrib", nticks = 2),
+      zaxis = list(title = "Gini", nticks = 5, range = c(0,0.4))
+    ))
+```
+
+Um aspecto interessante desse meta modelo mostrado no gráfico é que a riqueza inicial, `Initwealth`, conforme vai aumentando, vai diminuindo o índice de gini, porém apenas até certo ponto. A partir de um valor em torno de 50, essa variável causa um aumento no índice.
+
+## Conclusão
+
+Esse modelo busca analisar a distribuição de riqueza em um mundo em que os agentes pagam imposto e recebem assistência do governo, porém a quantidade total de riqueza do sistema é conservada. A intuição aponta para um resultado em que a riqueza se mantém distribuída de forma relativamente igual entre os agentes, porém não é o que ocorre, como aponta a variável `Gini`, que mede esse índice (de mesmo nome) de concentração de renda. Como foi visto, na configuração padrão do modelo (riqueza inicial de 1 e com todos os agentes com a mesma probabilidade de ser escolhido), `Gini` rapidamente sai do 0 (situação de igualdade absoluta) e salta para níveis acima de 0.6 --- um valor de 1 seria a desigualdade absoluta, com um agente possuindo toda riqueza. A redistribuição de renda em favor dos agentes com menos riqueza atenua um pouco esse resultado, porém `Gini` continua a atingir valores altos. O aumento da riqueza inicial, por outro lado, possui um efeito drástico sobre o índice, principalmente quando em conjunto com a redistribuição de renda. A análise de sensibilidade corrobora, até certo ponto, esses resultados, mostrando que que o parâmetro `InitWealth` possui grande impacto sobre a variância de `Gini` e que há certa influência conjunta com o parâmetro `Redistrib` --- que é apontado como o de maior influência sobre o resultado de `Gini`. A resposta de superfície do meta modelo também mostra o efeito em conjunto que esses dois parâmetros tem sobre `Gini`, fazendo esse variar de 0.08 a 0.38.
+
+
